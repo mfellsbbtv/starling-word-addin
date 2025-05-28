@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<OfficeApp xmlns="http://schemas.microsoft.com/office/appforoffice/1.1" 
-           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-           xmlns:bt="http://schemas.microsoft.com/office/officeappbasictypes/1.0" 
-           xmlns:ov="http://schemas.microsoft.com/office/taskpaneappversionoverrides" 
+<OfficeApp xmlns="http://schemas.microsoft.com/office/appforoffice/1.1"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns:bt="http://schemas.microsoft.com/office/officeappbasictypes/1.0"
+           xmlns:ov="http://schemas.microsoft.com/office/taskpaneappversionoverrides"
            xsi:type="TaskPaneApp">
 
   <!-- Begin Basic Settings: Add-in metadata, used for all versions of Office unless override provided. -->
@@ -18,7 +18,7 @@
   <AppDomains>
     <AppDomain>https://localhost:3000</AppDomain>
   </AppDomains>
-  
+
   <!-- End Basic Settings. -->
 
   <!-- Begin TaskPane Mode integration. This section is used if there are no VersionOverrides or if the Office client version does not support add-in commands. -->
@@ -28,7 +28,7 @@
   <DefaultSettings>
     <SourceLocation DefaultValue="https://localhost:3000/taskpane.html"/>
   </DefaultSettings>
-  
+
   <!-- End TaskPane Mode integration. -->
 
   <Permissions>ReadWriteDocument</Permissions>
@@ -53,8 +53,8 @@
             <!-- Point to a url resource which details how the add-in should be used. -->
             <LearnMoreUrl resid="GetStarted.LearnMoreUrl"/>
           </GetStarted>
-          
-          <!-- Function file is a HTML page that includes the JavaScript where functions for ExecuteAction will be called. 
+
+          <!-- Function file is a HTML page that includes the JavaScript where functions for ExecuteAction will be called.
                Think of the FunctionFile as the code behind ExecuteFunction. -->
           <FunctionFile resid="Commands.Url"/>
 
