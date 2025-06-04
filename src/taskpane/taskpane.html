@@ -22,12 +22,53 @@
     </header>
     
     <main id="app-body" class="ms-welcome__main">
+        <!-- Contract Generation Section -->
+        <section class="ms-welcome__features">
+            <h2 class="ms-font-xl">Contract Generation</h2>
+            
+            <!-- Agreement Type Selection -->
+            <div class="form-group">
+                <label for="agreement-type" class="ms-font-m">Agreement Type:</label>
+                <select id="agreement-type" class="ms-Dropdown">
+                    <option value="">Select Agreement Type</option>
+                    <option value="content-management">Content Management</option>
+                    <option value="licensing">Licensing Agreement</option>
+                    <option value="distribution">Distribution Agreement</option>
+                    <option value="talent">Talent Agreement</option>
+                </select>
+            </div>
+
+            <!-- Content Type Selection -->
+            <div class="form-group" id="content-type-group" style="display: none;">
+                <label for="content-type" class="ms-font-m">Content Type:</label>
+                <select id="content-type" class="ms-Dropdown">
+                    <option value="">Select Content Type</option>
+                    <option value="music">Music</option>
+                    <option value="non-music">Non-Music</option>
+                    <option value="both">Both</option>
+                </select>
+            </div>
+
+            <!-- Dynamic Form Fields -->
+            <div id="dynamic-form" class="dynamic-form" style="display: none;">
+                <!-- Fields will be populated dynamically -->
+            </div>
+
+            <!-- Generate Button -->
+            <div class="form-group" id="generate-button-group" style="display: none;">
+                <button id="generate-contract" class="ms-Button ms-Button--primary">
+                    <span class="ms-Button-label">Generate Contract</span>
+                </button>
+                <p class="ms-font-s">Generate new contract based on your inputs</p>
+            </div>
+        </section>
+
         <!-- Analysis Section -->
         <section class="ms-welcome__features">
             <h2 class="ms-font-xl">Contract Analysis</h2>
             
             <div class="feature-item">
-                <button id="analyze-contract" class="ms-Button ms-Button--primary">
+                <button id="analyze-contract" class="ms-Button">
                     <span class="ms-Button-label">Analyze Contract</span>
                 </button>
                 <p class="ms-font-s">Get AI-powered insights and risk assessment</p>
@@ -48,7 +89,7 @@
             </div>
         </section>
 
-        <!-- Redlining Section -->
+        <!-- Smart Redlining Section -->
         <section class="ms-welcome__features">
             <h2 class="ms-font-xl">Smart Redlining</h2>
             
@@ -69,7 +110,7 @@
 
         <!-- Results Section -->
         <section id="results-section" class="ms-welcome__features" style="display: none;">
-            <h2 class="ms-font-xl">Analysis Results</h2>
+            <h2 class="ms-font-xl">Results</h2>
             <div id="results-content" class="results-content">
                 <!-- Results will be populated here -->
             </div>
@@ -82,14 +123,14 @@
                 <div class="progress-bar">
                     <div id="progress-fill" class="progress-fill"></div>
                 </div>
-                <p id="progress-text" class="ms-font-s">Initializing analysis...</p>
+                <p id="progress-text" class="ms-font-s">Initializing...</p>
             </div>
         </section>
 
         <!-- Status Section -->
         <section class="ms-welcome__features">
             <div id="status-message" class="status-message ms-font-s">
-                Ready to analyze your contract
+                Ready to generate or analyze contracts
             </div>
         </section>
     </main>
