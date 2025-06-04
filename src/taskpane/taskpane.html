@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Starling - AI Contract Assistant</title>
+
+    <!-- Office JavaScript API -->
+    <script type="text/javascript" src="https://appsforoffice.microsoft.com/lib/1.1/hosted/office.js"></script>
+
+    <!-- Template styles -->
+    <link href="taskpane.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body class="ms-font-m ms-welcome ms-Fabric">
+    <header class="ms-welcome__header ms-bgColor-neutralLighter">
+        <img width="90" height="90" src="../../assets/logo-filled.png" alt="Starling" title="Starling" />
+        <h1 class="ms-font-su">Starling</h1>
+        <p class="ms-font-l">AI-Powered Contract Assistant</p>
+    </header>
+    
+    <main id="app-body" class="ms-welcome__main">
+        <!-- Analysis Section -->
+        <section class="ms-welcome__features">
+            <h2 class="ms-font-xl">Contract Analysis</h2>
+            
+            <div class="feature-item">
+                <button id="analyze-contract" class="ms-Button ms-Button--primary">
+                    <span class="ms-Button-label">Analyze Contract</span>
+                </button>
+                <p class="ms-font-s">Get AI-powered insights and risk assessment</p>
+            </div>
+
+            <div class="feature-item">
+                <button id="generate-summary" class="ms-Button">
+                    <span class="ms-Button-label">Generate Summary</span>
+                </button>
+                <p class="ms-font-s">Create executive summary with key points</p>
+            </div>
+
+            <div class="feature-item">
+                <button id="highlight-risks" class="ms-Button">
+                    <span class="ms-Button-label">Highlight Risks</span>
+                </button>
+                <p class="ms-font-s">Mark problematic clauses and terms</p>
+            </div>
+        </section>
+
+        <!-- Redlining Section -->
+        <section class="ms-welcome__features">
+            <h2 class="ms-font-xl">Smart Redlining</h2>
+            
+            <div class="feature-item">
+                <button id="suggest-changes" class="ms-Button">
+                    <span class="ms-Button-label">Suggest Changes</span>
+                </button>
+                <p class="ms-font-s">AI-powered clause improvements</p>
+            </div>
+
+            <div class="feature-item">
+                <button id="check-compliance" class="ms-Button">
+                    <span class="ms-Button-label">Check Compliance</span>
+                </button>
+                <p class="ms-font-s">Verify regulatory compliance</p>
+            </div>
+        </section>
+
+        <!-- Results Section -->
+        <section id="results-section" class="ms-welcome__features" style="display: none;">
+            <h2 class="ms-font-xl">Analysis Results</h2>
+            <div id="results-content" class="results-content">
+                <!-- Results will be populated here -->
+            </div>
+        </section>
+
+        <!-- Progress Section -->
+        <section id="progress-section" class="ms-welcome__features" style="display: none;">
+            <h2 class="ms-font-xl">Processing...</h2>
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div id="progress-fill" class="progress-fill"></div>
+                </div>
+                <p id="progress-text" class="ms-font-s">Initializing analysis...</p>
+            </div>
+        </section>
+
+        <!-- Status Section -->
+        <section class="ms-welcome__features">
+            <div id="status-message" class="status-message ms-font-s">
+                Ready to analyze your contract
+            </div>
+        </section>
+    </main>
+
+    <script type="text/javascript" src="taskpane.js"></script>
+</body>
+
+</html>

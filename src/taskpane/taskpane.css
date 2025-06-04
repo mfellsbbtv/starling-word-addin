@@ -1,0 +1,350 @@
+/* Office UI Fabric core styles */
+@import url('https://static2.sharepointonline.com/files/fabric/office-ui-fabric-core/11.0.0/css/fabric.min.css');
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: auto;
+}
+
+ul {
+    margin: 0;
+    padding: 0;
+}
+
+.ms-welcome {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    min-height: 100vh;
+}
+
+.ms-welcome__header {
+    min-height: 130px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #0078d4;
+    color: white;
+}
+
+.ms-welcome__header img {
+    margin-bottom: 10px;
+}
+
+.ms-welcome__header h1 {
+    margin: 5px 0;
+    color: white;
+}
+
+.ms-welcome__header p {
+    margin: 0;
+    color: #e1ecf4;
+}
+
+.ms-welcome__main {
+    flex-grow: 1;
+    padding: 20px;
+    background-color: #faf9f8;
+}
+
+.ms-welcome__features {
+    margin-bottom: 30px;
+    padding: 20px;
+    background-color: white;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.ms-welcome__features h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    color: #323130;
+    border-bottom: 2px solid #0078d4;
+    padding-bottom: 10px;
+}
+
+.feature-item {
+    margin-bottom: 20px;
+    padding: 15px;
+    border: 1px solid #edebe9;
+    border-radius: 4px;
+    background-color: #faf9f8;
+}
+
+.feature-item:last-child {
+    margin-bottom: 0;
+}
+
+.ms-Button {
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+    background-color: #f3f2f1;
+    color: #323130;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.ms-Button:hover {
+    background-color: #edebe9;
+}
+
+.ms-Button--primary {
+    background-color: #0078d4;
+    color: white;
+}
+
+.ms-Button--primary:hover {
+    background-color: #106ebe;
+}
+
+.ms-Button:disabled {
+    background-color: #f3f2f1;
+    color: #a19f9d;
+    cursor: not-allowed;
+}
+
+.ms-Button-label {
+    display: block;
+}
+
+.feature-item p {
+    margin: 0;
+    color: #605e5c;
+    font-size: 12px;
+    line-height: 1.4;
+}
+
+.results-content {
+    padding: 15px;
+    background-color: #f3f2f1;
+    border-radius: 4px;
+    border-left: 4px solid #0078d4;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.progress-container {
+    margin: 20px 0;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 8px;
+    background-color: #edebe9;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 10px;
+}
+
+.progress-fill {
+    height: 100%;
+    background-color: #0078d4;
+    width: 0%;
+    transition: width 0.3s ease;
+    border-radius: 4px;
+}
+
+.status-message {
+    padding: 15px;
+    background-color: #f3f2f1;
+    border-radius: 4px;
+    text-align: center;
+    color: #605e5c;
+    border-left: 4px solid #107c10;
+}
+
+.status-message.error {
+    background-color: #fdf2f2;
+    border-left-color: #d13438;
+    color: #a4262c;
+}
+
+.status-message.warning {
+    background-color: #fff8f0;
+    border-left-color: #ff8c00;
+    color: #8a5700;
+}
+
+.status-message.info {
+    background-color: #f0f6ff;
+    border-left-color: #0078d4;
+    color: #004578;
+}
+
+/* Responsive design */
+@media (max-width: 480px) {
+    .ms-welcome__header {
+        min-height: 100px;
+        padding: 15px;
+    }
+
+    .ms-welcome__main {
+        padding: 15px;
+    }
+
+    .ms-welcome__features {
+        padding: 15px;
+        margin-bottom: 20px;
+    }
+
+    .feature-item {
+        padding: 10px;
+    }
+}
+
+/* Animation for loading states */
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
+
+.loading {
+    animation: pulse 1.5s infinite;
+}
+
+/* Scrollbar styling */
+.results-content::-webkit-scrollbar {
+    width: 6px;
+}
+
+.results-content::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+}
+
+.results-content::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 3px;
+}
+
+.results-content::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+}
+
+.status-message.success {
+  background-color: #d4edda;
+  border-left-color: #28a745;
+  color: #155724;
+}
+
+/* Analysis Results Styling */
+.analysis-summary {
+  background: #f8f9fa;
+  padding: 15px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  border-left: 4px solid #0078d4;
+}
+
+.risks-section {
+  margin-bottom: 20px;
+}
+
+.risk-item {
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  padding: 15px;
+  margin-bottom: 10px;
+  background: white;
+}
+
+.risk-item.critical {
+  border-left: 4px solid #dc3545;
+}
+
+.risk-item.high {
+  border-left: 4px solid #fd7e14;
+}
+
+.risk-item.medium {
+  border-left: 4px solid #ffc107;
+}
+
+.risk-item.low {
+  border-left: 4px solid #28a745;
+}
+
+.risk-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.severity-badge {
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: bold;
+  margin-right: 10px;
+  text-transform: uppercase;
+}
+
+.severity-badge.critical {
+  background: #dc3545;
+  color: white;
+}
+
+.severity-badge.high {
+  background: #fd7e14;
+  color: white;
+}
+
+.severity-badge.medium {
+  background: #ffc107;
+  color: #212529;
+}
+
+.severity-badge.low {
+  background: #28a745;
+  color: white;
+}
+
+.category {
+  background: #e9ecef;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  text-transform: capitalize;
+}
+
+.description {
+  margin: 10px 0;
+  font-weight: 500;
+}
+
+.location {
+  font-size: 12px;
+  color: #6c757d;
+  margin: 5px 0;
+}
+
+.suggestion {
+  font-size: 12px;
+  color: #0078d4;
+  background: #f0f8ff;
+  padding: 8px;
+  border-radius: 4px;
+  margin-top: 10px;
+}
+
+.recommendations-section ul {
+  padding-left: 20px;
+}
+
+.recommendations-section li {
+  margin-bottom: 8px;
+  line-height: 1.4;
+}

@@ -1,0 +1,54 @@
+{
+  "name": "starling-word-addin",
+  "version": "1.0.0",
+  "description": "AI-powered contract redlining add-in for Microsoft Word",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack --mode production",
+    "build:dev": "webpack --mode development",
+    "dev-server": "webpack serve --mode development",
+    "start": "office-addin-dev-certs install && npm run dev-server",
+    "stop": "office-addin-dev-certs uninstall",
+    "validate": "office-addin-manifest validate manifest.xml",
+    "sideload": "office-addin-debugging start manifest.xml"
+  },
+  "keywords": [
+    "Office Add-in",
+    "Word",
+    "Contract Analysis",
+    "AI",
+    "Redlining"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "dependencies": {
+    "core-js": "^3.9.1",
+    "regenerator-runtime": "^0.13.7"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.13.10",
+    "@babel/preset-env": "^7.13.10",
+    "@babel/preset-typescript": "^7.13.0",
+    "@types/office-js": "^1.0.180",
+    "babel-loader": "^8.2.2",
+    "copy-webpack-plugin": "^8.1.0",
+    "css-loader": "^5.1.3",
+    "eslint": "^7.21.0",
+    "file-loader": "^6.2.0",
+    "html-loader": "^2.1.2",
+    "html-webpack-plugin": "^5.3.1",
+    "office-addin-debugging": "^4.4.4",
+    "office-addin-dev-certs": "^1.7.4",
+    "office-addin-lint": "^1.3.4",
+    "office-addin-manifest": "^1.7.4",
+    "source-map-loader": "^2.0.1",
+    "style-loader": "^2.0.0",
+    "typescript": "^4.2.3",
+    "webpack": "^5.26.3",
+    "webpack-cli": "^4.5.0",
+    "webpack-dev-server": "^3.11.2"
+  },
+  "browserslist": [
+    "ie 11"
+  ]
+}

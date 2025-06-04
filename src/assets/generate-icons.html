@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Generate Starling Icons</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .icon-container { margin: 20px 0; }
+        .icon { border: 1px solid #ccc; margin: 10px; display: inline-block; }
+        canvas { border: 1px solid #000; }
+    </style>
+</head>
+<body>
+    <h1>Starling Icon Generator</h1>
+    <p>This page generates PNG icons from the SVG logo in different sizes.</p>
+    
+    <div class="icon-container">
+        <h3>16x16 Icon</h3>
+        <canvas id="canvas16" width="16" height="16" class="icon"></canvas>
+        <button onclick="downloadIcon('canvas16', 'icon-16.png')">Download 16x16</button>
+    </div>
+    
+    <div class="icon-container">
+        <h3>32x32 Icon</h3>
+        <canvas id="canvas32" width="32" height="32" class="icon"></canvas>
+        <button onclick="downloadIcon('canvas32', 'icon-32.png')">Download 32x32</button>
+    </div>
+    
+    <div class="icon-container">
+        <h3>64x64 Icon</h3>
+        <canvas id="canvas64" width="64" height="64" class="icon"></canvas>
+        <button onclick="downloadIcon('canvas64', 'icon-64.png')">Download 64x64</button>
+    </div>
+    
+    <div class="icon-container">
+        <h3>80x80 Icon</h3>
+        <canvas id="canvas80" width="80" height="80" class="icon"></canvas>
+        <button onclick="downloadIcon('canvas80', 'icon-80.png')">Download 80x80</button>
+    </div>
+
+    <script>
+        // SVG content
+        const svgContent = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+  <g transform="translate(50,50) scale(0.8)">
+    <path d="M-25,0 C-25,-15 -15,-25 0,-25 C15,-25 25,-15 25,0 C25,10 20,15 15,20 L25,25 C30,20 35,15 40,10 C45,5 50,0 55,-5" 
+          fill="none" 
+          stroke="#000000" 
+          stroke-width="2.5" 
+          stroke-linecap="round" 
+          stroke-linejoin="round"/>
+    <path d="M-25,0 L-35,2" 
+          stroke="#000000" 
+          stroke-width="2.5" 
+          stroke-linecap="round"/>
+    <circle cx="-18" cy="-5" r="1.5" fill="#000000"/>
+    <path d="M-5,-10 C5,-5 15,0 20,8" 
+          fill="none" 
+          stroke="#000000" 
+          stroke-width="1.8" 
+          stroke-linecap="round"/>
+    <path d="M-2,-5 C8,0 18,5 22,12" 
+          fill="none" 
+          stroke="#000000" 
+          stroke-width="1.8" 
+          stroke-linecap="round"/>
+    <path d="M2,0 C12,5 22,10 25,18" 
+          fill="none" 
+          stroke="#000000" 
+          stroke-width="1.8" 
+          stroke-linecap="round"/>
+    <path d="M25,25 L45,20 M25,28 L45,28 M25,31 L40,35" 
+          stroke="#000000" 
+          stroke-width="2.5" 
+          stroke-linecap="round"/>
+    <path d="M-8,20 L-8,30 M-8,30 L-12,35 M-8,30 L-4,35" 
+          stroke="#000000" 
+          stroke-width="1.8" 
+          stroke-linecap="round"/>
+    <path d="M2,22 L2,32 M2,32 L-2,37 M2,32 L6,37" 
+          stroke="#000000" 
+          stroke-width="1.8" 
+          stroke-linecap="round"/>
+  </g>
+</svg>`;
+
+        function drawIcon(canvasId, size) {
+            const canvas = document.getElementById(canvasId);
+            const ctx = canvas.getContext('2d');
+            
+            // Clear canvas with white background
+            ctx.fillStyle = 'white';
+            ctx.fillRect(0, 0, size, size);
+            
+            // Create image from SVG
+            const img = new Image();
+            const svgBlob = new Blob([svgContent], {type: 'image/svg+xml'});
+            const url = URL.createObjectURL(svgBlob);
+            
+            img.onload = function() {
+                ctx.drawImage(img, 0, 0, size, size);
+                URL.revokeObjectURL(url);
+            };
+            
+            img.src = url;
+        }
+
+        function downloadIcon(canvasId, filename) {
+            const canvas = document.getElementById(canvasId);
+            const link = document.createElement('a');
+            link.download = filename;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }
+
+        // Generate all icons when page loads
+        window.onload = function() {
+            drawIcon('canvas16', 16);
+            drawIcon('canvas32', 32);
+            drawIcon('canvas64', 64);
+            drawIcon('canvas80', 80);
+        };
+    </script>
+</body>
+</html>
