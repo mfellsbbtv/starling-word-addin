@@ -1,4 +1,6 @@
 // API Service Layer - following augment-guidelines: centralized API calls
+import { AI_PROMPTS } from './config.js';
+
 export class APIService {
   constructor(config) {
     this.config = config;
@@ -81,12 +83,28 @@ export class APIService {
   }
 
   // API Methods
-  async analyzeContract(documentText) {
+  async analyzeContract(documentText, contractType = 'general') {
+    // Prepare the AI prompt for real API calls
+    const userPrompt = AI_PROMPTS.contractReview.userPromptTemplate
+      .replace('{documentText}', documentText)
+      .replace('{contractType}', contractType);
+
     return this.makeRequest('/contracts/analyze', {
       method: 'POST',
       body: {
         document_text: documentText,
-        analysis_type: 'comprehensive'
+        contract_type: contractType,
+        analysis_type: 'comprehensive',
+        ai_prompt: {
+          system_prompt: AI_PROMPTS.contractReview.systemPrompt,
+          user_prompt: userPrompt
+        },
+        requirements: {
+          article_numbering: true,
+          deviation_classification: true,
+          risk_quantification: true,
+          track_changes: true
+        }
       }
     });
   }

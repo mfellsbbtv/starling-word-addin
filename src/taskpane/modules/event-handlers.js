@@ -4,7 +4,7 @@ import { API_CONFIG } from '../../shared/config.js';
 import { updateStatus, showProgressSection, hideProgressSection, handleError, setButtonLoading, clearResults, clearSuggestions } from '../../shared/utils.js';
 import { generateDemoAnalysis, generateRiskAnalysis, generateChangeSuggestions } from '../services/contract-analyzer.js';
 import { handleAgreementTypeChange, handleContentTypeChange, collectFormData, validateFormData, updateContractPreview } from '../services/contract-generator.js';
-import { displayCombinedAnalysisResults, displayContractResults } from './ui-display.js';
+import { displayCombinedAnalysisResults, displayContractResults, displayStructuredAnalysisResults } from './ui-display.js';
 
 // Initialize API service
 const apiService = new APIService(API_CONFIG);
@@ -72,9 +72,15 @@ export async function analyzeContract() {
 
     updateStatus("Analysis complete!", "success");
 
-    // Display combined results
-    displayCombinedAnalysisResults(analysisResult, riskAnalysis, changeSuggestions, summaryResult);
-    
+    // Check if we have structured analysis and display accordingly
+    if (analysisResult.structured_analysis) {
+      console.log("Displaying structured analysis results using new AI prompt format");
+      displayStructuredAnalysisResults(analysisResult);
+    } else {
+      console.log("Displaying legacy analysis results");
+      displayCombinedAnalysisResults(analysisResult, riskAnalysis, changeSuggestions, summaryResult);
+    }
+
     hideProgressSection();
 
   } catch (error) {

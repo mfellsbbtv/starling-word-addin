@@ -1,5 +1,6 @@
 // Contract Analysis Service
 import { updateStatus, showProgressSection, hideProgressSection, handleError, setButtonLoading } from '../../shared/utils.js';
+import { AI_PROMPTS } from '../../shared/config.js';
 
 // Analyze track changes in the document
 export async function analyzeTrackChanges() {
@@ -127,13 +128,18 @@ export async function checkClauseModifications(clauseText, startPosition) {
   }
 }
 
-// Generate demo analysis locally (for demo purposes)
+// Generate demo analysis following the new AI prompt structure
 export async function generateDemoAnalysis(documentText) {
+  console.log("Generating analysis using new AI prompt structure...");
+
   const wordCount = documentText.split(/\s+/).length;
   const hasSignatureLines = documentText.includes('_______') || documentText.includes('DATE:');
   const hasParties = documentText.toLowerCase().includes('party') || documentText.toLowerCase().includes('agreement');
   const hasTermination = documentText.toLowerCase().includes('termination') || documentText.toLowerCase().includes('terminate');
   const hasCompensation = documentText.toLowerCase().includes('fee') || documentText.toLowerCase().includes('payment') || documentText.toLowerCase().includes('compensation');
+
+  // Simulate AI prompt processing
+  console.log("AI Prompt System Message:", AI_PROMPTS.contractReview.systemPrompt.substring(0, 100) + "...");
 
   // Determine contract type based on content
   let contractType = "General Agreement";
@@ -166,8 +172,8 @@ export async function generateDemoAnalysis(documentText) {
     risks.push("Contract appears incomplete - consider adding more detailed terms");
   }
 
-  // Parse contract structure for articles and clauses
-  const contractStructure = await parseContractStructureWithChanges(documentText);
+  // Generate structured analysis following the new AI prompt format
+  const structuredAnalysis = await generateStructuredAnalysis(documentText, contractType);
 
   return {
     contract_type: contractType,
@@ -177,7 +183,30 @@ export async function generateDemoAnalysis(documentText) {
     risks: risks,
     key_terms: extractKeyTerms(documentText),
     recommendations: generateRecommendations(risks.length, hasSignatureLines, hasTermination),
-    contract_structure: contractStructure // Add the new structure breakdown with change tracking
+    structured_analysis: structuredAnalysis, // New structured analysis following AI prompt format
+    contract_structure: await parseContractStructureWithChanges(documentText) // Keep existing structure for compatibility
+  };
+}
+
+// Generate structured analysis following the new AI prompt requirements
+async function generateStructuredAnalysis(documentText, contractType) {
+  console.log("Generating structured analysis per AI prompt requirements...");
+
+  // Step 1: Extract and number articles and clauses
+  const articleStructure = extractArticlesAndClauses(documentText);
+
+  // Step 2: Compare against standard library (simulated)
+  const deviationAnalysis = compareAgainstStandardLibrary(articleStructure, contractType);
+
+  // Step 3: Generate improvement recommendations
+  const improvementRecommendations = generateImprovementRecommendations(deviationAnalysis);
+
+  return {
+    article_structure: articleStructure,
+    deviation_analysis: deviationAnalysis,
+    improvement_recommendations: improvementRecommendations,
+    ai_prompt_used: "contractReview",
+    analysis_timestamp: new Date().toISOString()
   };
 }
 
@@ -366,4 +395,266 @@ export function generateChangeSuggestions(documentText) {
     suggestions: suggestions,
     summary: `Generated ${suggestions.length} improvement suggestions to enhance contract clarity, enforceability, and modern business practices.`
   };
+}
+
+// Extract articles and clauses with proper numbering (1, 1.1, 1.1.1, 2, 2.1, etc.)
+function extractArticlesAndClauses(documentText) {
+  console.log("Extracting articles and clauses with structured numbering...");
+
+  const lines = documentText.split('\n').filter(line => line.trim().length > 0);
+  const structure = [];
+  let currentArticle = 0;
+  let currentClause = 0;
+
+  // Simulate article/clause detection (in real implementation, this would use NLP)
+  const articleKeywords = ['article', 'section', 'clause', 'term', 'provision'];
+  const clauseKeywords = ['shall', 'will', 'must', 'agrees', 'obligations'];
+
+  lines.forEach((line, index) => {
+    const lowerLine = line.toLowerCase();
+    const isArticleHeader = articleKeywords.some(keyword =>
+      lowerLine.includes(keyword) && line.length < 100
+    );
+
+    if (isArticleHeader || (index % 8 === 0 && line.length > 50)) {
+      // New article detected
+      currentArticle++;
+      currentClause = 0;
+
+      structure.push({
+        type: 'article',
+        number: currentArticle.toString(),
+        title: line.trim(),
+        content: line,
+        line_number: index + 1,
+        clauses: []
+      });
+    } else if (clauseKeywords.some(keyword => lowerLine.includes(keyword)) && line.length > 30) {
+      // New clause detected
+      if (currentArticle === 0) {
+        currentArticle = 1;
+        structure.push({
+          type: 'article',
+          number: '1',
+          title: 'General Provisions',
+          content: '',
+          line_number: 1,
+          clauses: []
+        });
+      }
+
+      currentClause++;
+      const clauseNumber = `${currentArticle}.${currentClause}`;
+      const currentArticleIndex = structure.findIndex(item => item.number === currentArticle.toString());
+
+      if (currentArticleIndex >= 0) {
+        structure[currentArticleIndex].clauses.push({
+          type: 'clause',
+          number: clauseNumber,
+          content: line.trim(),
+          line_number: index + 1,
+          sub_clauses: []
+        });
+      }
+    }
+  });
+
+  return structure;
+}
+
+// Compare against standard library and identify deviations
+function compareAgainstStandardLibrary(articleStructure, contractType) {
+  console.log("Comparing against standard library for", contractType);
+
+  // Simulated standard library comparison
+  const standardClauses = getStandardClausesForType(contractType);
+  const deviations = [];
+
+  articleStructure.forEach(article => {
+    article.clauses.forEach(clause => {
+      const standardClause = findMatchingStandardClause(clause, standardClauses);
+
+      if (standardClause) {
+        const deviation = analyzeDeviation(clause, standardClause);
+        if (deviation.has_deviation) {
+          deviations.push({
+            clause_reference: clause.number,
+            clause_title: extractClauseTitle(clause.content),
+            deviation_type: deviation.type,
+            negotiable_status: deviation.negotiable ? 'negotiable' : 'non-negotiable',
+            risk_level: deviation.risk_level,
+            current_language: clause.content.substring(0, 100) + '...',
+            standard_language: standardClause.content.substring(0, 100) + '...',
+            deviation_description: deviation.description,
+            business_impact: deviation.business_impact
+          });
+        }
+      } else {
+        // Missing standard clause
+        deviations.push({
+          clause_reference: 'Missing',
+          clause_title: 'Standard Clause Not Found',
+          deviation_type: 'missing_clause',
+          negotiable_status: 'non-negotiable',
+          risk_level: 'high',
+          current_language: 'Clause not present in contract',
+          standard_language: 'Required standard clause missing',
+          deviation_description: 'This contract is missing a standard clause required for this contract type',
+          business_impact: 'High risk due to missing legal protection'
+        });
+      }
+    });
+  });
+
+  return deviations;
+}
+
+// Generate improvement recommendations based on deviations
+function generateImprovementRecommendations(deviations) {
+  console.log("Generating improvement recommendations...");
+
+  const recommendations = [];
+
+  deviations.forEach(deviation => {
+    const recommendation = {
+      clause_reference: deviation.clause_reference,
+      priority: mapRiskToPriority(deviation.risk_level),
+      recommendation_type: deviation.negotiable_status === 'negotiable' ? 'optimization' : 'compliance',
+      current_risk_score: calculateDeviationRiskScore(deviation),
+      improved_language: generateImprovedLanguage(deviation),
+      risk_mitigation: generateRiskMitigation(deviation),
+      business_benefit: generateBusinessBenefit(deviation),
+      implementation_notes: generateImplementationNotes(deviation)
+    };
+
+    recommendations.push(recommendation);
+  });
+
+  return recommendations;
+}
+
+// Helper functions for the new AI prompt structure
+
+function getStandardClausesForType(contractType) {
+  // Simulated standard library - in real implementation, this would come from a database
+  const standardLibrary = {
+    'content-management': [
+      {
+        id: 'termination',
+        title: 'Termination Clause',
+        content: 'Either party may terminate this agreement with thirty (30) days written notice.',
+        negotiable: true,
+        category: 'termination'
+      },
+      {
+        id: 'payment',
+        title: 'Payment Terms',
+        content: 'Payment shall be made within thirty (30) days of invoice receipt.',
+        negotiable: false,
+        category: 'financial'
+      },
+      {
+        id: 'liability',
+        title: 'Limitation of Liability',
+        content: 'Neither party shall be liable for indirect, incidental, or consequential damages.',
+        negotiable: true,
+        category: 'liability'
+      }
+    ],
+    'licensing': [
+      {
+        id: 'scope',
+        title: 'License Scope',
+        content: 'License is granted for the specific territory and duration outlined herein.',
+        negotiable: false,
+        category: 'scope'
+      }
+    ]
+  };
+
+  return standardLibrary[contractType] || standardLibrary['content-management'];
+}
+
+function findMatchingStandardClause(clause, standardClauses) {
+  // Simple keyword matching - in real implementation, this would use semantic analysis
+  const clauseText = clause.content.toLowerCase();
+
+  return standardClauses.find(standard => {
+    const keywords = standard.category;
+    return clauseText.includes(keywords) || clauseText.includes(standard.title.toLowerCase());
+  });
+}
+
+function analyzeDeviation(clause, standardClause) {
+  // Simulate deviation analysis
+  const clauseText = clause.content.toLowerCase();
+  const standardText = standardClause.content.toLowerCase();
+
+  // Simple similarity check
+  const similarity = calculateTextSimilarity(clauseText, standardText);
+
+  if (similarity < 0.7) {
+    return {
+      has_deviation: true,
+      type: 'language_deviation',
+      negotiable: standardClause.negotiable,
+      risk_level: standardClause.negotiable ? 'medium' : 'high',
+      description: `Current clause deviates from standard ${standardClause.title}`,
+      business_impact: standardClause.negotiable ?
+        'May impact negotiation position' :
+        'Critical compliance issue requiring immediate attention'
+    };
+  }
+
+  return { has_deviation: false };
+}
+
+function extractClauseTitle(content) {
+  // Extract title from clause content
+  const words = content.split(' ').slice(0, 5);
+  return words.join(' ') + '...';
+}
+
+function calculateTextSimilarity(text1, text2) {
+  // Simple similarity calculation - in real implementation, use proper NLP
+  const words1 = new Set(text1.split(' '));
+  const words2 = new Set(text2.split(' '));
+  const intersection = new Set([...words1].filter(x => words2.has(x)));
+  const union = new Set([...words1, ...words2]);
+
+  return intersection.size / union.size;
+}
+
+function mapRiskToPriority(riskLevel) {
+  const mapping = {
+    'high': 'critical',
+    'medium': 'high',
+    'low': 'medium'
+  };
+  return mapping[riskLevel] || 'medium';
+}
+
+function calculateDeviationRiskScore(deviation) {
+  const scores = {
+    'high': 85,
+    'medium': 60,
+    'low': 30
+  };
+  return scores[deviation.risk_level] || 50;
+}
+
+function generateImprovedLanguage(deviation) {
+  return `Recommended revision for ${deviation.clause_title}: [Specific improved language would be generated here based on standard library and AI analysis]`;
+}
+
+function generateRiskMitigation(deviation) {
+  return `Risk mitigation: Address ${deviation.deviation_type} to reduce ${deviation.risk_level} risk exposure`;
+}
+
+function generateBusinessBenefit(deviation) {
+  return `Business benefit: Implementing this change will improve legal compliance and reduce potential disputes`;
+}
+
+function generateImplementationNotes(deviation) {
+  return `Implementation: ${deviation.negotiable_status === 'negotiable' ? 'Can be negotiated with counterparty' : 'Must be implemented to maintain compliance'}`;
 }

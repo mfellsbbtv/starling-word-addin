@@ -288,3 +288,268 @@ export function displayContractResults(result) {
   resultsContent.innerHTML = html;
   resultsSection.style.display = "block";
 }
+
+// Display structured analysis results following the new AI prompt format
+export function displayStructuredAnalysisResults(analysisResult) {
+  const resultsContent = document.getElementById("results-content");
+  const resultsSection = document.getElementById("results-section");
+
+  // Check if we have the new structured analysis format
+  if (!analysisResult.structured_analysis) {
+    // Fall back to the existing display function
+    console.log("No structured analysis found, using legacy display");
+    return;
+  }
+
+  const structured = analysisResult.structured_analysis;
+
+  let html = `
+    <div class="structured-analysis-results">
+      <div class="analysis-header">
+        <h2>📋 AI Contract Analysis Report</h2>
+        <div class="analysis-meta">
+          <p><strong>Contract Type:</strong> ${analysisResult.contract_type}</p>
+          <p><strong>Analysis Date:</strong> ${new Date(structured.analysis_timestamp).toLocaleString()}</p>
+          <p><strong>AI Prompt:</strong> ${structured.ai_prompt_used}</p>
+        </div>
+      </div>
+
+      <!-- 1. ARTICLE STRUCTURE (Following numbering: 1, 1.1, 1.1.1, 2, 2.1, etc.) -->
+      <div class="analysis-section article-structure">
+        <h3>📑 Contract Structure Analysis</h3>
+        <div class="structure-summary">
+          <p>Articles identified and numbered according to legal standards:</p>
+        </div>
+
+        <div class="articles-breakdown">`;
+
+  // Display articles with proper numbering
+  structured.article_structure.forEach(article => {
+    html += `
+          <div class="article-container">
+            <div class="article-header">
+              <h4 class="article-number">Article ${article.number}</h4>
+              <h5 class="article-title">${article.title}</h5>
+            </div>
+
+            <div class="clauses-container">`;
+
+    article.clauses.forEach(clause => {
+      html += `
+              <div class="clause-item">
+                <span class="clause-number">${clause.number}</span>
+                <div class="clause-content">
+                  <p>${clause.content}</p>
+                  <small class="line-reference">Line ${clause.line_number}</small>
+                </div>
+              </div>`;
+    });
+
+    html += `
+            </div>
+          </div>`;
+  });
+
+  html += `
+        </div>
+      </div>
+
+      <!-- 2. DEVIATION ANALYSIS -->
+      <div class="analysis-section deviation-analysis">
+        <h3>⚖️ Standard Library Comparison</h3>
+        <div class="deviations-summary">
+          <p>Deviations from company standard clauses:</p>
+        </div>
+
+        <div class="deviations-list">`;
+
+  structured.deviation_analysis.forEach(deviation => {
+    const statusClass = deviation.negotiable_status === 'negotiable' ? 'negotiable' : 'non-negotiable';
+    const riskClass = `risk-${deviation.risk_level}`;
+
+    html += `
+          <div class="deviation-item ${statusClass} ${riskClass}">
+            <div class="deviation-header">
+              <span class="clause-ref">Clause ${deviation.clause_reference}</span>
+              <span class="negotiable-badge ${deviation.negotiable_status}">
+                ${deviation.negotiable_status.toUpperCase()}
+              </span>
+              <span class="risk-badge ${deviation.risk_level}">
+                ${deviation.risk_level.toUpperCase()} RISK
+              </span>
+            </div>
+
+            <div class="deviation-content">
+              <h5>${deviation.clause_title}</h5>
+              <p class="deviation-description">${deviation.deviation_description}</p>
+
+              <div class="language-comparison">
+                <div class="current-language">
+                  <strong>Current Language:</strong>
+                  <p>${deviation.current_language}</p>
+                </div>
+                <div class="standard-language">
+                  <strong>Standard Library:</strong>
+                  <p>${deviation.standard_language}</p>
+                </div>
+              </div>
+
+              <div class="business-impact">
+                <strong>Business Impact:</strong> ${deviation.business_impact}
+              </div>
+            </div>
+          </div>`;
+  });
+
+  html += `
+        </div>
+      </div>
+
+      <!-- 3. IMPROVEMENT RECOMMENDATIONS -->
+      <div class="analysis-section improvement-recommendations">
+        <h3>💡 Improvement Recommendations</h3>
+        <div class="recommendations-summary">
+          <p>Specific language revisions and compliance recommendations:</p>
+        </div>
+
+        <div class="recommendations-list">`;
+
+  structured.improvement_recommendations.forEach(recommendation => {
+    const priorityClass = `priority-${recommendation.priority}`;
+    const typeClass = `type-${recommendation.recommendation_type}`;
+
+    html += `
+          <div class="recommendation-item ${priorityClass} ${typeClass}">
+            <div class="recommendation-header">
+              <span class="clause-ref">Clause ${recommendation.clause_reference}</span>
+              <span class="priority-badge ${recommendation.priority}">
+                ${recommendation.priority.toUpperCase()}
+              </span>
+              <span class="type-badge ${recommendation.recommendation_type}">
+                ${recommendation.recommendation_type.toUpperCase()}
+              </span>
+            </div>
+
+            <div class="recommendation-content">
+              <div class="risk-score">
+                <strong>Current Risk Score:</strong>
+                <span class="score">${recommendation.current_risk_score}/100</span>
+              </div>
+
+              <div class="improved-language">
+                <strong>Recommended Language:</strong>
+                <p>${recommendation.improved_language}</p>
+              </div>
+
+              <div class="benefits">
+                <div class="risk-mitigation">
+                  <strong>Risk Mitigation:</strong> ${recommendation.risk_mitigation}
+                </div>
+                <div class="business-benefit">
+                  <strong>Business Benefit:</strong> ${recommendation.business_benefit}
+                </div>
+              </div>
+
+              <div class="implementation">
+                <strong>Implementation Notes:</strong> ${recommendation.implementation_notes}
+              </div>
+            </div>
+          </div>`;
+  });
+
+  html += `
+        </div>
+      </div>
+
+      <!-- 4. SUMMARY METRICS -->
+      <div class="analysis-section summary-metrics">
+        <h3>📊 Analysis Summary</h3>
+        <div class="metrics-grid">
+          <div class="metric-card">
+            <span class="metric-label">Total Articles</span>
+            <span class="metric-value">${structured.article_structure.length}</span>
+          </div>
+          <div class="metric-card">
+            <span class="metric-label">Deviations Found</span>
+            <span class="metric-value">${structured.deviation_analysis.length}</span>
+          </div>
+          <div class="metric-card">
+            <span class="metric-label">Recommendations</span>
+            <span class="metric-value">${structured.improvement_recommendations.length}</span>
+          </div>
+          <div class="metric-card">
+            <span class="metric-label">Compliance Score</span>
+            <span class="metric-value">${analysisResult.compliance_score}%</span>
+          </div>
+        </div>
+      </div>
+    </div>`;
+
+  resultsContent.innerHTML = html;
+  resultsSection.style.display = "block";
+
+  // Show suggestions section if we have recommendations
+  if (structured.improvement_recommendations.length > 0) {
+    showStructuredSuggestionsSection(structured.improvement_recommendations);
+  }
+}
+
+// Show suggestions section for structured recommendations
+function showStructuredSuggestionsSection(recommendations) {
+  const suggestionsSection = document.getElementById("suggestions-section");
+  const suggestionsContent = document.getElementById("suggestions-content");
+
+  let html = `
+    <div class="structured-suggestions-header">
+      <h3>🔧 Apply Recommended Changes</h3>
+      <p>Review and apply AI-recommended improvements to optimize your contract:</p>
+    </div>
+
+    <div class="structured-suggestions-list">`;
+
+  recommendations.forEach((recommendation, index) => {
+    const priorityClass = `priority-${recommendation.priority}`;
+    const typeClass = `type-${recommendation.recommendation_type}`;
+
+    html += `
+      <div class="structured-suggestion-card ${priorityClass} ${typeClass}">
+        <div class="suggestion-header">
+          <span class="clause-ref">Clause ${recommendation.clause_reference}</span>
+          <span class="priority-badge ${recommendation.priority}">${recommendation.priority.toUpperCase()}</span>
+          <span class="type-badge ${recommendation.recommendation_type}">${recommendation.recommendation_type.toUpperCase()}</span>
+        </div>
+        <div class="suggestion-content">
+          <div class="risk-info">
+            <strong>Current Risk Score:</strong> <span class="risk-score">${recommendation.current_risk_score}/100</span>
+          </div>
+          <div class="improved-language">
+            <strong>Recommended Language:</strong>
+            <p>${recommendation.improved_language}</p>
+          </div>
+          <div class="benefits">
+            <p><strong>Business Benefit:</strong> ${recommendation.business_benefit}</p>
+          </div>
+        </div>
+        <div class="suggestion-actions">
+          <button class="apply-structured-suggestion-btn" onclick="applyStructuredSuggestion(${index})">
+            Apply This Change
+          </button>
+        </div>
+      </div>`;
+  });
+
+  html += `
+    </div>
+
+    <div class="structured-suggestions-actions">
+      <button id="apply-all-structured-changes-btn" class="primary-button" onclick="applyAllStructuredChanges()">
+        Apply All Recommendations
+      </button>
+      <button id="dismiss-structured-suggestions-btn" class="secondary-button" onclick="dismissSuggestions()">
+        Dismiss Suggestions
+      </button>
+    </div>`;
+
+  suggestionsContent.innerHTML = html;
+  suggestionsSection.style.display = "block";
+}
