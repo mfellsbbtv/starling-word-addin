@@ -5,10 +5,10 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Starling - AI Contract Assistant</title>
+    <title>RHEI AI Legal Assistant</title>
 
     <!-- Office JavaScript API -->
-    <script type="text/javascript" src="https://appsforoffice.microsoft.com/lib/1.1/hosted/office.js"></script>
+    <script type="text/javascript" src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
 
     <!-- Template styles -->
     <link href="taskpane.css" rel="stylesheet" type="text/css" />
@@ -16,18 +16,39 @@
 
 <body class="ms-font-m ms-welcome ms-Fabric">
     <header class="ms-welcome__header ms-bgColor-neutralLighter">
-        <img width="90" height="90" src="../../assets/logo-filled.png" alt="Starling" title="Starling" />
-        <h1 class="ms-font-su">Starling</h1>
-        <p class="ms-font-l">AI-Powered Contract Assistant</p>
+        <p class="ms-font-l">RHEI AI Legal Assistant</p>
     </header>
     
     <main id="app-body" class="ms-welcome__main">
+        <!-- Configuration Section -->
+        <section class="ms-welcome__features config-section">
+            <div class="config-header">
+                <h3 class="ms-font-l">Configuration</h3>
+                <div class="api-status" id="api-status">
+                    <span class="status-indicator demo" id="status-indicator"></span>
+                    <span id="status-text">Demo Mode</span>
+                </div>
+            </div>
+
+            <div class="config-controls">
+                <label class="toggle-switch">
+                    <input type="checkbox" id="api-mode-toggle">
+                    <span class="slider"></span>
+                    <span class="toggle-label">Use Real API</span>
+                </label>
+
+                <div class="api-endpoint" id="api-endpoint-display">
+                    <span class="ms-font-xs">Endpoint: Demo Mode (Local)</span>
+                </div>
+            </div>
+        </section>
+
         <!-- Contract Generation Section -->
         <section class="ms-welcome__features">
             <h2 class="ms-font-xl">Contract Generation</h2>
-            
-            <!-- Agreement Type Selection -->
-            <div class="form-group">
+
+            <!-- Agreement Type Selection - HIDDEN -->
+            <div class="form-group" style="display: none;">
                 <label for="agreement-type" class="ms-font-m">Agreement Type:</label>
                 <select id="agreement-type" class="ms-Dropdown">
                     <option value="">Select Agreement Type</option>
@@ -38,7 +59,7 @@
                 </select>
             </div>
 
-            <!-- Content Type Selection -->
+            <!-- Content Type Selection - HIDDEN -->
             <div class="form-group" id="content-type-group" style="display: none;">
                 <label for="content-type" class="ms-font-m">Content Type:</label>
                 <select id="content-type" class="ms-Dropdown">
@@ -49,37 +70,61 @@
                 </select>
             </div>
 
-            <!-- Dynamic Form Fields -->
+            <!-- Dynamic Form Fields - HIDDEN -->
             <div id="dynamic-form" class="dynamic-form" style="display: none;">
                 <!-- Fields will be populated dynamically -->
             </div>
 
-            <!-- Generate Button -->
-            <div class="form-group" id="generate-button-group" style="display: none;">
+            <!-- Contract Preview -->
+            <div class="contract-preview" id="contract-preview">
+                <h4 class="ms-font-m">Next Contract Preview</h4>
+                <div class="preview-content" id="preview-content">
+                    <p class="ms-font-s"><strong>Type:</strong> <span id="preview-type">Content Management Agreement</span></p>
+                    <p class="ms-font-s"><strong>Parties:</strong> <span id="preview-parties">Professional content management services</span></p>
+                    <p class="ms-font-s"><strong>Scope:</strong> <span id="preview-scope">Digital distribution and rights management</span></p>
+                </div>
+            </div>
+
+            <!-- Generate Button - ALWAYS VISIBLE -->
+            <div class="form-group" id="generate-button-group">
                 <button id="generate-contract" class="ms-Button ms-Button--primary">
                     <span class="ms-Button-label">Generate Contract</span>
                 </button>
-                <p class="ms-font-s">Generate new contract based on your inputs</p>
+                <p class="ms-font-s">Generate demo contract with realistic terms</p>
             </div>
         </section>
 
         <!-- Analysis Section -->
         <section class="ms-welcome__features">
             <h2 class="ms-font-xl">Contract Analysis</h2>
-            
+
             <div class="feature-item">
+                <!-- Contract Type Selection for Analysis -->
+                <div class="form-group">
+                    <label for="analysis-contract-type" class="ms-font-m">Contract Type:</label>
+                    <select id="analysis-contract-type" class="ms-Dropdown">
+                        <option value="">Select Contract Type</option>
+                        <option value="content-management">Content Management</option>
+                        <option value="datapro">DataPro</option>
+                        <option value="service-agreement">Service Agreement</option>
+                        <option value="nda">NDA</option>
+                    </select>
+                </div>
+
                 <button id="analyze-contract" class="ms-Button">
                     <span class="ms-Button-label">Analyze Contract</span>
                 </button>
-                <p class="ms-font-s">Get AI-powered insights and risk assessment</p>
+                <p class="ms-font-s">Get AI-powered analysis, summary, and risk assessment</p>
             </div>
 
             <div class="feature-item">
-                <button id="generate-summary" class="ms-Button">
-                    <span class="ms-Button-label">Generate Summary</span>
+                <button id="toggle-track-changes" class="ms-Button">
+                    <span class="ms-Button-label">Enable Track Changes</span>
                 </button>
-                <p class="ms-font-s">Create executive summary with key points</p>
+                <p class="ms-font-s">Enable/disable track changes for collaboration</p>
             </div>
+
+
 
             <div class="feature-item">
                 <button id="highlight-risks" class="ms-Button">
@@ -89,17 +134,8 @@
             </div>
         </section>
 
-        <!-- Smart Redlining Section -->
+        <!-- Compliance Section -->
         <section class="ms-welcome__features">
-            <h2 class="ms-font-xl">Smart Redlining</h2>
-            
-            <div class="feature-item">
-                <button id="suggest-changes" class="ms-Button">
-                    <span class="ms-Button-label">Suggest Changes</span>
-                </button>
-                <p class="ms-font-s">AI-powered clause improvements</p>
-            </div>
-
             <div class="feature-item">
                 <button id="check-compliance" class="ms-Button">
                     <span class="ms-Button-label">Check Compliance</span>
@@ -110,9 +146,34 @@
 
         <!-- Results Section -->
         <section id="results-section" class="ms-welcome__features" style="display: none;">
-            <h2 class="ms-font-xl">Results</h2>
+            <div class="results-header">
+                <h2 class="ms-font-xl">Analysis Results</h2>
+                <button id="clear-results" class="ms-Button clear-button">
+                    <span class="ms-Button-label">Clear Results</span>
+                </button>
+            </div>
             <div id="results-content" class="results-content">
                 <!-- Results will be populated here -->
+            </div>
+        </section>
+
+        <!-- Contract Suggestions Section -->
+        <section id="suggestions-section" class="ms-welcome__features" style="display: none;">
+            <div class="results-header">
+                <h2 class="ms-font-xl">Suggested Changes</h2>
+                <button id="clear-suggestions" class="ms-Button clear-button">
+                    <span class="ms-Button-label">Clear</span>
+                </button>
+            </div>
+            <div id="suggestions-content" class="results-content">
+                <!-- Suggestions will be populated here -->
+            </div>
+
+            <div class="feature-item" style="margin-top: 20px;">
+                <button id="suggest-changes" class="ms-Button ms-Button--primary">
+                    <span class="ms-Button-label">Apply Changes</span>
+                </button>
+                <p class="ms-font-s">Apply AI-powered clause improvements to the document</p>
             </div>
         </section>
 

@@ -1,7 +1,7 @@
 {
   "name": "starling-word-addin",
   "version": "1.0.0",
-  "description": "AI-powered contract redlining add-in for Microsoft Word",
+  "description": "RHEI AI Legal Assistant - AI-powered contract redlining add-in for Microsoft Word",
   "main": "index.js",
   "scripts": {
     "build": "webpack --mode production",
