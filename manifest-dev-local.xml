@@ -34,8 +34,22 @@
 
   <Permissions>ReadWriteDocument</Permissions>
 
+  <!-- Requirements for Word API -->
+  <Requirements>
+    <Sets DefaultMinVersion="1.3">
+      <Set Name="WordApi" MinVersion="1.3"/>
+    </Sets>
+  </Requirements>
+
   <!-- Begin Add-in Commands Mode integration. -->
   <VersionOverrides xmlns="http://schemas.microsoft.com/office/taskpaneappversionoverrides" xsi:type="VersionOverridesV1_0">
+
+    <!-- Requirements for Word API in VersionOverrides -->
+    <Requirements>
+      <Sets DefaultMinVersion="1.3">
+        <Set Name="WordApi" MinVersion="1.3"/>
+      </Sets>
+    </Requirements>
 
     <!-- The Hosts node is required. -->
     <Hosts>

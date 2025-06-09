@@ -12,33 +12,87 @@ import {
 
 // Initialize the add-in
 Office.onReady((info) => {
+  console.log("Office.onReady called with info:", info);
+
   if (info.host === Office.HostApplication.Word) {
-    console.log("RHEI AI Legal Assistant loaded successfully");
+    console.log("RHEI AI Legal Assistant loaded successfully in Word");
 
-    // Check if Word API is available
-    if (typeof Word === 'undefined') {
-      console.error("Word API not available");
-      updateStatus("Error: Word API not available. Please refresh the add-in.", "error");
-      return;
-    }
+    // Wait a moment for Word API to fully load, then check
+    setTimeout(() => {
+      checkWordAPIAndInitialize();
+    }, 1000);
 
-    console.log("Word API is available");
-
-    // Initialize theme
-    initializeTheme();
-
-    // Set up event listeners
-    setupEventListeners();
-
-    // Initialize UI state
-    initializeUI();
-
-    console.log("Add-in initialization complete");
   } else {
-    console.error("This add-in is designed for Microsoft Word only");
+    console.error("This add-in is designed for Microsoft Word only. Current host:", info.host);
     updateStatus("Error: This add-in requires Microsoft Word", "error");
   }
 });
+
+// Check Word API availability and initialize
+function checkWordAPIAndInitialize() {
+  console.log("Checking Word API availability...");
+  console.log("typeof Word:", typeof Word);
+  console.log("Office.context:", Office.context);
+  console.log("Office.context.requirements:", Office.context.requirements);
+
+  // Check if Word API is available
+  if (typeof Word === 'undefined') {
+    console.error("Word API not available - typeof Word is undefined");
+
+    // Try to wait a bit longer and check again
+    setTimeout(() => {
+      console.log("Retrying Word API check...");
+      if (typeof Word === 'undefined') {
+        console.error("Word API still not available after retry");
+        updateStatus("Error: Word API not available. Please ensure you're using Word Online or Word Desktop with add-in support.", "error");
+
+        // Show diagnostic information
+        showDiagnosticInfo();
+        return;
+      } else {
+        console.log("Word API became available on retry");
+        proceedWithInitialization();
+      }
+    }, 2000);
+
+    return;
+  }
+
+  console.log("Word API is available");
+  proceedWithInitialization();
+}
+
+// Proceed with normal initialization
+function proceedWithInitialization() {
+  console.log("Proceeding with add-in initialization...");
+
+  // Initialize theme
+  initializeTheme();
+
+  // Set up event listeners
+  setupEventListeners();
+
+  // Initialize UI state
+  initializeUI();
+
+  console.log("Add-in initialization complete");
+}
+
+// Show diagnostic information for debugging
+function showDiagnosticInfo() {
+  const diagnosticInfo = {
+    officeVersion: Office.context?.diagnostics?.version || "Unknown",
+    platform: Office.context?.diagnostics?.platform || "Unknown",
+    host: Office.context?.diagnostics?.host || "Unknown",
+    wordApiAvailable: typeof Word !== 'undefined',
+    officeJsLoaded: typeof Office !== 'undefined',
+    requirements: Office.context?.requirements || "Not available"
+  };
+
+  console.log("Diagnostic Information:", diagnosticInfo);
+
+  updateStatus(`Diagnostic: Office ${diagnosticInfo.officeVersion} on ${diagnosticInfo.platform}, Word API: ${diagnosticInfo.wordApiAvailable}`, "error");
+}
 
 // Set up all event listeners
 function setupEventListeners() {
