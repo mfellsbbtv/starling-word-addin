@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<OfficeApp xmlns="http://schemas.microsoft.com/office/appforoffice/1.1" 
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+           xsi:type="TaskPaneApp">
+
+  <!-- Basic Settings: Minimal required fields only -->
+  <Id>b2c3d4e5-f6g7-8901-bcde-f23456789abc</Id>
+  <Version>1.0.1.0</Version>
+  <ProviderName>RHEI</ProviderName>
+  <DefaultLocale>en-US</DefaultLocale>
+  <DisplayName DefaultValue="Document Assistant"/>
+  <Description DefaultValue="Document analysis and review assistant for Microsoft Word"/>
+
+  <!-- Use Microsoft's own CDN for icons to avoid external domain issues -->
+  <IconUrl DefaultValue="https://static2.sharepointonline.com/files/fabric/assets/brand-icons/product/png/word_32x1.png"/>
+  <HighResolutionIconUrl DefaultValue="https://static2.sharepointonline.com/files/fabric/assets/brand-icons/product/png/word_48x1.png"/>
+  <SupportUrl DefaultValue="https://support.microsoft.com"/>
+  
+  <!-- Minimal AppDomains - use only GitHub Pages -->
+  <AppDomains>
+    <AppDomain>https://mfellsbbtv.github.io</AppDomain>
+  </AppDomains>
+  
+  <!-- Simple TaskPane Mode only - no ribbon integration -->
+  <Hosts>
+    <Host Name="Document"/>
+  </Hosts>
+  
+  <DefaultSettings>
+    <SourceLocation DefaultValue="https://mfellsbbtv.github.io/starling-word-addin/taskpane.html"/>
+  </DefaultSettings>
+  
+  <!-- Minimal permissions -->
+  <Permissions>ReadWriteDocument</Permissions>
+
+  <!-- Basic requirements only -->
+  <Requirements>
+    <Sets DefaultMinVersion="1.1">
+      <Set Name="WordApi" MinVersion="1.1"/>
+    </Sets>
+  </Requirements>
+
+</OfficeApp>
