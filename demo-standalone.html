@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>RHEI AI Legal Assistant - Demo</title>
+    
+    <!-- Office UI Fabric CSS -->
+    <link rel="stylesheet" href="https://static2.sharepointonline.com/files/fabric/office-ui-fabric-core/11.0.0/css/fabric.min.css" />
+    
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f3f2f1;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #0078d4;
+        }
+        
+        .header h1 {
+            color: #0078d4;
+            margin: 0;
+            font-size: 28px;
+        }
+        
+        .header p {
+            color: #666;
+            margin: 10px 0 0 0;
+        }
+        
+        .section {
+            margin: 30px 0;
+            padding: 20px;
+            border: 1px solid #e1dfdd;
+            border-radius: 6px;
+        }
+        
+        .section h3 {
+            color: #323130;
+            margin-top: 0;
+            font-size: 18px;
+        }
+        
+        .form-group {
+            margin: 15px 0;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #323130;
+        }
+        
+        .form-group select, .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #8a8886;
+            border-radius: 4px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+        
+        .form-group textarea {
+            height: 100px;
+            resize: vertical;
+        }
+        
+        .button {
+            background-color: #0078d4;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            margin: 10px 10px 10px 0;
+        }
+        
+        .button:hover {
+            background-color: #106ebe;
+        }
+        
+        .button:disabled {
+            background-color: #a19f9d;
+            cursor: not-allowed;
+        }
+        
+        .button.secondary {
+            background-color: #f3f2f1;
+            color: #323130;
+            border: 1px solid #8a8886;
+        }
+        
+        .button.secondary:hover {
+            background-color: #edebe9;
+        }
+        
+        .status {
+            padding: 10px;
+            border-radius: 4px;
+            margin: 15px 0;
+            font-weight: 500;
+        }
+        
+        .status.success {
+            background-color: #dff6dd;
+            color: #107c10;
+            border: 1px solid #107c10;
+        }
+        
+        .status.info {
+            background-color: #deecf9;
+            color: #0078d4;
+            border: 1px solid #0078d4;
+        }
+        
+        .status.warning {
+            background-color: #fff4ce;
+            color: #797775;
+            border: 1px solid #ffb900;
+        }
+        
+        .results {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 6px;
+            border-left: 4px solid #0078d4;
+        }
+        
+        .results h4 {
+            margin-top: 0;
+            color: #0078d4;
+        }
+        
+        .risk-item {
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 4px;
+            border-left: 4px solid #d13438;
+            background-color: #fdf3f4;
+        }
+        
+        .risk-item.medium {
+            border-left-color: #ffb900;
+            background-color: #fffcf1;
+        }
+        
+        .risk-item.low {
+            border-left-color: #107c10;
+            background-color: #f3f9f1;
+        }
+        
+        .suggestion-item {
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 4px;
+            border: 1px solid #e1dfdd;
+            background-color: white;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .demo-notice {
+            background-color: #fff4ce;
+            border: 1px solid #ffb900;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .demo-notice strong {
+            color: #8a8886;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏛️ RHEI AI Legal Assistant</h1>
+            <p>AI-powered contract analysis and generation</p>
+        </div>
+        
+        <div class="demo-notice">
+            <strong>📋 Demo Mode:</strong> This is a standalone demo showing all functionality without Word integration.
+        </div>
+        
+        <div id="status" class="status info">
+            Ready to generate or analyze contracts
+        </div>
+        
+        <!-- Contract Generation Section -->
+        <div class="section">
+            <h3>📝 Contract Generation</h3>
+            <p>Generate professional contracts with AI-powered templates</p>
+            
+            <div class="form-group">
+                <label for="agreement-type">Agreement Type:</label>
+                <select id="agreement-type">
+                    <option value="">Select Agreement Type</option>
+                    <option value="content-management">Content Management</option>
+                    <option value="licensing">Licensing Agreement</option>
+                    <option value="distribution">Distribution Agreement</option>
+                    <option value="talent">Talent Agreement</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="content-type">Content Type:</label>
+                <select id="content-type">
+                    <option value="">Select Content Type</option>
+                    <option value="music">Music</option>
+                    <option value="non-music">Non-Music</option>
+                    <option value="both">Both</option>
+                </select>
+            </div>
+            
+            <button class="button" onclick="generateContract()">Generate Contract</button>
+        </div>
+        
+        <!-- Contract Analysis Section -->
+        <div class="section">
+            <h3>🔍 Contract Analysis</h3>
+            <p>Analyze contracts for risks, compliance, and improvement opportunities</p>
+            
+            <div class="form-group">
+                <label for="contract-text">Contract Text (paste your contract here):</label>
+                <textarea id="contract-text" placeholder="Paste your contract text here for analysis...">SAMPLE CONTENT MANAGEMENT AGREEMENT
+
+This Content Management Agreement is entered into between Company A and Company B.
+
+1. SCOPE OF SERVICES
+The Manager will provide content management services including distribution and marketing.
+
+2. COMPENSATION
+Revenue will be split 80% to Artist and 20% to Manager.
+
+3. TERM
+This agreement is effective for 2 years from the date of signing.
+
+4. TERMINATION
+Either party may terminate with 30 days notice.</textarea>
+            </div>
+            
+            <button class="button" onclick="analyzeContract()">Analyze Contract</button>
+            <button class="button secondary" onclick="clearResults()">Clear Results</button>
+        </div>
+        
+        <!-- Results Section -->
+        <div id="results-section" class="section hidden">
+            <h3>📊 Analysis Results</h3>
+            <div id="results-content"></div>
+        </div>
+        
+        <!-- Suggestions Section -->
+        <div id="suggestions-section" class="section hidden">
+            <h3>💡 Improvement Suggestions</h3>
+            <div id="suggestions-content"></div>
+        </div>
+    </div>
+
+    <script>
+        // Demo data and functionality
+        let currentAnalysis = null;
+        
+        function updateStatus(message, type = 'info') {
+            const statusEl = document.getElementById('status');
+            statusEl.textContent = message;
+            statusEl.className = `status ${type}`;
+        }
+        
+        function generateContract() {
+            const agreementType = document.getElementById('agreement-type').value;
+            const contentType = document.getElementById('content-type').value;
+            
+            if (!agreementType || !contentType) {
+                updateStatus('Please select both Agreement Type and Content Type', 'warning');
+                return;
+            }
+            
+            updateStatus('Generating contract...', 'info');
+            
+            // Simulate API call
+            setTimeout(() => {
+                const contractData = {
+                    type: agreementType,
+                    content: contentType,
+                    generated: new Date().toLocaleString()
+                };
+                
+                displayContractResults(contractData);
+                updateStatus('Contract generated successfully!', 'success');
+            }, 1500);
+        }
+        
+        function analyzeContract() {
+            const contractText = document.getElementById('contract-text').value.trim();
+            
+            if (!contractText) {
+                updateStatus('Please enter contract text to analyze', 'warning');
+                return;
+            }
+            
+            updateStatus('Analyzing contract...', 'info');
+            
+            // Simulate analysis
+            setTimeout(() => {
+                currentAnalysis = performDemoAnalysis(contractText);
+                displayAnalysisResults(currentAnalysis);
+                updateStatus('Analysis complete!', 'success');
+            }, 2000);
+        }
+        
+        function performDemoAnalysis(text) {
+            const wordCount = text.split(/\s+/).length;
+            const hasTermination = text.toLowerCase().includes('termination');
+            const hasCompensation = text.toLowerCase().includes('compensation') || text.toLowerCase().includes('payment');
+            const hasLiability = text.toLowerCase().includes('liability');
+            
+            const risks = [];
+            if (!hasTermination) {
+                risks.push({
+                    severity: 'high',
+                    title: 'Missing Termination Clause',
+                    description: 'Contract lacks clear termination conditions and procedures.',
+                    suggestion: 'Add a comprehensive termination clause specifying conditions, notice periods, and post-termination obligations.'
+                });
+            }
+            
+            if (!hasLiability) {
+                risks.push({
+                    severity: 'medium',
+                    title: 'No Liability Limitation',
+                    description: 'Contract does not address liability limitations or damage caps.',
+                    suggestion: 'Include liability limitation clauses to protect against excessive damages.'
+                });
+            }
+            
+            const suggestions = [
+                {
+                    title: 'Add Electronic Signature Provision',
+                    current: 'Traditional signature requirements',
+                    suggested: 'Add electronic signature acceptance clause',
+                    benefit: 'Enables faster execution and modern business practices'
+                },
+                {
+                    title: 'Clarify Payment Terms',
+                    current: 'General payment language',
+                    suggested: 'Specify exact payment schedules and methods',
+                    benefit: 'Reduces payment disputes and improves cash flow'
+                }
+            ];
+            
+            return {
+                wordCount,
+                complianceScore: hasTermination && hasCompensation ? 85 : 65,
+                risks,
+                suggestions,
+                contractType: 'Content Management Agreement'
+            };
+        }
+        
+        function displayContractResults(data) {
+            const resultsSection = document.getElementById('results-section');
+            const resultsContent = document.getElementById('results-content');
+            
+            resultsContent.innerHTML = `
+                <h4>✅ Contract Generated Successfully</h4>
+                <p><strong>Type:</strong> ${data.type} - ${data.content}</p>
+                <p><strong>Generated:</strong> ${data.generated}</p>
+                <p><strong>Status:</strong> Ready for review and customization</p>
+                <div style="margin-top: 15px;">
+                    <button class="button">📄 Download Contract</button>
+                    <button class="button secondary">🔍 Analyze Generated Contract</button>
+                </div>
+            `;
+            
+            resultsSection.classList.remove('hidden');
+        }
+        
+        function displayAnalysisResults(analysis) {
+            const resultsSection = document.getElementById('results-section');
+            const resultsContent = document.getElementById('results-content');
+            const suggestionsSection = document.getElementById('suggestions-section');
+            const suggestionsContent = document.getElementById('suggestions-content');
+            
+            // Display main results
+            resultsContent.innerHTML = `
+                <h4>📋 Contract Analysis Report</h4>
+                <p><strong>Contract Type:</strong> ${analysis.contractType}</p>
+                <p><strong>Word Count:</strong> ${analysis.wordCount}</p>
+                <p><strong>Compliance Score:</strong> ${analysis.complianceScore}%</p>
+                
+                <h4>⚠️ Risk Analysis</h4>
+                ${analysis.risks.map(risk => `
+                    <div class="risk-item ${risk.severity}">
+                        <strong>${risk.title}</strong>
+                        <p>${risk.description}</p>
+                        <p><em>Suggestion: ${risk.suggestion}</em></p>
+                    </div>
+                `).join('')}
+                
+                ${analysis.risks.length === 0 ? '<p>No significant risks identified.</p>' : ''}
+            `;
+            
+            // Display suggestions
+            suggestionsContent.innerHTML = `
+                <h4>💡 Improvement Recommendations</h4>
+                ${analysis.suggestions.map((suggestion, index) => `
+                    <div class="suggestion-item">
+                        <strong>${suggestion.title}</strong>
+                        <p><strong>Current:</strong> ${suggestion.current}</p>
+                        <p><strong>Suggested:</strong> ${suggestion.suggested}</p>
+                        <p><strong>Benefit:</strong> ${suggestion.benefit}</p>
+                        <button class="button" onclick="applySuggestion(${index})">Apply This Change</button>
+                    </div>
+                `).join('')}
+                
+                <div style="margin-top: 20px;">
+                    <button class="button" onclick="applyAllSuggestions()">Apply All Changes</button>
+                    <button class="button secondary" onclick="dismissSuggestions()">Dismiss Suggestions</button>
+                </div>
+            `;
+            
+            resultsSection.classList.remove('hidden');
+            suggestionsSection.classList.remove('hidden');
+        }
+        
+        function applySuggestion(index) {
+            updateStatus(`Applied suggestion ${index + 1}`, 'success');
+        }
+        
+        function applyAllSuggestions() {
+            updateStatus('All suggestions applied successfully!', 'success');
+        }
+        
+        function dismissSuggestions() {
+            document.getElementById('suggestions-section').classList.add('hidden');
+            updateStatus('Suggestions dismissed', 'info');
+        }
+        
+        function clearResults() {
+            document.getElementById('results-section').classList.add('hidden');
+            document.getElementById('suggestions-section').classList.add('hidden');
+            updateStatus('Results cleared', 'info');
+        }
+        
+        // Initialize
+        console.log('RHEI AI Legal Assistant Demo loaded successfully');
+    </script>
+</body>
+</html>
