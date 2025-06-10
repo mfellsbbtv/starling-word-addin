@@ -3,8 +3,8 @@
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
            xsi:type="TaskPaneApp">
 
-  <Id>a1b2c3d4-e5f6-7890-abcd-ef1234567890</Id>
-  <Version>1.0.5.0</Version>
+  <Id>c1d2e3f4-g5h6-7890-cdef-gh3456789012</Id>
+  <Version>1.0.6.0</Version>
   <ProviderName>RHEI</ProviderName>
   <DefaultLocale>en-US</DefaultLocale>
   <DisplayName DefaultValue="RHEI AI Legal Assistant"/>
