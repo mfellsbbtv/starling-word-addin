@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>RHEI AI Legal Assistant</title>
+
+    <!-- Office JavaScript API -->
+    <script type="text/javascript" src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
+
+    <!-- Office UI Fabric CSS -->
+    <link rel="stylesheet" href="https://static2.sharepointonline.com/files/fabric/office-ui-fabric-core/11.0.0/css/fabric.min.css" />
+    
+    <!-- Custom CSS -->
+    <style>
+        body {
+            font-family: 'Poppins', 'Calibri', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        .ms-welcome {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        
+        .ms-welcome__header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .ms-welcome__main {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .ms-welcome__features {
+            margin-bottom: 20px;
+        }
+        
+        .feature-item {
+            margin-bottom: 15px;
+        }
+        
+        .ms-Button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 4px;
+            background-color: #0078d4;
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+            margin-bottom: 8px;
+        }
+        
+        .ms-Button:hover {
+            background-color: #106ebe;
+        }
+        
+        .ms-Button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        
+        .ms-Button--primary {
+            background-color: #0078d4;
+        }
+        
+        .status-message {
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 20px;
+            text-align: center;
+        }
+        
+        .status-message.info {
+            background-color: #e1f5fe;
+            color: #0277bd;
+        }
+        
+        .status-message.success {
+            background-color: #e8f5e8;
+            color: #2e7d32;
+        }
+        
+        .status-message.warning {
+            background-color: #fff3e0;
+            color: #f57c00;
+        }
+        
+        .status-message.error {
+            background-color: #ffebee;
+            color: #c62828;
+        }
+
+        #results-section {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 20px;
+        }
+
+        /* Progress Bar Styles */
+        .progress-container {
+            width: 100%;
+            background-color: #f0f0f0;
+            border-radius: 4px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 20px;
+            background-color: #0078d4;
+            width: 0%;
+            transition: width 0.3s ease;
+            border-radius: 4px;
+            position: relative;
+        }
+
+        .progress-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .initialization-steps {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 10px 0;
+            font-size: 12px;
+        }
+
+        .step {
+            margin: 5px 0;
+            padding: 3px 0;
+        }
+
+        .step.completed {
+            color: #2e7d32;
+        }
+
+        .step.current {
+            color: #0078d4;
+            font-weight: bold;
+        }
+
+        .step.pending {
+            color: #666;
+        }
+
+        .step.error {
+            color: #c62828;
+        }
+        
+        .ms-font-xl {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .ms-font-s {
+            font-size: 12px;
+            color: #666;
+        }
+    </style>
+</head>
+
+<body class="ms-font-m ms-welcome ms-Fabric">
+    <div class="ms-welcome">
+        <header class="ms-welcome__header">
+            <h1 class="ms-font-xl">RHEI AI Legal Assistant</h1>
+            <p class="ms-font-s">Local Development Version</p>
+        </header>
+
+        <main class="ms-welcome__main">
+            <!-- Initialization Progress Section -->
+            <section id="initialization-section" class="ms-welcome__features">
+                <h3>Initializing Add-in...</h3>
+
+                <!-- Progress Bar -->
+                <div class="progress-container">
+                    <div id="progress-bar" class="progress-bar">
+                        <div class="progress-text" id="progress-text">0%</div>
+                    </div>
+                </div>
+
+                <!-- Initialization Steps -->
+                <div class="initialization-steps">
+                    <div id="step-1" class="step pending">1. Loading Office.js...</div>
+                    <div id="step-2" class="step pending">2. Checking Office environment...</div>
+                    <div id="step-3" class="step pending">3. Testing Word API...</div>
+                    <div id="step-4" class="step pending">4. Setting up event handlers...</div>
+                    <div id="step-5" class="step pending">5. Initializing UI...</div>
+                    <div id="step-6" class="step pending">6. Ready!</div>
+                </div>
+            </section>
+
+            <!-- Generate Contract Section -->
+            <section id="generate-button-group" class="ms-welcome__features" style="display: none;">
+                <div class="feature-item">
+                    <button id="generate-contract" class="ms-Button ms-Button--primary">
+                        <span class="ms-Button-label">Generate Contract</span>
+                    </button>
+                    <p class="ms-font-s">Create a new contract in the document</p>
+                </div>
+            </section>
+
+            <!-- Analysis Section -->
+            <section class="ms-welcome__features">
+                <div class="feature-item">
+                    <button id="analyze-contract" class="ms-Button">
+                        <span class="ms-Button-label">Analyze Contract</span>
+                    </button>
+                    <p class="ms-font-s">AI-powered contract analysis and risk assessment</p>
+                </div>
+            </section>
+
+            <!-- Additional Features -->
+            <section class="ms-welcome__features">
+                <div class="feature-item">
+                    <button id="toggle-track-changes" class="ms-Button">
+                        <span class="ms-Button-label">Toggle Track Changes</span>
+                    </button>
+                    <p class="ms-font-s">Enable/disable change tracking</p>
+                </div>
+            </section>
+
+            <section class="ms-welcome__features">
+                <div class="feature-item">
+                    <button id="highlight-risks" class="ms-Button">
+                        <span class="ms-Button-label">Highlight Risks</span>
+                    </button>
+                    <p class="ms-font-s">Mark problematic clauses and terms</p>
+                </div>
+            </section>
+
+            <section class="ms-welcome__features">
+                <div class="feature-item">
+                    <button id="suggest-changes" class="ms-Button">
+                        <span class="ms-Button-label">Suggest Changes</span>
+                    </button>
+                    <p class="ms-font-s">AI-powered clause improvements</p>
+                </div>
+            </section>
+
+            <!-- Results Section -->
+            <section id="results-section" style="display: none;">
+                <!-- Results will be populated here -->
+            </section>
+
+            <!-- Hidden sections for compatibility -->
+            <div id="dynamic-form" style="display: none;"></div>
+            <div id="content-type-group" style="display: none;"></div>
+            <div id="suggestions-section" style="display: none;"></div>
+            <div id="progress-section" style="display: none;"></div>
+
+            <!-- Status Section -->
+            <div id="status-message" class="status-message info">
+                Initializing add-in...
+            </div>
+        </main>
+    </div>
+
+    <!-- Use the simple JavaScript version -->
+    <script type="text/javascript" src="src/taskpane/taskpane-simple.js"></script>
+</body>
+
+</html>

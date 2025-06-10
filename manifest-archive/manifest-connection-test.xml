@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<OfficeApp xmlns="http://schemas.microsoft.com/office/appforoffice/1.1" 
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+           xsi:type="TaskPaneApp">
+
+  <Id>99999999-8888-7777-6666-555555555555</Id>
+  <Version>1.0.0.1</Version>
+  <ProviderName>RHEI</ProviderName>
+  <DefaultLocale>en-US</DefaultLocale>
+  <DisplayName DefaultValue="Connection Test"/>
+  <Description DefaultValue="Test local server connection"/>
+
+  <Hosts>
+    <Host Name="Document"/>
+  </Hosts>
+  
+  <DefaultSettings>
+    <SourceLocation DefaultValue="https://localhost:3000/test-connection.html"/>
+  </DefaultSettings>
+
+  <Permissions>ReadWriteDocument</Permissions>
+
+</OfficeApp>

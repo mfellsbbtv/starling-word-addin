@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>Connection Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+        .test-result {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+    </style>
+</head>
+<body>
+    <h1>Local Server Connection Test</h1>
+    <div id="results"></div>
+    
+    <script>
+        console.log("Test script is running!");
+        
+        const results = document.getElementById('results');
+        
+        // Test 1: Basic JavaScript execution
+        results.innerHTML += '<div class="test-result success">✅ JavaScript is executing</div>';
+        
+        // Test 2: Check if we can access the server
+        results.innerHTML += '<div class="test-result success">✅ HTML file loaded from localhost:3000</div>';
+        
+        // Test 3: Current URL
+        results.innerHTML += '<div class="test-result success">✅ Current URL: ' + window.location.href + '</div>';
+        
+        // Test 4: User Agent
+        results.innerHTML += '<div class="test-result success">✅ User Agent: ' + navigator.userAgent + '</div>';
+        
+        // Test 5: Check if Office.js would be available
+        setTimeout(() => {
+            if (typeof Office !== 'undefined') {
+                results.innerHTML += '<div class="test-result success">✅ Office.js is available</div>';
+            } else {
+                results.innerHTML += '<div class="test-result error">❌ Office.js is not available</div>';
+            }
+        }, 2000);
+        
+        console.log("Connection test completed");
+    </script>
+</body>
+</html>

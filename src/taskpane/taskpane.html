@@ -7,27 +7,105 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>RHEI AI Legal Assistant</title>
 
-    <!-- Office JavaScript API with fallback -->
+    <!-- Office JavaScript API with enhanced loading and Word API optimization -->
     <script type="text/javascript" src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
     <script type="text/javascript">
-        // Fallback check for Office.js loading
-        window.addEventListener('load', function() {
-            setTimeout(function() {
-                if (typeof Office === 'undefined') {
-                    console.error('Office.js failed to load from CDN, trying alternative...');
-                    // Try alternative CDN
-                    var script = document.createElement('script');
-                    script.src = 'https://appsforoffice.microsoft.com/lib/beta/hosted/office.js';
-                    script.onerror = function() {
-                        console.error('All Office.js CDN sources failed');
-                        document.getElementById('status-message').innerHTML =
-                            'Error: Office.js failed to load. Please check your internet connection and refresh.';
-                    };
-                    document.head.appendChild(script);
-                } else {
-                    console.log('Office.js loaded successfully');
+        // Enhanced Office.js loading with Word API optimization
+        let officeLoadAttempts = 0;
+        const maxOfficeLoadAttempts = 5;
+        let wordApiCheckInterval;
+
+        function checkOfficeLoading() {
+            officeLoadAttempts++;
+            console.log(`Office.js loading check attempt ${officeLoadAttempts}/${maxOfficeLoadAttempts}`);
+
+            if (typeof Office !== 'undefined') {
+                console.log('Office.js loaded successfully');
+                // Start checking for Word API availability
+                startWordApiCheck();
+                return;
+            }
+
+            if (officeLoadAttempts >= maxOfficeLoadAttempts) {
+                console.error('Office.js failed to load after all attempts');
+                showOfficeLoadError();
+                return;
+            }
+
+            // Try alternative CDN sources with latest versions
+            const cdnSources = [
+                'https://appsforoffice.microsoft.com/lib/1/hosted/office.js',
+                'https://appsforoffice.microsoft.com/lib/beta/hosted/office.js',
+                'https://appsforoffice.microsoft.com/lib/1.1/hosted/office.js'
+            ];
+
+            const script = document.createElement('script');
+            script.src = cdnSources[officeLoadAttempts % cdnSources.length];
+            script.onload = function() {
+                console.log(`Office.js loaded from alternative source: ${script.src}`);
+                startWordApiCheck();
+            };
+            script.onerror = function() {
+                console.error(`Failed to load Office.js from: ${script.src}`);
+                setTimeout(checkOfficeLoading, 1500);
+            };
+            document.head.appendChild(script);
+        }
+
+        function startWordApiCheck() {
+            // Clear any existing interval
+            if (wordApiCheckInterval) {
+                clearInterval(wordApiCheckInterval);
+            }
+
+            let attempts = 0;
+            const maxAttempts = 20; // 10 seconds total
+
+            wordApiCheckInterval = setInterval(() => {
+                attempts++;
+
+                if (typeof Word !== 'undefined' && typeof Word.run === 'function') {
+                    console.log('Word API is available!');
+                    clearInterval(wordApiCheckInterval);
+                    window.WORD_API_READY = true;
+                    return;
                 }
-            }, 2000);
+
+                if (attempts >= maxAttempts) {
+                    console.log('Word API not available after timeout - will use demo mode');
+                    clearInterval(wordApiCheckInterval);
+                    window.WORD_API_READY = false;
+                }
+            }, 500);
+        }
+
+        function showOfficeLoadError() {
+            const statusElement = document.getElementById('status-message');
+            if (statusElement) {
+                statusElement.innerHTML = `
+                    <div class="error-message">
+                        <h4>Office.js Loading Error</h4>
+                        <p>Failed to load Office.js library. This may be due to:</p>
+                        <ul>
+                            <li>Network connectivity issues</li>
+                            <li>Corporate firewall blocking Office CDN</li>
+                            <li>Browser compatibility issues</li>
+                        </ul>
+                        <p><strong>Solutions:</strong></p>
+                        <ul>
+                            <li>Refresh the page</li>
+                            <li>Check your internet connection</li>
+                            <li>Try a different browser</li>
+                            <li>Contact your IT administrator</li>
+                        </ul>
+                    </div>
+                `;
+            }
+        }
+
+        // Start checking after page load
+        window.addEventListener('load', function() {
+            setTimeout(checkOfficeLoading, 1000);
         });
     </script>
 
@@ -213,6 +291,27 @@
         <section class="ms-welcome__features">
             <div id="status-message" class="status-message ms-font-s">
                 Ready to generate or analyze contracts
+            </div>
+
+            <!-- Skip Word API Test Button (hidden by default) -->
+            <div id="skip-test-section" class="feature-item" style="display: none; margin-top: 15px; padding: 10px; background-color: #fff3cd; border-radius: 4px;">
+                <p class="ms-font-s" style="margin: 0 0 8px 0; color: #856404;">
+                    <strong>Word API test is taking longer than expected...</strong>
+                </p>
+                <button id="skip-word-api-test" class="ms-Button" style="background-color: #ffc107; color: #000; font-size: 12px; padding: 8px;">
+                    <span class="ms-Button-label">Skip Test & Continue in Demo Mode</span>
+                </button>
+                <p class="ms-font-s" style="margin: 4px 0 0 0; color: #856404;">
+                    You can still use contract analysis with sample data
+                </p>
+            </div>
+
+            <!-- Diagnostic Button -->
+            <div class="feature-item" style="margin-top: 15px;">
+                <button id="show-diagnostics" class="ms-Button" style="background-color: #666; font-size: 12px; padding: 8px;">
+                    <span class="ms-Button-label">Show Word API Diagnostics</span>
+                </button>
+                <p class="ms-font-s">Check Word API status and troubleshooting information</p>
             </div>
         </section>
     </main>

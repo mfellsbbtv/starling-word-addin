@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>RHEI AI Legal Assistant</title>
+
+    <!-- Office JavaScript API with enhanced loading -->
+    <script type="text/javascript">
+        console.log("Starting Office.js loading process...");
+        
+        // Track Office.js loading
+        window.officeLoadAttempts = 0;
+        window.maxOfficeLoadAttempts = 5;
+        window.officeLoadTimeout = null;
+        
+        // Function to check Office.js loading
+        function checkOfficeLoading() {
+            window.officeLoadAttempts++;
+            console.log(`Office.js loading attempt ${window.officeLoadAttempts}/${window.maxOfficeLoadAttempts}`);
+            
+            if (typeof Office !== 'undefined') {
+                console.log('Office.js loaded successfully!');
+                clearTimeout(window.officeLoadTimeout);
+                return true;
+            }
+            
+            if (window.officeLoadAttempts >= window.maxOfficeLoadAttempts) {
+                console.error('Office.js failed to load after maximum attempts');
+                handleOfficeLoadFailure();
+                return false;
+            }
+            
+            // Try loading Office.js again
+            loadOfficeJS();
+            return false;
+        }
+        
+        // Function to load Office.js
+        function loadOfficeJS() {
+            const script = document.createElement('script');
+            script.type = 'text/javascript';
+            script.src = 'https://appsforoffice.microsoft.com/lib/1/hosted/office.js';
+            script.onload = function() {
+                console.log('Office.js script loaded');
+                setTimeout(checkOfficeLoading, 1000);
+            };
+            script.onerror = function() {
+                console.error('Failed to load Office.js script');
+                setTimeout(checkOfficeLoading, 2000);
+            };
+            document.head.appendChild(script);
+        }
+        
+        // Handle Office.js load failure
+        function handleOfficeLoadFailure() {
+            console.log('Office.js failed to load, proceeding without it');
+            window.OFFICE_FAILED = true;
+            // Continue with initialization anyway
+            if (typeof window.proceedWithoutOffice === 'function') {
+                window.proceedWithoutOffice();
+            }
+        }
+        
+        // Start loading Office.js
+        loadOfficeJS();
+        
+        // Set a timeout as backup
+        window.officeLoadTimeout = setTimeout(() => {
+            if (typeof Office === 'undefined') {
+                console.log('Office.js loading timeout, proceeding without it');
+                handleOfficeLoadFailure();
+            }
+        }, 10000); // 10 second timeout
+    </script>
+
+    <!-- Office UI Fabric CSS -->
+    <link rel="stylesheet" href="https://static2.sharepointonline.com/files/fabric/office-ui-fabric-core/11.0.0/css/fabric.min.css" />
+    
+    <!-- Custom CSS -->
+    <style>
+        body {
+            font-family: 'Poppins', 'Calibri', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        .ms-welcome {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        
+        .ms-welcome__header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .ms-welcome__main {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .ms-welcome__features {
+            margin-bottom: 20px;
+        }
+        
+        .feature-item {
+            margin-bottom: 15px;
+        }
+        
+        .ms-Button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 4px;
+            background-color: #0078d4;
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+            margin-bottom: 8px;
+        }
+        
+        .ms-Button:hover {
+            background-color: #106ebe;
+        }
+        
+        .ms-Button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        
+        .ms-Button--primary {
+            background-color: #0078d4;
+        }
+        
+        .status-message {
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 20px;
+            text-align: center;
+        }
+        
+        .status-message.info {
+            background-color: #e1f5fe;
+            color: #0277bd;
+        }
+        
+        .status-message.success {
+            background-color: #e8f5e8;
+            color: #2e7d32;
+        }
+        
+        .status-message.warning {
+            background-color: #fff3e0;
+            color: #f57c00;
+        }
+        
+        .status-message.error {
+            background-color: #ffebee;
+            color: #c62828;
+        }
+        
+        #results-section {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 20px;
+        }
+        
+        /* Progress Bar Styles */
+        .progress-container {
+            width: 100%;
+            background-color: #f0f0f0;
+            border-radius: 4px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 20px;
+            background-color: #0078d4;
+            width: 0%;
+            transition: width 0.3s ease;
+            border-radius: 4px;
+            position: relative;
+        }
+        
+        .progress-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .initialization-steps {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 10px 0;
+            font-size: 12px;
+        }
+        
+        .step {
+            margin: 5px 0;
+            padding: 3px 0;
+        }
+        
+        .step.completed {
+            color: #2e7d32;
+        }
+        
+        .step.current {
+            color: #0078d4;
+            font-weight: bold;
+        }
+        
+        .step.pending {
+            color: #666;
+        }
+        
+        .step.error {
+            color: #c62828;
+        }
+        
+        .ms-font-xl {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .ms-font-s {
+            font-size: 12px;
+            color: #666;
+        }
+    </style>
+</head>
+
+<body class="ms-font-m ms-welcome ms-Fabric">
+    <div class="ms-welcome">
+        <header class="ms-welcome__header">
+            <h1 class="ms-font-xl">RHEI AI Legal Assistant</h1>
+            <p class="ms-font-s">Local Development Version</p>
+        </header>
+
+        <main class="ms-welcome__main">
+            <!-- Initialization Progress Section -->
+            <section id="initialization-section" class="ms-welcome__features">
+                <h3>Initializing Add-in...</h3>
+                
+                <!-- Progress Bar -->
+                <div class="progress-container">
+                    <div id="progress-bar" class="progress-bar">
+                        <div class="progress-text" id="progress-text">0%</div>
+                    </div>
+                </div>
+                
+                <!-- Initialization Steps -->
+                <div class="initialization-steps">
+                    <div id="step-1" class="step pending">1. Loading Office.js...</div>
+                    <div id="step-2" class="step pending">2. Checking Office environment...</div>
+                    <div id="step-3" class="step pending">3. Testing Word API...</div>
+                    <div id="step-4" class="step pending">4. Setting up event handlers...</div>
+                    <div id="step-5" class="step pending">5. Initializing UI...</div>
+                    <div id="step-6" class="step pending">6. Ready!</div>
+                </div>
+            </section>
+
+            <!-- Generate Contract Section -->
+            <section id="generate-button-group" class="ms-welcome__features" style="display: none;">
+                <div class="feature-item">
+                    <button id="generate-contract" class="ms-Button ms-Button--primary">
+                        <span class="ms-Button-label">Generate Contract</span>
+                    </button>
+                    <p class="ms-font-s">Create a new contract in the document</p>
+                </div>
+            </section>
+
+            <!-- Analysis Section -->
+            <section class="ms-welcome__features" style="display: none;" id="analysis-section">
+                <div class="feature-item">
+                    <button id="analyze-contract" class="ms-Button">
+                        <span class="ms-Button-label">Analyze Contract</span>
+                    </button>
+                    <p class="ms-font-s">AI-powered contract analysis and risk assessment</p>
+                </div>
+            </section>
+
+            <!-- Results Section -->
+            <section id="results-section" style="display: none;">
+                <!-- Results will be populated here -->
+            </section>
+
+            <!-- Hidden sections for compatibility -->
+            <div id="dynamic-form" style="display: none;"></div>
+            <div id="content-type-group" style="display: none;"></div>
+            <div id="suggestions-section" style="display: none;"></div>
+            <div id="progress-section" style="display: none;"></div>
+
+            <!-- Status Section -->
+            <div id="status-message" class="status-message info">
+                Initializing add-in...
+            </div>
+        </main>
+    </div>
+
+    <!-- Enhanced JavaScript with Office.js handling -->
+    <script type="text/javascript">
+        console.log("Main script starting...");
+        
+        // Global state
+        window.WORD_API_AVAILABLE = false;
+        window.OFFICE_READY = false;
+        
+        // Progress tracking
+        let currentStep = 0;
+        const totalSteps = 6;
+        
+        // Update progress function
+        function updateProgress(step, message, isError = false) {
+            currentStep = step;
+            const progressPercent = Math.round((step / totalSteps) * 100);
+            
+            console.log(`Progress: Step ${step}/${totalSteps} - ${message}`);
+            
+            // Update progress bar
+            const progressBar = document.getElementById('progress-bar');
+            const progressText = document.getElementById('progress-text');
+            if (progressBar && progressText) {
+                progressBar.style.width = progressPercent + '%';
+                progressText.textContent = progressPercent + '%';
+            }
+            
+            // Update step status
+            for (let i = 1; i <= totalSteps; i++) {
+                const stepElement = document.getElementById(`step-${i}`);
+                if (stepElement) {
+                    if (i < step) {
+                        stepElement.className = 'step completed';
+                    } else if (i === step) {
+                        stepElement.className = isError ? 'step error' : 'step current';
+                        if (message) {
+                            stepElement.textContent = stepElement.textContent.split(':')[0] + ': ' + message;
+                        }
+                    } else {
+                        stepElement.className = 'step pending';
+                    }
+                }
+            }
+            
+            // Update status message
+            const statusElement = document.getElementById("status-message");
+            if (statusElement) {
+                statusElement.textContent = message || `Step ${step} of ${totalSteps}`;
+                statusElement.className = `status-message ${isError ? "error" : "info"}`;
+            }
+        }
+        
+        // Function to proceed without Office.js
+        window.proceedWithoutOffice = function() {
+            console.log("Proceeding without Office.js");
+            updateProgress(2, "Office.js not available, using fallback mode...", true);
+            
+            setTimeout(() => {
+                setupBasicFunctionality();
+            }, 1000);
+        };
+        
+        // Setup basic functionality without Office.js
+        function setupBasicFunctionality() {
+            updateProgress(4, "Setting up basic functionality...");
+            
+            // Show analysis section (works without Word API)
+            const analysisSection = document.getElementById('analysis-section');
+            if (analysisSection) {
+                analysisSection.style.display = 'block';
+            }
+            
+            // Setup basic event listeners
+            const analyzeBtn = document.getElementById('analyze-contract');
+            if (analyzeBtn) {
+                analyzeBtn.addEventListener('click', function() {
+                    alert('Demo analysis would run here (Office.js not available)');
+                });
+            }
+            
+            setTimeout(() => {
+                completeBasicInitialization();
+            }, 1000);
+        }
+        
+        // Complete basic initialization
+        function completeBasicInitialization() {
+            updateProgress(6, "Initialization complete (basic mode)!");
+            
+            // Hide initialization section
+            const initSection = document.getElementById('initialization-section');
+            if (initSection) {
+                setTimeout(() => {
+                    initSection.style.display = 'none';
+                }, 1000);
+            }
+            
+            // Update final status
+            setTimeout(() => {
+                const statusElement = document.getElementById("status-message");
+                if (statusElement) {
+                    statusElement.textContent = "Add-in loaded in basic mode (Office.js not available)";
+                    statusElement.className = "status-message warning";
+                }
+            }, 1000);
+        }
+        
+        // Start initialization when DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', function() {
+                updateProgress(1, "DOM loaded, waiting for Office.js...");
+            });
+        } else {
+            updateProgress(1, "DOM ready, waiting for Office.js...");
+        }
+        
+        console.log("Main script loaded");
+    </script>
+</body>
+
+</html>

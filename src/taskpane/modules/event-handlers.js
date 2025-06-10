@@ -1,24 +1,34 @@
 // Event Handlers Module
-import { APIService } from '../../shared/api-service.js';
-import { API_CONFIG } from '../../shared/config.js';
-import { updateStatus, showProgressSection, hideProgressSection, handleError, setButtonLoading, clearResults, clearSuggestions } from '../../shared/utils.js';
-import { generateDemoAnalysis, generateRiskAnalysis, generateChangeSuggestions } from '../services/contract-analyzer.js';
-import { handleAgreementTypeChange, handleContentTypeChange, collectFormData, validateFormData, updateContractPreview } from '../services/contract-generator.js';
-import { displayCombinedAnalysisResults, displayContractResults, displayStructuredAnalysisResults } from './ui-display.js';
+// NO STATIC IMPORTS - All imports will be dynamic to prevent Word API access during loading
 
-// Initialize API service
-const apiService = new APIService(API_CONFIG);
+// Dynamic imports will be used throughout this module to prevent early Word API access
 
 // Contract Generation Event Handlers
 export async function generateContract() {
-  setButtonLoading("generate-contract-btn", true);
-  showProgressSection("Generating contract...");
-  updateStatus("Preparing contract generation...", "info");
-
   try {
+    // Dynamic imports to prevent early Word API access
+    const { updateStatus, showProgressSection, hideProgressSection, handleError, setButtonLoading } = await import('../../shared/utils.js');
+    const { APIService } = await import('../../shared/api-service.js');
+    const { API_CONFIG } = await import('../../shared/config.js');
+    const { collectFormData, validateFormData } = await import('../services/contract-generator.js');
+    const { displayContractResults } = await import('./ui-display.js');
+
+    // Check if Word API is available
+    if (!window.WORD_API_AVAILABLE) {
+      updateStatus("Error: Word API not available. Cannot generate contract in current environment.", "error");
+      return;
+    }
+
+    setButtonLoading("generate-contract-btn", true);
+    showProgressSection("Generating contract...");
+    updateStatus("Preparing contract generation...", "info");
+
+    // Initialize API service
+    const apiService = new APIService(API_CONFIG);
+
     // Collect and validate form data
     const formData = collectFormData();
-    
+
     if (!validateFormData(formData)) {
       throw new Error("Please fill in all required fields");
     }
@@ -33,29 +43,67 @@ export async function generateContract() {
 
     // Display results
     displayContractResults(result);
-    
+
     updateStatus("Contract generated successfully!", "success");
     hideProgressSection();
 
   } catch (error) {
-    handleError(error);
+    try {
+      const { handleError } = await import('../../shared/utils.js');
+      handleError(error);
+    } catch (importError) {
+      console.error("Error importing handleError:", importError);
+      console.error("Original error:", error);
+    }
   } finally {
-    setButtonLoading("generate-contract-btn", false);
+    try {
+      const { setButtonLoading } = await import('../../shared/utils.js');
+      setButtonLoading("generate-contract-btn", false);
+    } catch (importError) {
+      console.error("Error importing setButtonLoading:", importError);
+    }
   }
 }
 
 // Contract Analysis Event Handlers
 export async function analyzeContract() {
-  setButtonLoading("analyze-contract-btn", true);
-  showProgressSection("Analyzing contract...");
-  updateStatus("Reading document content...", "info");
-
   try {
-    // Get document text
-    const documentText = await getDocumentText();
-    
-    if (!documentText || documentText.trim().length < 50) {
-      throw new Error("Document appears to be empty or too short to analyze. Please ensure you have contract content in the document.");
+    // Dynamic imports to prevent early Word API access
+    const { updateStatus, showProgressSection, hideProgressSection, handleError, setButtonLoading } = await import('../../shared/utils.js');
+    const { generateDemoAnalysis, generateRiskAnalysis, generateChangeSuggestions } = await import('../services/contract-analyzer.js');
+    const { displayCombinedAnalysisResults, displayStructuredAnalysisResults } = await import('./ui-display.js');
+
+    setButtonLoading("analyze-contract-btn", true);
+    showProgressSection("Analyzing contract...");
+
+    let documentText;
+
+    if (window.WORD_API_AVAILABLE) {
+      // Use real Word document
+      updateStatus("Reading document content...", "info");
+      documentText = await getDocumentText();
+
+      if (!documentText || documentText.trim().length < 50) {
+        throw new Error("Document appears to be empty or too short to analyze. Please ensure you have contract content in the document.");
+      }
+    } else {
+      // Use demo content
+      updateStatus("Using demo contract for analysis...", "info");
+      documentText = `SAMPLE CONTENT MANAGEMENT AGREEMENT
+
+This Content Management Agreement is entered into between Company A and Company B.
+
+1. SCOPE OF SERVICES
+The Manager will provide content management services including distribution and marketing.
+
+2. COMPENSATION
+Revenue will be split 80% to Artist and 20% to Manager.
+
+3. TERM
+This agreement is effective for 2 years from the date of signing.
+
+4. TERMINATION
+Either party may terminate with 30 days notice.`;
     }
 
     updateStatus("Performing contract analysis...", "info");
@@ -70,7 +118,8 @@ export async function analyzeContract() {
     // Generate executive summary
     const summaryResult = generateExecutiveSummary(analysisResult, riskAnalysis, changeSuggestions);
 
-    updateStatus("Analysis complete!", "success");
+    const statusMessage = window.WORD_API_AVAILABLE ? "Analysis complete!" : "Demo analysis complete!";
+    updateStatus(statusMessage, "success");
 
     // Check if we have structured analysis and display accordingly
     if (analysisResult.structured_analysis) {
@@ -84,9 +133,20 @@ export async function analyzeContract() {
     hideProgressSection();
 
   } catch (error) {
-    handleError(error);
+    try {
+      const { handleError } = await import('../../shared/utils.js');
+      handleError(error);
+    } catch (importError) {
+      console.error("Error importing handleError:", importError);
+      console.error("Original error:", error);
+    }
   } finally {
-    setButtonLoading("analyze-contract-btn", false);
+    try {
+      const { setButtonLoading } = await import('../../shared/utils.js');
+      setButtonLoading("analyze-contract-btn", false);
+    } catch (importError) {
+      console.error("Error importing setButtonLoading:", importError);
+    }
   }
 }
 
@@ -153,56 +213,114 @@ export function dismissSuggestions() {
   updateStatus("Suggestions dismissed", "info");
 }
 
-// Utility Functions
+// Enhanced Utility Functions with better error diagnostics
 async function getDocumentText() {
-  // Ensure Word API is available
+  console.log("Attempting to read document text...");
+
+  // Comprehensive Word API availability check with detailed diagnostics
   if (typeof Word === 'undefined') {
-    throw new Error('Word API not available. Please ensure you are running this add-in in Microsoft Word.');
+    console.error("Word API object not found");
+    throw new Error('Word API not available. Please ensure you are running this add-in in Microsoft Word and that the Word API has loaded properly.');
   }
 
   // Additional check for Office.js initialization
-  if (!Office.context || !Office.context.document) {
+  if (!Office || !Office.context) {
+    console.error("Office.js context not available");
     throw new Error('Office.js not properly initialized. Please refresh the add-in.');
   }
 
-  return await Word.run(async (context) => {
-    const body = context.document.body;
-    body.load("text");
-    await context.sync();
-    return body.text;
-  });
+  // Check if we're in a Word context
+  if (Office.context.host !== Office.HostApplication.Word) {
+    console.error("Not running in Word context:", Office.context.host);
+    throw new Error('This add-in must be run in Microsoft Word.');
+  }
+
+  // Check if Word.run is available
+  if (typeof Word.run !== 'function') {
+    console.error("Word.run function not available");
+    throw new Error('Word.run function not available. Please ensure Word API is properly loaded.');
+  }
+
+  try {
+    console.log("Executing Word.run to read document...");
+
+    // Add timeout to prevent hanging
+    const readPromise = Word.run(async (context) => {
+      const body = context.document.body;
+      body.load("text");
+      await context.sync();
+
+      console.log("Document text read successfully, length:", body.text.length);
+      return body.text;
+    });
+
+    const timeoutPromise = new Promise((_, reject) => {
+      setTimeout(() => reject(new Error("Document read timeout")), 15000);
+    });
+
+    return await Promise.race([readPromise, timeoutPromise]);
+
+  } catch (error) {
+    console.error("Error in Word.run:", error);
+
+    // Provide more specific error messages
+    if (error.message.includes("timeout")) {
+      throw new Error(`Document read timeout - this may indicate a slow connection or large document`);
+    } else if (error.message.includes("permission")) {
+      throw new Error(`Permission denied - please ensure the add-in has document access permissions`);
+    } else if (error.message.includes("context")) {
+      throw new Error(`Word context error - please try refreshing the add-in`);
+    } else {
+      throw new Error(`Failed to read document: ${error.message}`);
+    }
+  }
 }
 
 async function insertContractIntoDocument(result, formData) {
-  // Ensure Word API is available
+  // Comprehensive Word API availability check
   if (typeof Word === 'undefined') {
-    throw new Error('Word API not available. Please ensure you are running this add-in in Microsoft Word.');
+    throw new Error('Word API not available. Please ensure you are running this add-in in Microsoft Word and that the Word API has loaded properly.');
   }
 
   // Additional check for Office.js initialization
-  if (!Office.context || !Office.context.document) {
+  if (!Office || !Office.context) {
     throw new Error('Office.js not properly initialized. Please refresh the add-in.');
   }
 
-  return await Word.run(async (context) => {
-    const body = context.document.body;
-    
-    // Clear existing content
-    body.clear();
-    
-    // Generate contract content based on form data
-    const contractContent = generateContractContent(formData);
-    
-    // Insert the contract
-    body.insertText(contractContent, Word.InsertLocation.start);
-    
-    // Apply formatting
-    const range = body.getRange();
-    range.font.name = "Calibri";
-    range.font.size = 11;
-    
-    await context.sync();
-  });
+  // Check if we're in a Word context
+  if (Office.context.host !== Office.HostApplication.Word) {
+    throw new Error('This add-in must be run in Microsoft Word.');
+  }
+
+  // Check if Word.run is available
+  if (typeof Word.run !== 'function') {
+    throw new Error('Word.run function not available. Please ensure Word API is properly loaded.');
+  }
+
+  try {
+    return await Word.run(async (context) => {
+      const body = context.document.body;
+
+      // Clear existing content
+      body.clear();
+
+      // Generate contract content based on form data
+      const contractContent = generateContractContent(formData);
+
+      // Insert the contract
+      body.insertText(contractContent, Word.InsertLocation.start);
+
+      // Apply formatting
+      const range = body.getRange();
+      range.font.name = "Calibri";
+      range.font.size = 11;
+
+      await context.sync();
+    });
+  } catch (error) {
+    console.error("Error in Word.run during contract insertion:", error);
+    throw new Error(`Failed to insert contract: ${error.message}`);
+  }
 }
 
 function generateContractContent(formData) {
@@ -305,8 +423,16 @@ function generateExecutiveSummary(analysisResult, riskAnalysis, changeSuggestion
   };
 }
 
-// Export form change handlers
-export { handleAgreementTypeChange, handleContentTypeChange };
+// Export form change handlers - these will be dynamically imported when needed
+export async function handleAgreementTypeChange(event) {
+  const { handleAgreementTypeChange } = await import('../services/contract-generator.js');
+  return handleAgreementTypeChange(event);
+}
+
+export async function handleContentTypeChange(event) {
+  const { handleContentTypeChange } = await import('../services/contract-generator.js');
+  return handleContentTypeChange(event);
+}
 
 // Export utility functions for global access
 window.generateContract = generateContract;
@@ -314,7 +440,16 @@ window.analyzeContract = analyzeContract;
 window.applySuggestion = applySuggestion;
 window.applyAllChanges = applyAllChanges;
 window.dismissSuggestions = dismissSuggestions;
-window.clearResults = clearResults;
-window.clearSuggestions = clearSuggestions;
 window.handleAgreementTypeChange = handleAgreementTypeChange;
 window.handleContentTypeChange = handleContentTypeChange;
+
+// Dynamic utility functions that will be imported when needed
+window.clearResults = async function() {
+  const { clearResults } = await import('../../shared/utils.js');
+  return clearResults();
+};
+
+window.clearSuggestions = async function() {
+  const { clearSuggestions } = await import('../../shared/utils.js');
+  return clearSuggestions();
+};

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<OfficeApp xmlns="http://schemas.microsoft.com/office/appforoffice/1.1" 
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+           xsi:type="TaskPaneApp">
+
+  <!-- IMPORTANT! Id must be unique for your add-in. If you copy this manifest ensure that you change this id to your own GUID. -->
+  <Id>c6890c26-5bbb-40ed-a321-37f07909a2f0</Id>
+  <Version>1.0.0.0</Version>
+  <ProviderName>RHEI</ProviderName>
+  <DefaultLocale>en-US</DefaultLocale>
+  <!-- The display name of your add-in. Used on the store and various placed of the Office UI such as the add-in's dialog. -->
+  <DisplayName DefaultValue="RHEI AI Legal Assistant" />
+  <Description DefaultValue="AI-powered contract analysis and redlining for Microsoft Word" />
+  <!-- Icon for your add-in. Used on installation screens and the add-in's dialog. -->
+  <IconUrl DefaultValue="https://mfellsbbtv.github.io/starling-word-addin/assets/icon-32.png" />
+  <HighResolutionIconUrl DefaultValue="https://mfellsbbtv.github.io/starling-word-addin/assets/icon-64.png" />
+  <SupportUrl DefaultValue="https://github.com/mfellsbbtv/starling-word-addin" />
+  <!-- Domains that are allowed when navigating. For example, if you use ShowTaskpane and then have an href link, navigation is only allowed if the domain is on this list. -->
+  <AppDomains>
+    <AppDomain>https://mfellsbbtv.github.io</AppDomain>
+  </AppDomains>
+
+  <!-- BeginTaskPaneMode integration. Any client that doesn't understand commands will use this section.
+    This section will also be used if there are no VersionOverrides. -->
+  <Hosts>
+    <Host Name="Document"/>
+  </Hosts>
+  <DefaultSettings>
+    <SourceLocation DefaultValue="https://mfellsbbtv.github.io/starling-word-addin/taskpane.html" />
+  </DefaultSettings>
+  <!-- EndTaskPaneMode integration. -->
+
+  <Permissions>ReadWriteDocument</Permissions>
+
+  <Requirements>
+    <Sets DefaultMinVersion="1.1">
+      <Set Name="WordApi" MinVersion="1.1" />
+    </Sets>
+  </Requirements>
+
+</OfficeApp>
