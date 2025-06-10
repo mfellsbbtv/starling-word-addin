@@ -1,0 +1,135 @@
+{
+  "metadata": {
+    "name": "Standard Clauses Library - {{CONTRACT_TYPE}} - {{CONTENT_TYPE}}",
+    "version": "1.0.0",
+    "created": "{{DATE}}",
+    "updated": "{{DATE}}",
+    "author": "RHEI Legal Team",
+    "description": "Standard clauses for {{CONTRACT_TYPE}} agreements covering {{CONTENT_TYPE}} content"
+  },
+  "clauses": [
+    {
+      "id": "termination_standard",
+      "category": "termination",
+      "title": "Standard Termination Clause",
+      "content": "{{TERMINATION_CLAUSE_CONTENT}}",
+      "negotiable": true,
+      "risk_level": "low",
+      "alternatives": [
+        {
+          "id": "termination_extended",
+          "title": "Extended Notice Termination",
+          "content": "{{EXTENDED_TERMINATION_CONTENT}}",
+          "risk_level": "medium"
+        }
+      ],
+      "keywords": ["termination", "terminate", "end", "expiry"],
+      "compliance_notes": "{{COMPLIANCE_NOTES}}"
+    },
+    {
+      "id": "payment_standard",
+      "category": "financial",
+      "title": "Standard Payment Terms",
+      "content": "{{PAYMENT_CLAUSE_CONTENT}}",
+      "negotiable": false,
+      "risk_level": "low",
+      "alternatives": [],
+      "keywords": ["payment", "compensation", "revenue", "split"],
+      "compliance_notes": "{{PAYMENT_COMPLIANCE_NOTES}}"
+    },
+    {
+      "id": "liability_limitation",
+      "category": "liability",
+      "title": "Limitation of Liability",
+      "content": "{{LIABILITY_CLAUSE_CONTENT}}",
+      "negotiable": true,
+      "risk_level": "high",
+      "alternatives": [
+        {
+          "id": "liability_mutual",
+          "title": "Mutual Liability Limitation",
+          "content": "{{MUTUAL_LIABILITY_CONTENT}}",
+          "risk_level": "medium"
+        }
+      ],
+      "keywords": ["liability", "damages", "limitation", "indemnification"],
+      "compliance_notes": "{{LIABILITY_COMPLIANCE_NOTES}}"
+    },
+    {
+      "id": "intellectual_property",
+      "category": "rights",
+      "title": "Intellectual Property Rights",
+      "content": "{{IP_CLAUSE_CONTENT}}",
+      "negotiable": false,
+      "risk_level": "high",
+      "alternatives": [],
+      "keywords": ["intellectual property", "copyright", "trademark", "rights"],
+      "compliance_notes": "{{IP_COMPLIANCE_NOTES}}"
+    },
+    {
+      "id": "confidentiality",
+      "category": "confidentiality",
+      "title": "Confidentiality and Non-Disclosure",
+      "content": "{{CONFIDENTIALITY_CLAUSE_CONTENT}}",
+      "negotiable": true,
+      "risk_level": "medium",
+      "alternatives": [
+        {
+          "id": "confidentiality_mutual",
+          "title": "Mutual Confidentiality",
+          "content": "{{MUTUAL_CONFIDENTIALITY_CONTENT}}",
+          "risk_level": "low"
+        }
+      ],
+      "keywords": ["confidential", "non-disclosure", "proprietary", "information"],
+      "compliance_notes": "{{CONFIDENTIALITY_COMPLIANCE_NOTES}}"
+    },
+    {
+      "id": "governing_law",
+      "category": "general",
+      "title": "Governing Law and Jurisdiction",
+      "content": "{{GOVERNING_LAW_CLAUSE_CONTENT}}",
+      "negotiable": true,
+      "risk_level": "low",
+      "alternatives": [
+        {
+          "id": "governing_law_alternative",
+          "title": "Alternative Jurisdiction",
+          "content": "{{ALTERNATIVE_JURISDICTION_CONTENT}}",
+          "risk_level": "low"
+        }
+      ],
+      "keywords": ["governing law", "jurisdiction", "disputes", "courts"],
+      "compliance_notes": "{{GOVERNING_LAW_COMPLIANCE_NOTES}}"
+    }
+  ],
+  "clause_relationships": [
+    {
+      "primary_clause": "termination_standard",
+      "related_clauses": ["payment_standard", "confidentiality"],
+      "relationship_type": "dependent"
+    },
+    {
+      "primary_clause": "liability_limitation",
+      "related_clauses": ["intellectual_property"],
+      "relationship_type": "complementary"
+    }
+  ],
+  "compliance_requirements": {
+    "mandatory_clauses": [
+      "termination_standard",
+      "payment_standard",
+      "intellectual_property"
+    ],
+    "recommended_clauses": [
+      "liability_limitation",
+      "confidentiality",
+      "governing_law"
+    ],
+    "jurisdiction_specific": {
+      "US": ["governing_law"],
+      "CA": ["governing_law", "confidentiality"],
+      "EU": ["liability_limitation", "confidentiality"]
+    }
+  }
+}

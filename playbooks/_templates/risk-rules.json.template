@@ -1,0 +1,179 @@
+{
+  "metadata": {
+    "name": "Risk Assessment Rules - {{CONTRACT_TYPE}} - {{CONTENT_TYPE}}",
+    "version": "1.0.0",
+    "created": "{{DATE}}",
+    "updated": "{{DATE}}",
+    "author": "RHEI Legal Team",
+    "description": "Risk assessment rules for {{CONTRACT_TYPE}} agreements covering {{CONTENT_TYPE}} content"
+  },
+  "risk_categories": [
+    {
+      "id": "missing_clauses",
+      "name": "Missing Essential Clauses",
+      "severity": "high",
+      "description": "Contract lacks essential clauses required for this agreement type"
+    },
+    {
+      "id": "unfavorable_terms",
+      "name": "Unfavorable Terms",
+      "severity": "medium",
+      "description": "Contract contains terms that may be unfavorable to one party"
+    },
+    {
+      "id": "compliance_issues",
+      "name": "Compliance Issues",
+      "severity": "high",
+      "description": "Contract may not comply with applicable laws or regulations"
+    },
+    {
+      "id": "ambiguous_language",
+      "name": "Ambiguous Language",
+      "severity": "low",
+      "description": "Contract contains unclear or ambiguous language"
+    }
+  ],
+  "risk_rules": [
+    {
+      "id": "missing_termination",
+      "category": "missing_clauses",
+      "severity": "high",
+      "title": "Missing Termination Clause",
+      "description": "Contract lacks clear termination conditions and procedures",
+      "detection": {
+        "type": "keyword_absence",
+        "keywords": ["termination", "terminate", "end agreement", "expiry"],
+        "threshold": 0
+      },
+      "recommendation": {
+        "action": "add_clause",
+        "clause_id": "termination_standard",
+        "priority": "immediate",
+        "explanation": "Add comprehensive termination clause specifying conditions, notice periods, and post-termination obligations"
+      },
+      "impact_assessment": {
+        "financial_risk": "medium",
+        "legal_risk": "high",
+        "operational_risk": "medium"
+      }
+    },
+    {
+      "id": "missing_liability",
+      "category": "missing_clauses",
+      "severity": "medium",
+      "title": "No Liability Limitation",
+      "description": "Contract does not address liability limitations or damage caps",
+      "detection": {
+        "type": "keyword_absence",
+        "keywords": ["liability", "limitation", "damages", "indemnification"],
+        "threshold": 0
+      },
+      "recommendation": {
+        "action": "add_clause",
+        "clause_id": "liability_limitation",
+        "priority": "high",
+        "explanation": "Include liability limitation clauses to protect against excessive damages"
+      },
+      "impact_assessment": {
+        "financial_risk": "high",
+        "legal_risk": "high",
+        "operational_risk": "low"
+      }
+    },
+    {
+      "id": "vague_payment_terms",
+      "category": "ambiguous_language",
+      "severity": "medium",
+      "title": "Vague Payment Terms",
+      "description": "Payment terms are not clearly specified",
+      "detection": {
+        "type": "keyword_analysis",
+        "keywords": ["payment", "compensation"],
+        "required_specificity": ["amount", "schedule", "method"],
+        "threshold": 2
+      },
+      "recommendation": {
+        "action": "clarify_language",
+        "clause_id": "payment_standard",
+        "priority": "high",
+        "explanation": "Specify exact payment amounts, schedules, and methods to avoid disputes"
+      },
+      "impact_assessment": {
+        "financial_risk": "high",
+        "legal_risk": "medium",
+        "operational_risk": "medium"
+      }
+    },
+    {
+      "id": "excessive_revenue_split",
+      "category": "unfavorable_terms",
+      "severity": "medium",
+      "title": "Potentially Unfavorable Revenue Split",
+      "description": "Revenue split may be unfavorable compared to industry standards",
+      "detection": {
+        "type": "numerical_analysis",
+        "field": "revenue_split",
+        "operator": "greater_than",
+        "threshold": 30,
+        "context": "{{CONTENT_TYPE}}"
+      },
+      "recommendation": {
+        "action": "review_terms",
+        "priority": "medium",
+        "explanation": "Review revenue split percentage against industry standards for {{CONTENT_TYPE}} content"
+      },
+      "impact_assessment": {
+        "financial_risk": "high",
+        "legal_risk": "low",
+        "operational_risk": "low"
+      }
+    }
+  ],
+  "compliance_checks": [
+    {
+      "id": "jurisdiction_compliance",
+      "name": "Jurisdiction-Specific Compliance",
+      "rules": [
+        {
+          "jurisdiction": "US",
+          "required_clauses": ["governing_law", "liability_limitation"],
+          "prohibited_clauses": [],
+          "special_requirements": ["state_specific_laws"]
+        },
+        {
+          "jurisdiction": "CA",
+          "required_clauses": ["governing_law", "confidentiality"],
+          "prohibited_clauses": [],
+          "special_requirements": ["privacy_laws"]
+        },
+        {
+          "jurisdiction": "EU",
+          "required_clauses": ["liability_limitation", "confidentiality", "data_protection"],
+          "prohibited_clauses": ["unlimited_liability"],
+          "special_requirements": ["gdpr_compliance"]
+        }
+      ]
+    }
+  ],
+  "scoring_algorithm": {
+    "base_score": 100,
+    "deductions": {
+      "high_risk": 25,
+      "medium_risk": 15,
+      "low_risk": 5
+    },
+    "bonuses": {
+      "comprehensive_clauses": 10,
+      "clear_language": 5,
+      "compliance_adherence": 15
+    },
+    "minimum_score": 0,
+    "maximum_score": 100
+  },
+  "recommendations_priority": {
+    "immediate": ["missing_termination", "compliance_violations"],
+    "high": ["missing_liability", "vague_payment_terms"],
+    "medium": ["excessive_revenue_split", "ambiguous_language"],
+    "low": ["formatting_issues", "minor_clarifications"]
+  }
+}

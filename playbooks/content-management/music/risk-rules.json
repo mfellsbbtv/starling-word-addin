@@ -1,0 +1,247 @@
+{
+  "metadata": {
+    "name": "Risk Assessment Rules - Content Management - Music",
+    "version": "1.0.0",
+    "created": "2024-12-11",
+    "updated": "2024-12-11",
+    "author": "RHEI Legal Team",
+    "description": "Risk assessment rules for Content Management agreements covering music content"
+  },
+  "risk_categories": [
+    {
+      "id": "missing_clauses",
+      "name": "Missing Essential Clauses",
+      "severity": "high",
+      "description": "Contract lacks essential clauses required for music management agreements"
+    },
+    {
+      "id": "unfavorable_terms",
+      "name": "Unfavorable Terms",
+      "severity": "medium",
+      "description": "Contract contains terms that may be unfavorable for music content management"
+    },
+    {
+      "id": "compliance_issues",
+      "name": "Music Industry Compliance",
+      "severity": "high",
+      "description": "Contract may not comply with music industry standards or regulations"
+    },
+    {
+      "id": "rights_issues",
+      "name": "Rights and Ownership Issues",
+      "severity": "high",
+      "description": "Unclear or problematic rights allocation for music content"
+    }
+  ],
+  "risk_rules": [
+    {
+      "id": "missing_termination",
+      "category": "missing_clauses",
+      "severity": "high",
+      "title": "Missing Termination Clause",
+      "description": "Contract lacks clear termination conditions and procedures for music management",
+      "detection": {
+        "type": "keyword_absence",
+        "keywords": ["termination", "terminate", "end agreement", "expiry"],
+        "threshold": 0
+      },
+      "recommendation": {
+        "action": "add_clause",
+        "clause_id": "termination_standard",
+        "priority": "immediate",
+        "explanation": "Add comprehensive termination clause with notice periods and post-termination rights management"
+      },
+      "impact_assessment": {
+        "financial_risk": "high",
+        "legal_risk": "high",
+        "operational_risk": "medium"
+      }
+    },
+    {
+      "id": "missing_rights_definition",
+      "category": "rights_issues",
+      "severity": "high",
+      "title": "Unclear Rights Definition",
+      "description": "Contract does not clearly define master recording vs publishing rights",
+      "detection": {
+        "type": "keyword_absence",
+        "keywords": ["master recording", "publishing rights", "copyright ownership"],
+        "threshold": 1
+      },
+      "recommendation": {
+        "action": "add_clause",
+        "clause_id": "music_rights_master",
+        "priority": "immediate",
+        "explanation": "Clearly define whether agreement covers master recordings, publishing, or both"
+      },
+      "impact_assessment": {
+        "financial_risk": "high",
+        "legal_risk": "high",
+        "operational_risk": "high"
+      }
+    },
+    {
+      "id": "excessive_revenue_split",
+      "category": "unfavorable_terms",
+      "severity": "medium",
+      "title": "High Management Fee",
+      "description": "Management fee exceeds industry standard for music content management",
+      "detection": {
+        "type": "numerical_analysis",
+        "field": "revenue_split",
+        "operator": "greater_than",
+        "threshold": 25,
+        "context": "music"
+      },
+      "recommendation": {
+        "action": "review_terms",
+        "priority": "high",
+        "explanation": "Industry standard for music management is typically 15-25%. Consider negotiating lower rate."
+      },
+      "impact_assessment": {
+        "financial_risk": "high",
+        "legal_risk": "low",
+        "operational_risk": "low"
+      }
+    },
+    {
+      "id": "missing_liability_protection",
+      "category": "missing_clauses",
+      "severity": "medium",
+      "title": "No Liability Limitation",
+      "description": "Contract lacks liability limitation clauses for music industry risks",
+      "detection": {
+        "type": "keyword_absence",
+        "keywords": ["liability", "limitation", "damages", "indemnification"],
+        "threshold": 0
+      },
+      "recommendation": {
+        "action": "add_clause",
+        "clause_id": "liability_limitation",
+        "priority": "high",
+        "explanation": "Include liability limitations to protect against music industry-specific risks"
+      },
+      "impact_assessment": {
+        "financial_risk": "high",
+        "legal_risk": "high",
+        "operational_risk": "low"
+      }
+    },
+    {
+      "id": "vague_territory_definition",
+      "category": "rights_issues",
+      "severity": "medium",
+      "title": "Unclear Territory Rights",
+      "description": "Geographic scope of management rights is not clearly defined",
+      "detection": {
+        "type": "keyword_analysis",
+        "keywords": ["territory", "worldwide", "geographic"],
+        "required_specificity": ["specific countries", "regions", "exclusions"],
+        "threshold": 1
+      },
+      "recommendation": {
+        "action": "clarify_language",
+        "clause_id": "territory_worldwide",
+        "priority": "medium",
+        "explanation": "Clearly define geographic territories where management rights apply"
+      },
+      "impact_assessment": {
+        "financial_risk": "medium",
+        "legal_risk": "medium",
+        "operational_risk": "high"
+      }
+    },
+    {
+      "id": "missing_advance_terms",
+      "category": "missing_clauses",
+      "severity": "low",
+      "title": "Advance Terms Not Specified",
+      "description": "If advance is provided, recoupment terms should be clearly defined",
+      "detection": {
+        "type": "conditional_check",
+        "condition": "advance_amount > 0",
+        "required_keywords": ["recoupable", "recoupment", "advance terms"]
+      },
+      "recommendation": {
+        "action": "add_clause",
+        "clause_id": "advance_recoupment",
+        "priority": "medium",
+        "explanation": "Clearly define advance recoupment terms to avoid future disputes"
+      },
+      "impact_assessment": {
+        "financial_risk": "medium",
+        "legal_risk": "low",
+        "operational_risk": "low"
+      }
+    }
+  ],
+  "compliance_checks": [
+    {
+      "id": "music_industry_standards",
+      "name": "Music Industry Standard Compliance",
+      "rules": [
+        {
+          "requirement": "Revenue split within industry norms",
+          "check": "revenue_split <= 25",
+          "severity": "medium"
+        },
+        {
+          "requirement": "Clear rights definition",
+          "check": "contains_keywords(['master recording', 'publishing'])",
+          "severity": "high"
+        },
+        {
+          "requirement": "Termination notice period",
+          "check": "termination_notice >= 30",
+          "severity": "medium"
+        }
+      ]
+    },
+    {
+      "id": "jurisdiction_compliance",
+      "name": "Jurisdiction-Specific Compliance",
+      "rules": [
+        {
+          "jurisdiction": "US",
+          "required_clauses": ["governing_law", "liability_limitation"],
+          "prohibited_clauses": [],
+          "special_requirements": ["copyright_compliance"]
+        },
+        {
+          "jurisdiction": "CA",
+          "required_clauses": ["governing_law", "confidentiality_music"],
+          "prohibited_clauses": [],
+          "special_requirements": ["privacy_laws", "artist_rights"]
+        },
+        {
+          "jurisdiction": "EU",
+          "required_clauses": ["liability_limitation", "confidentiality_music"],
+          "prohibited_clauses": ["unlimited_liability"],
+          "special_requirements": ["gdpr_compliance", "artist_moral_rights"]
+        }
+      ]
+    }
+  ],
+  "scoring_algorithm": {
+    "base_score": 100,
+    "deductions": {
+      "high": 25,
+      "medium": 15,
+      "low": 5
+    },
+    "bonuses": {
+      "comprehensive_rights_definition": 10,
+      "industry_standard_terms": 5,
+      "clear_termination_terms": 5,
+      "liability_protection": 10
+    },
+    "minimum_score": 0,
+    "maximum_score": 100
+  },
+  "recommendations_priority": {
+    "immediate": ["missing_termination", "missing_rights_definition"],
+    "high": ["missing_liability_protection", "excessive_revenue_split"],
+    "medium": ["vague_territory_definition", "missing_advance_terms"],
+    "low": ["formatting_issues", "minor_clarifications"]
+  }
+}

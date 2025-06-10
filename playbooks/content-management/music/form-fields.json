@@ -1,0 +1,258 @@
+{
+  "metadata": {
+    "name": "Form Fields Configuration - Content Management - Music",
+    "version": "1.0.0",
+    "created": "2024-12-11",
+    "updated": "2024-12-11",
+    "author": "RHEI Legal Team",
+    "description": "Dynamic form field configuration for Content Management agreements covering music content"
+  },
+  "form_sections": [
+    {
+      "id": "parties",
+      "title": "Parties Information",
+      "order": 1,
+      "description": "Basic information about the contracting parties",
+      "fields": [
+        {
+          "name": "entity_name",
+          "label": "Management Entity Name",
+          "type": "text",
+          "required": true,
+          "placeholder": "Enter the management company name",
+          "description": "Name of the music management entity or company",
+          "validation": {
+            "min_length": 2,
+            "max_length": 100,
+            "pattern": "^[a-zA-Z0-9\\s\\.,&-]+$"
+          },
+          "help_text": "Legal name of the management entity as it should appear in the contract"
+        },
+        {
+          "name": "content_creator",
+          "label": "Artist/Creator Name",
+          "type": "text",
+          "required": true,
+          "placeholder": "Enter the artist or creator name",
+          "description": "Name of the music artist or content creator",
+          "validation": {
+            "min_length": 2,
+            "max_length": 100,
+            "pattern": "^[a-zA-Z\\s\\.,'-]+$"
+          },
+          "help_text": "Full legal name or professional name of the artist/creator"
+        }
+      ]
+    },
+    {
+      "id": "scope",
+      "title": "Scope of Music Management",
+      "order": 2,
+      "description": "Details about the music management services and scope",
+      "fields": [
+        {
+          "name": "scope_description",
+          "label": "Scope of Management Services",
+          "type": "textarea",
+          "required": true,
+          "placeholder": "Describe the music management services to be provided...",
+          "description": "Detailed description of the music management services and scope of work",
+          "validation": {
+            "min_length": 50,
+            "max_length": 1000
+          },
+          "help_text": "Include details about distribution, marketing, rights management, and other services"
+        },
+        {
+          "name": "music_rights",
+          "label": "Music Rights Covered",
+          "type": "select",
+          "required": true,
+          "options": [
+            { "value": "Master Rights", "label": "Master Recording Rights Only" },
+            { "value": "Publishing Rights", "label": "Publishing Rights Only" },
+            { "value": "Both", "label": "Both Master and Publishing Rights" },
+            { "value": "Synchronization Only", "label": "Synchronization Rights Only" }
+          ],
+          "description": "Type of music rights being managed under this agreement",
+          "help_text": "Choose the specific rights that will be managed by the entity"
+        }
+      ]
+    },
+    {
+      "id": "financial",
+      "title": "Financial Terms",
+      "order": 3,
+      "description": "Revenue sharing and financial arrangements for music management",
+      "fields": [
+        {
+          "name": "revenue_split",
+          "label": "Management Fee (%)",
+          "type": "number",
+          "required": true,
+          "placeholder": "Enter percentage (15-25 typical)",
+          "description": "Percentage of revenue retained by the management entity",
+          "validation": {
+            "min": 10,
+            "max": 50,
+            "step": 0.5
+          },
+          "help_text": "Industry standard for music management is typically 15-25%"
+        },
+        {
+          "name": "advance_amount",
+          "label": "Advance Amount ($)",
+          "type": "number",
+          "required": false,
+          "placeholder": "Enter advance amount (optional)",
+          "description": "Initial advance payment if applicable",
+          "validation": {
+            "min": 0,
+            "max": 1000000
+          },
+          "help_text": "Any upfront payment or advance (leave blank if not applicable)"
+        }
+      ]
+    },
+    {
+      "id": "terms",
+      "title": "Contract Terms",
+      "order": 4,
+      "description": "Duration, territory, and termination terms",
+      "fields": [
+        {
+          "name": "term_length",
+          "label": "Contract Term",
+          "type": "select",
+          "required": true,
+          "options": [
+            { "value": "1 year", "label": "1 Year" },
+            { "value": "2 years", "label": "2 Years" },
+            { "value": "3 years", "label": "3 Years" },
+            { "value": "5 years", "label": "5 Years" },
+            { "value": "custom", "label": "Custom Duration" }
+          ],
+          "description": "Duration of the music management agreement",
+          "help_text": "How long the management contract will remain in effect"
+        },
+        {
+          "name": "territory",
+          "label": "Territory",
+          "type": "select",
+          "required": true,
+          "options": [
+            { "value": "Worldwide", "label": "Worldwide" },
+            { "value": "North America", "label": "North America" },
+            { "value": "United States", "label": "United States" },
+            { "value": "Canada", "label": "Canada" },
+            { "value": "Europe", "label": "Europe" },
+            { "value": "Other", "label": "Other (specify in notes)" }
+          ],
+          "description": "Geographic scope of the management agreement",
+          "help_text": "Where the management rights will be effective"
+        },
+        {
+          "name": "termination_notice",
+          "label": "Termination Notice (days)",
+          "type": "number",
+          "required": true,
+          "placeholder": "Enter number of days (30-90 typical)",
+          "description": "Notice period required for contract termination",
+          "validation": {
+            "min": 30,
+            "max": 180
+          },
+          "help_text": "Industry standard is typically 60-90 days for music management"
+        }
+      ]
+    }
+  ],
+  "conditional_fields": [
+    {
+      "condition": {
+        "field": "term_length",
+        "operator": "equals",
+        "value": "custom"
+      },
+      "show_fields": [
+        {
+          "name": "custom_term",
+          "label": "Custom Term Duration",
+          "type": "text",
+          "required": true,
+          "placeholder": "e.g., 18 months, 4 years",
+          "description": "Specify the custom contract duration"
+        }
+      ]
+    },
+    {
+      "condition": {
+        "field": "territory",
+        "operator": "equals",
+        "value": "Other"
+      },
+      "show_fields": [
+        {
+          "name": "territory_custom",
+          "label": "Specify Territory",
+          "type": "text",
+          "required": true,
+          "placeholder": "Enter specific territory or regions",
+          "description": "Specify the geographic territory for management rights"
+        }
+      ]
+    },
+    {
+      "condition": {
+        "field": "advance_amount",
+        "operator": "greater_than",
+        "value": 0
+      },
+      "show_fields": [
+        {
+          "name": "advance_recoupable",
+          "label": "Advance Recoupment",
+          "type": "select",
+          "required": true,
+          "options": [
+            { "value": "recoupable", "label": "Recoupable from future earnings" },
+            { "value": "non-recoupable", "label": "Non-recoupable (additional compensation)" }
+          ],
+          "description": "How the advance will be handled"
+        }
+      ]
+    }
+  ],
+  "validation_rules": [
+    {
+      "type": "cross_field",
+      "rule": "revenue_split_reasonable",
+      "fields": ["revenue_split", "music_rights"],
+      "validation": {
+        "message": "Management fee seems high for the selected rights type",
+        "severity": "warning",
+        "condition": "revenue_split > 25 && music_rights != 'Both'"
+      }
+    },
+    {
+      "type": "cross_field",
+      "rule": "termination_notice_adequate",
+      "fields": ["termination_notice", "term_length"],
+      "validation": {
+        "message": "Consider longer notice period for longer-term agreements",
+        "severity": "info",
+        "condition": "termination_notice < 60 && term_length.includes('year') && parseInt(term_length) >= 3"
+      }
+    }
+  ],
+  "ui_configuration": {
+    "layout": "vertical",
+    "show_progress": true,
+    "allow_save_draft": true,
+    "required_field_indicator": "*",
+    "help_text_position": "below",
+    "validation_display": "inline",
+    "section_collapsible": true,
+    "auto_save": true
+  }
+}

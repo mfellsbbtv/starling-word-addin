@@ -1,0 +1,123 @@
+{
+  "metadata": {
+    "name": "{{CONTRACT_TYPE}} - {{CONTENT_TYPE}}",
+    "version": "1.0.0",
+    "created": "{{DATE}}",
+    "updated": "{{DATE}}",
+    "author": "RHEI Legal Team",
+    "description": "Template for {{CONTRACT_TYPE}} agreements covering {{CONTENT_TYPE}} content"
+  },
+  "template": {
+    "title": "{{CONTRACT_TYPE_TITLE}}",
+    "parties": {
+      "party1": {
+        "role": "{{PARTY1_ROLE}}",
+        "placeholder": "{{PARTY1_PLACEHOLDER}}"
+      },
+      "party2": {
+        "role": "{{PARTY2_ROLE}}",
+        "placeholder": "{{PARTY2_PLACEHOLDER}}"
+      }
+    },
+    "sections": [
+      {
+        "id": "preamble",
+        "title": "PREAMBLE",
+        "order": 1,
+        "required": true,
+        "content": "{{PREAMBLE_CONTENT}}"
+      },
+      {
+        "id": "definitions",
+        "title": "DEFINITIONS",
+        "order": 2,
+        "required": true,
+        "content": "{{DEFINITIONS_CONTENT}}"
+      },
+      {
+        "id": "scope",
+        "title": "SCOPE OF SERVICES",
+        "order": 3,
+        "required": true,
+        "content": "{{SCOPE_CONTENT}}"
+      },
+      {
+        "id": "compensation",
+        "title": "COMPENSATION",
+        "order": 4,
+        "required": true,
+        "content": "{{COMPENSATION_CONTENT}}"
+      },
+      {
+        "id": "term",
+        "title": "TERM AND TERMINATION",
+        "order": 5,
+        "required": true,
+        "content": "{{TERM_CONTENT}}"
+      },
+      {
+        "id": "rights",
+        "title": "RIGHTS AND OBLIGATIONS",
+        "order": 6,
+        "required": true,
+        "content": "{{RIGHTS_CONTENT}}"
+      },
+      {
+        "id": "liability",
+        "title": "LIABILITY AND INDEMNIFICATION",
+        "order": 7,
+        "required": true,
+        "content": "{{LIABILITY_CONTENT}}"
+      },
+      {
+        "id": "general",
+        "title": "GENERAL PROVISIONS",
+        "order": 8,
+        "required": true,
+        "content": "{{GENERAL_CONTENT}}"
+      }
+    ],
+    "variables": {
+      "entity_name": "{{ENTITY_NAME}}",
+      "content_creator": "{{CONTENT_CREATOR}}",
+      "scope_description": "{{SCOPE_DESCRIPTION}}",
+      "revenue_split": "{{REVENUE_SPLIT}}",
+      "term_length": "{{TERM_LENGTH}}",
+      "territory": "{{TERRITORY}}",
+      "effective_date": "{{EFFECTIVE_DATE}}",
+      "governing_law": "{{GOVERNING_LAW}}"
+    }
+  },
+  "generation_rules": {
+    "conditional_sections": [
+      {
+        "condition": "{{CONDITION}}",
+        "section_id": "{{SECTION_ID}}",
+        "action": "include|exclude|modify"
+      }
+    ],
+    "variable_transformations": [
+      {
+        "variable": "{{VARIABLE_NAME}}",
+        "transformation": "{{TRANSFORMATION_RULE}}"
+      }
+    ]
+  },
+  "validation": {
+    "required_fields": [
+      "entity_name",
+      "content_creator",
+      "scope_description",
+      "revenue_split",
+      "term_length"
+    ],
+    "field_validations": [
+      {
+        "field": "revenue_split",
+        "type": "number",
+        "min": 0,
+        "max": 100
+      }
+    ]
+  }
+}

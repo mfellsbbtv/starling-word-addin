@@ -1,0 +1,221 @@
+{
+  "metadata": {
+    "name": "Form Fields Configuration - {{CONTRACT_TYPE}} - {{CONTENT_TYPE}}",
+    "version": "1.0.0",
+    "created": "{{DATE}}",
+    "updated": "{{DATE}}",
+    "author": "RHEI Legal Team",
+    "description": "Dynamic form field configuration for {{CONTRACT_TYPE}} agreements covering {{CONTENT_TYPE}} content"
+  },
+  "form_sections": [
+    {
+      "id": "parties",
+      "title": "Parties Information",
+      "order": 1,
+      "description": "Basic information about the contracting parties",
+      "fields": [
+        {
+          "name": "entity_name",
+          "label": "Entity Name",
+          "type": "text",
+          "required": true,
+          "placeholder": "Enter the managing entity name",
+          "description": "Name of the contracting entity or management company",
+          "validation": {
+            "min_length": 2,
+            "max_length": 100,
+            "pattern": "^[a-zA-Z0-9\\s\\.,&-]+$"
+          },
+          "help_text": "Legal name of the entity as it should appear in the contract"
+        },
+        {
+          "name": "content_creator",
+          "label": "Content Creator",
+          "type": "text",
+          "required": true,
+          "placeholder": "Enter the content creator name",
+          "description": "Name of the content creator, artist, or talent",
+          "validation": {
+            "min_length": 2,
+            "max_length": 100,
+            "pattern": "^[a-zA-Z\\s\\.,'-]+$"
+          },
+          "help_text": "Full legal name or professional name of the content creator"
+        }
+      ]
+    },
+    {
+      "id": "scope",
+      "title": "Scope of Services",
+      "order": 2,
+      "description": "Details about the services and scope of work",
+      "fields": [
+        {
+          "name": "scope_description",
+          "label": "Scope of Work",
+          "type": "textarea",
+          "required": true,
+          "placeholder": "Describe the services to be provided...",
+          "description": "Detailed description of the services and scope of work",
+          "validation": {
+            "min_length": 50,
+            "max_length": 1000
+          },
+          "help_text": "Be specific about what services will be provided and any limitations"
+        },
+        {
+          "name": "{{CONTENT_TYPE}}_specific_field",
+          "label": "{{CONTENT_TYPE_LABEL}}",
+          "type": "select",
+          "required": true,
+          "options": "{{CONTENT_TYPE_OPTIONS}}",
+          "description": "{{CONTENT_TYPE_DESCRIPTION}}",
+          "help_text": "{{CONTENT_TYPE_HELP}}"
+        }
+      ]
+    },
+    {
+      "id": "financial",
+      "title": "Financial Terms",
+      "order": 3,
+      "description": "Revenue sharing and financial arrangements",
+      "fields": [
+        {
+          "name": "revenue_split",
+          "label": "Revenue Split (%)",
+          "type": "number",
+          "required": true,
+          "placeholder": "Enter percentage (0-100)",
+          "description": "Percentage of revenue for the managing entity",
+          "validation": {
+            "min": 0,
+            "max": 100,
+            "step": 0.1
+          },
+          "help_text": "Percentage that the management entity will retain from revenue"
+        },
+        {
+          "name": "advance_amount",
+          "label": "Advance Amount ($)",
+          "type": "number",
+          "required": false,
+          "placeholder": "Enter advance amount (optional)",
+          "description": "Initial advance payment if applicable",
+          "validation": {
+            "min": 0,
+            "max": 1000000
+          },
+          "help_text": "Any upfront payment or advance (leave blank if not applicable)"
+        }
+      ]
+    },
+    {
+      "id": "terms",
+      "title": "Contract Terms",
+      "order": 4,
+      "description": "Duration and territorial scope",
+      "fields": [
+        {
+          "name": "term_length",
+          "label": "Contract Term",
+          "type": "select",
+          "required": true,
+          "options": [
+            { "value": "1 year", "label": "1 Year" },
+            { "value": "2 years", "label": "2 Years" },
+            { "value": "3 years", "label": "3 Years" },
+            { "value": "5 years", "label": "5 Years" },
+            { "value": "custom", "label": "Custom Duration" }
+          ],
+          "description": "Duration of the agreement",
+          "help_text": "How long the contract will remain in effect"
+        },
+        {
+          "name": "territory",
+          "label": "Territory",
+          "type": "select",
+          "required": true,
+          "options": [
+            { "value": "Worldwide", "label": "Worldwide" },
+            { "value": "North America", "label": "North America" },
+            { "value": "United States", "label": "United States" },
+            { "value": "Canada", "label": "Canada" },
+            { "value": "Europe", "label": "Europe" },
+            { "value": "Other", "label": "Other (specify in notes)" }
+          ],
+          "description": "Geographic scope of the agreement",
+          "help_text": "Where the agreement will be effective"
+        },
+        {
+          "name": "termination_notice",
+          "label": "Termination Notice (days)",
+          "type": "number",
+          "required": true,
+          "placeholder": "Enter number of days",
+          "description": "Notice period required for termination",
+          "validation": {
+            "min": 1,
+            "max": 365
+          },
+          "help_text": "How many days notice is required to terminate the contract"
+        }
+      ]
+    }
+  ],
+  "conditional_fields": [
+    {
+      "condition": {
+        "field": "term_length",
+        "operator": "equals",
+        "value": "custom"
+      },
+      "show_fields": [
+        {
+          "name": "custom_term",
+          "label": "Custom Term Duration",
+          "type": "text",
+          "required": true,
+          "placeholder": "e.g., 18 months, 4 years",
+          "description": "Specify the custom contract duration"
+        }
+      ]
+    },
+    {
+      "condition": {
+        "field": "territory",
+        "operator": "equals",
+        "value": "Other"
+      },
+      "show_fields": [
+        {
+          "name": "territory_custom",
+          "label": "Specify Territory",
+          "type": "text",
+          "required": true,
+          "placeholder": "Enter specific territory",
+          "description": "Specify the geographic territory"
+        }
+      ]
+    }
+  ],
+  "validation_rules": [
+    {
+      "type": "cross_field",
+      "rule": "revenue_split_reasonable",
+      "fields": ["revenue_split", "{{CONTENT_TYPE}}_specific_field"],
+      "validation": {
+        "message": "Revenue split seems high for this content type",
+        "severity": "warning",
+        "condition": "revenue_split > 30 && {{CONTENT_TYPE}}_specific_field != 'premium'"
+      }
+    }
+  ],
+  "ui_configuration": {
+    "layout": "vertical",
+    "show_progress": true,
+    "allow_save_draft": true,
+    "required_field_indicator": "*",
+    "help_text_position": "below",
+    "validation_display": "inline"
+  }
+}
