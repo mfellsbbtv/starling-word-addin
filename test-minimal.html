@@ -20,17 +20,27 @@
 
     <script type="text/javascript">
         console.log("Script starting...");
-        
+
         // Global state
         window.OFFICE_READY = false;
         window.WORD_API_AVAILABLE = false;
-        
+
         function updateStatus(message) {
             console.log("Status:", message);
             const statusEl = document.getElementById("status");
             if (statusEl) {
                 statusEl.textContent = message;
             }
+        }
+
+        // Immediate status update
+        updateStatus("Script loaded - checking Office.js...");
+
+        // Check if Office is available immediately
+        if (typeof Office !== 'undefined') {
+            updateStatus("Office.js detected - waiting for onReady...");
+        } else {
+            updateStatus("Office.js NOT detected - check loading...");
         }
         
         function testWordAPI() {
@@ -60,45 +70,52 @@
         }
         
         // Initialize when Office is ready
-        Office.onReady((info) => {
-            console.log("Office.onReady called with:", info);
-            window.OFFICE_READY = true;
-            
-            if (info.host === Office.HostApplication.Word) {
-                updateStatus("Office ready - Word detected");
-                
-                // Check Word API availability
-                if (typeof Word !== 'undefined' && typeof Word.run === 'function') {
-                    window.WORD_API_AVAILABLE = true;
-                    updateStatus("Word API available - ready to test");
+        try {
+            Office.onReady((info) => {
+                console.log("Office.onReady called with:", info);
+                window.OFFICE_READY = true;
+
+                if (info.host === Office.HostApplication.Word) {
+                    updateStatus("✅ Office ready - Word detected");
+
+                    // Check Word API availability
+                    if (typeof Word !== 'undefined' && typeof Word.run === 'function') {
+                        window.WORD_API_AVAILABLE = true;
+                        updateStatus("✅ Word API available - ready to test");
+                    } else {
+                        updateStatus("⚠️ Word API not available - demo mode");
+                    }
+
+                    // Set up button
+                    const testBtn = document.getElementById("test-btn");
+                    if (testBtn) {
+                        testBtn.addEventListener("click", testWordAPI);
+                        testBtn.disabled = false;
+                        testBtn.textContent = "Test Word API (Ready)";
+                    }
+
                 } else {
-                    updateStatus("Word API not available - demo mode");
+                    updateStatus("❌ Error: Not running in Word (Host: " + info.host + ")");
                 }
-                
-                // Set up button
-                const testBtn = document.getElementById("test-btn");
-                if (testBtn) {
-                    testBtn.addEventListener("click", testWordAPI);
-                    testBtn.disabled = false;
-                }
-                
-            } else {
-                updateStatus("Error: Not running in Word");
-            }
-        });
+            });
+        } catch (error) {
+            console.error("Error setting up Office.onReady:", error);
+            updateStatus("❌ Error setting up Office.onReady: " + error.message);
+        }
         
         // Fallback if Office.onReady doesn't fire
         setTimeout(() => {
             if (!window.OFFICE_READY) {
                 console.log("Office.onReady timeout - enabling demo mode");
-                updateStatus("Office.js timeout - demo mode enabled");
+                updateStatus("⚠️ Office.js timeout - demo mode enabled");
                 const testBtn = document.getElementById("test-btn");
                 if (testBtn) {
                     testBtn.addEventListener("click", testWordAPI);
                     testBtn.disabled = false;
+                    testBtn.textContent = "Test Word API (Demo Mode)";
                 }
             }
-        }, 10000);
+        }, 5000); // Reduced timeout to 5 seconds
         
         console.log("Script loaded successfully");
     </script>
