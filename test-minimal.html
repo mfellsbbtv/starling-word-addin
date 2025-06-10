@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Minimal Test</title>
+    
+    <!-- Office JavaScript API -->
+    <script type="text/javascript" src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
+</head>
+
+<body>
+    <div id="content-main">
+        <h1>Minimal Word Add-in Test</h1>
+        <p id="status">Loading...</p>
+        <button id="test-btn">Test Word API</button>
+        <div id="results"></div>
+    </div>
+
+    <script type="text/javascript">
+        console.log("Script starting...");
+        
+        // Global state
+        window.OFFICE_READY = false;
+        window.WORD_API_AVAILABLE = false;
+        
+        function updateStatus(message) {
+            console.log("Status:", message);
+            const statusEl = document.getElementById("status");
+            if (statusEl) {
+                statusEl.textContent = message;
+            }
+        }
+        
+        function testWordAPI() {
+            console.log("Testing Word API...");
+            updateStatus("Testing Word API...");
+            
+            if (typeof Word === 'undefined') {
+                updateStatus("Word API not available - using demo mode");
+                document.getElementById("results").innerHTML = "<p>Demo mode: Word API not available</p>";
+                return;
+            }
+            
+            try {
+                Word.run(async (context) => {
+                    updateStatus("Word API test successful!");
+                    document.getElementById("results").innerHTML = "<p>✅ Word API is working!</p>";
+                }).catch(error => {
+                    console.error("Word.run error:", error);
+                    updateStatus("Word API error: " + error.message);
+                    document.getElementById("results").innerHTML = "<p>❌ Word API error: " + error.message + "</p>";
+                });
+            } catch (error) {
+                console.error("Word API test error:", error);
+                updateStatus("Word API test failed: " + error.message);
+                document.getElementById("results").innerHTML = "<p>❌ Word API test failed: " + error.message + "</p>";
+            }
+        }
+        
+        // Initialize when Office is ready
+        Office.onReady((info) => {
+            console.log("Office.onReady called with:", info);
+            window.OFFICE_READY = true;
+            
+            if (info.host === Office.HostApplication.Word) {
+                updateStatus("Office ready - Word detected");
+                
+                // Check Word API availability
+                if (typeof Word !== 'undefined' && typeof Word.run === 'function') {
+                    window.WORD_API_AVAILABLE = true;
+                    updateStatus("Word API available - ready to test");
+                } else {
+                    updateStatus("Word API not available - demo mode");
+                }
+                
+                // Set up button
+                const testBtn = document.getElementById("test-btn");
+                if (testBtn) {
+                    testBtn.addEventListener("click", testWordAPI);
+                    testBtn.disabled = false;
+                }
+                
+            } else {
+                updateStatus("Error: Not running in Word");
+            }
+        });
+        
+        // Fallback if Office.onReady doesn't fire
+        setTimeout(() => {
+            if (!window.OFFICE_READY) {
+                console.log("Office.onReady timeout - enabling demo mode");
+                updateStatus("Office.js timeout - demo mode enabled");
+                const testBtn = document.getElementById("test-btn");
+                if (testBtn) {
+                    testBtn.addEventListener("click", testWordAPI);
+                    testBtn.disabled = false;
+                }
+            }
+        }, 10000);
+        
+        console.log("Script loaded successfully");
+    </script>
+</body>
+</html>
