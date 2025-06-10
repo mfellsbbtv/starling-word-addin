@@ -1,6 +1,5 @@
 // Contract Analysis Service
-import { updateStatus, showProgressSection, hideProgressSection, handleError, setButtonLoading } from '../../shared/utils.js';
-import { AI_PROMPTS } from '../../shared/config.js';
+// NO STATIC IMPORTS - All imports will be dynamic to prevent Word API access during loading
 
 // Analyze track changes in the document
 export async function analyzeTrackChanges() {
@@ -139,7 +138,12 @@ export async function generateDemoAnalysis(documentText) {
   const hasCompensation = documentText.toLowerCase().includes('fee') || documentText.toLowerCase().includes('payment') || documentText.toLowerCase().includes('compensation');
 
   // Simulate AI prompt processing
-  console.log("AI Prompt System Message:", AI_PROMPTS.contractReview.systemPrompt.substring(0, 100) + "...");
+  try {
+    const { AI_PROMPTS } = await import('../../shared/config.js');
+    console.log("AI Prompt System Message:", AI_PROMPTS.contractReview.systemPrompt.substring(0, 100) + "...");
+  } catch (error) {
+    console.log("AI Prompt System Message: [Config not available]");
+  }
 
   // Determine contract type based on content
   let contractType = "General Agreement";

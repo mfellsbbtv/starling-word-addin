@@ -1,5 +1,5 @@
 // Contract Structure Parser Service
-import { analyzeTrackChanges, checkClauseModifications } from './contract-analyzer.js';
+// NO STATIC IMPORTS - All imports will be dynamic to prevent Word API access during loading
 
 // Parse contract structure into articles and clauses
 export function parseContractStructure(documentText) {
@@ -111,8 +111,10 @@ export async function parseContractStructureWithChanges(documentText) {
 
     // If track changes is enabled, analyze real changes
     if (trackChangesStatus.isEnabled) {
+      // Dynamic import to prevent early Word API access
+      const { analyzeTrackChanges, checkClauseModifications } = await import('./contract-analyzer.js');
       const changeData = await analyzeTrackChanges();
-      
+
       // Enhance each clause with real change information
       if (basicStructure.articles && basicStructure.articles.length > 0) {
         for (let article of basicStructure.articles) {

@@ -1,5 +1,5 @@
 // UI Display Module - handles all result display functionality
-import { setButtonLoading } from '../../shared/utils.js';
+// NO STATIC IMPORTS - All imports will be dynamic to prevent Word API access during loading
 
 // Display combined analysis results
 export function displayCombinedAnalysisResults(analysisResult, riskAnalysis, changeSuggestions, summaryResult) {
