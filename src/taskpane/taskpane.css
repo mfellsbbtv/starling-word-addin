@@ -1124,3 +1124,336 @@ ul {
     }
 }
 
+/* Contract Review Workflow Styles */
+.contract-review-results {
+    margin-top: 20px;
+}
+
+.review-header {
+    margin-bottom: 25px;
+}
+
+.acceptability-status {
+    padding: 15px;
+    border-radius: 8px;
+    margin: 15px 0;
+    border-left: 4px solid;
+}
+
+.acceptability-status.status-success {
+    background-color: #d4edda;
+    border-left-color: #28a745;
+    color: #155724;
+}
+
+.acceptability-status.status-warning {
+    background-color: #fff3cd;
+    border-left-color: #ffc107;
+    color: #856404;
+}
+
+.acceptability-status.status-error {
+    background-color: #f8d7da;
+    border-left-color: #dc3545;
+    color: #721c24;
+}
+
+.acceptability-status.status-critical {
+    background-color: #f5c6cb;
+    border-left-color: #dc3545;
+    color: #721c24;
+}
+
+.status-indicator {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.status-icon {
+    font-size: 24px;
+}
+
+.status-text {
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.status-metrics {
+    display: flex;
+    gap: 20px;
+    font-size: 14px;
+}
+
+.metric {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.review-actions {
+    margin: 20px 0;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.compliance-overview {
+    margin: 25px 0;
+}
+
+.compliance-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.compliance-card {
+    text-align: center;
+    padding: 15px;
+    border-radius: 8px;
+    border: 2px solid;
+}
+
+.compliance-card.acceptable {
+    background-color: #d4edda;
+    border-color: #28a745;
+}
+
+.compliance-card.problematic {
+    background-color: #f8d7da;
+    border-color: #dc3545;
+}
+
+.compliance-card.missing {
+    background-color: #fff3cd;
+    border-color: #ffc107;
+}
+
+.compliance-card.score {
+    background-color: #d1ecf1;
+    border-color: #17a2b8;
+}
+
+.card-number {
+    font-size: 24px;
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.card-label {
+    font-size: 12px;
+    color: #666;
+}
+
+.revision-plan-section {
+    margin: 25px 0;
+}
+
+.priority-group {
+    margin: 20px 0;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.priority-group h4 {
+    margin: 0;
+    padding: 12px 15px;
+    font-size: 14px;
+}
+
+.priority-group.high-priority h4 {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.priority-group.medium-priority h4 {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.priority-group.low-priority h4 {
+    background-color: #d1ecf1;
+    color: #0c5460;
+}
+
+.revision-items {
+    padding: 0;
+}
+
+.revision-item {
+    border-bottom: 1px solid #eee;
+    padding: 15px;
+}
+
+.revision-item:last-child {
+    border-bottom: none;
+}
+
+.revision-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+}
+
+.revision-icon {
+    font-size: 16px;
+}
+
+.clause-id {
+    font-weight: 600;
+    color: #0078d4;
+}
+
+.revision-action {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 6px;
+    border-radius: 3px;
+    background-color: #f8f9fa;
+    color: #495057;
+}
+
+.auto-badge {
+    background-color: #28a745;
+    color: white;
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-weight: 600;
+}
+
+.manual-badge {
+    background-color: #ffc107;
+    color: #212529;
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-weight: 600;
+}
+
+.revision-content {
+    margin: 10px 0;
+    font-size: 13px;
+}
+
+.current-text, .replacement-options, .revision-issues {
+    margin: 8px 0;
+    padding: 8px;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+}
+
+.revision-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.mini-button {
+    padding: 4px 8px;
+    font-size: 11px;
+    border: 1px solid;
+    border-radius: 3px;
+    cursor: pointer;
+    background: white;
+}
+
+.mini-button.primary {
+    background-color: #0078d4;
+    color: white;
+    border-color: #0078d4;
+}
+
+.mini-button.secondary {
+    background-color: #6c757d;
+    color: white;
+    border-color: #6c757d;
+}
+
+.mini-button.tertiary {
+    background-color: transparent;
+    color: #0078d4;
+    border-color: #0078d4;
+}
+
+.next-steps-section {
+    margin: 25px 0;
+}
+
+.next-steps-list {
+    padding-left: 20px;
+}
+
+.next-steps-list li {
+    margin: 8px 0;
+    line-height: 1.4;
+}
+
+.detailed-issues {
+    margin: 25px 0;
+}
+
+.issues-accordion {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.accordion-item {
+    border-bottom: 1px solid #ddd;
+}
+
+.accordion-item:last-child {
+    border-bottom: none;
+}
+
+.accordion-header {
+    padding: 12px 15px;
+    background-color: #f8f9fa;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 600;
+}
+
+.accordion-header:hover {
+    background-color: #e9ecef;
+}
+
+.accordion-content {
+    padding: 15px;
+    display: none;
+}
+
+.issue-item {
+    margin: 10px 0;
+    padding: 10px;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+    font-size: 13px;
+}
+
+.legal-submission-success {
+    text-align: center;
+    padding: 30px;
+    background-color: #d4edda;
+    border-radius: 8px;
+    border: 2px solid #28a745;
+}
+
+.submission-details {
+    margin: 20px 0;
+    text-align: left;
+    background-color: white;
+    padding: 15px;
+    border-radius: 4px;
+}
+

@@ -75,11 +75,11 @@ export async function analyzeContract() {
   try {
     // Dynamic imports to prevent early Word API access
     const { updateStatus, showProgressSection, hideProgressSection, handleError, setButtonLoading } = await import('../../shared/utils.js');
-    const { generateDemoAnalysis, generateRiskAnalysis, generateChangeSuggestions } = await import('../services/contract-analyzer.js');
-    const { displayCombinedAnalysisResults, displayStructuredAnalysisResults } = await import('./ui-display.js');
+    const { contractReviewer } = await import('../services/contract-reviewer.js');
+    const { displayContractReviewResults } = await import('./ui-display.js');
 
     setButtonLoading("analyze-contract-btn", true);
-    showProgressSection("Analyzing contract...");
+    showProgressSection("Analyzing contract for compliance and acceptability...");
 
     let documentText;
 
@@ -111,29 +111,25 @@ This agreement is effective for 2 years from the date of signing.
 Either party may terminate with 30 days notice.`;
     }
 
-    updateStatus("Performing contract analysis...", "info");
+    updateStatus("Performing comprehensive contract review...", "info");
 
-    // Perform comprehensive analysis
-    const [analysisResult, riskAnalysis, changeSuggestions] = await Promise.all([
-      generateDemoAnalysis(documentText),
-      generateRiskAnalysis(documentText),
-      generateChangeSuggestions(documentText)
-    ]);
+    // Determine contract type for playbook selection
+    const agreementType = determineAgreementType(documentText);
+    const contentType = determineContentType(documentText);
 
-    // Generate executive summary
-    const summaryResult = generateExecutiveSummary(analysisResult, riskAnalysis, changeSuggestions);
+    updateStatus(`Analyzing ${agreementType} contract for ${contentType} content...`, "info");
 
-    const statusMessage = window.WORD_API_AVAILABLE ? "Analysis complete!" : "Demo analysis complete!";
-    updateStatus(statusMessage, "success");
+    // Perform comprehensive contract review using playbook system
+    const reviewResults = await contractReviewer.reviewContract(documentText, agreementType, contentType);
 
-    // Check if we have structured analysis and display accordingly
-    if (analysisResult.structured_analysis) {
-      console.log("Displaying structured analysis results using new AI prompt format");
-      displayStructuredAnalysisResults(analysisResult);
-    } else {
-      console.log("Displaying legacy analysis results");
-      displayCombinedAnalysisResults(analysisResult, riskAnalysis, changeSuggestions, summaryResult);
-    }
+    const statusMessage = window.WORD_API_AVAILABLE ?
+      `Contract review complete! Status: ${reviewResults.acceptabilityStatus.status}` :
+      `Demo contract review complete! Status: ${reviewResults.acceptabilityStatus.status}`;
+
+    updateStatus(statusMessage, reviewResults.acceptabilityStatus.status === 'ready-for-legal' ? "success" : "warning");
+
+    // Display comprehensive review results
+    displayContractReviewResults(reviewResults);
 
     hideProgressSection();
 
@@ -153,6 +149,110 @@ Either party may terminate with 30 days notice.`;
       console.error("Error importing setButtonLoading:", importError);
     }
   }
+}
+
+// Helper functions for contract type determination
+function determineAgreementType(documentText) {
+  const lowerText = documentText.toLowerCase();
+
+  if (lowerText.includes('content management') || lowerText.includes('management agreement')) {
+    return 'content-management';
+  } else if (lowerText.includes('licensing') || lowerText.includes('license agreement')) {
+    return 'licensing';
+  } else if (lowerText.includes('distribution') || lowerText.includes('distribution agreement')) {
+    return 'distribution';
+  } else if (lowerText.includes('talent') || lowerText.includes('talent agreement')) {
+    return 'talent';
+  }
+
+  // Default to content management if unclear
+  return 'content-management';
+}
+
+function determineContentType(documentText) {
+  const lowerText = documentText.toLowerCase();
+
+  if (lowerText.includes('music') || lowerText.includes('recording') || lowerText.includes('artist')) {
+    return 'music';
+  } else if (lowerText.includes('video') || lowerText.includes('content creator') || lowerText.includes('youtube')) {
+    return 'non-music';
+  }
+
+  // Default to music if unclear
+  return 'music';
+}
+
+// Contract Review Workflow Event Handlers
+export async function applyAutomaticRevisions() {
+  try {
+    const { updateStatus } = await import('../../shared/utils.js');
+    const { contractReviewer } = await import('../services/contract-reviewer.js');
+
+    if (!window.currentReviewResults) {
+      updateStatus("No review results available. Please run contract analysis first.", "error");
+      return;
+    }
+
+    updateStatus("Applying automatic revisions...", "info");
+
+    const revisionResults = await contractReviewer.applyRevisions(
+      window.currentReviewResults.revisionPlan,
+      true // auto-approve
+    );
+
+    updateStatus(`Applied ${revisionResults.applied.length} automatic revisions successfully!`, "success");
+
+    // Re-run analysis to show updated status
+    setTimeout(() => {
+      analyzeContract();
+    }, 1000);
+
+  } catch (error) {
+    const { handleError } = await import('../../shared/utils.js');
+    handleError(error);
+  }
+}
+
+export async function submitToLegal() {
+  try {
+    const { updateStatus } = await import('../../shared/utils.js');
+
+    updateStatus("Preparing contract for legal review...", "info");
+
+    // Simulate legal submission process
+    await new Promise(resolve => setTimeout(resolve, 1500));
+
+    updateStatus("Contract submitted to legal team for review!", "success");
+
+    // Show success message with next steps
+    const resultsContent = document.getElementById("results-content");
+    resultsContent.innerHTML = `
+      <div class="legal-submission-success">
+        <h2>✅ Contract Submitted to Legal Review</h2>
+        <div class="submission-details">
+          <p><strong>Submission Time:</strong> ${new Date().toLocaleString()}</p>
+          <p><strong>Status:</strong> Pending Legal Review</p>
+          <p><strong>Reference ID:</strong> CR-${Date.now()}</p>
+        </div>
+        <div class="next-steps">
+          <h3>What happens next:</h3>
+          <ol>
+            <li>Legal team will review the contract within 2-3 business days</li>
+            <li>You'll receive feedback and any additional recommendations</li>
+            <li>Final approval will be provided once review is complete</li>
+          </ol>
+        </div>
+      </div>`;
+
+  } catch (error) {
+    const { handleError } = await import('../../shared/utils.js');
+    handleError(error);
+  }
+}
+
+export async function rerunAnalysis() {
+  // Simply call the main analyze function again
+  analyzeContract();
 }
 
 // Suggestion Application Event Handlers
@@ -505,6 +605,26 @@ window.applyAllChanges = applyAllChanges;
 window.dismissSuggestions = dismissSuggestions;
 window.handleAgreementTypeChange = handleAgreementTypeChange;
 window.handleContentTypeChange = handleContentTypeChange;
+
+// Export new contract review workflow functions
+window.applyAutomaticRevisions = applyAutomaticRevisions;
+window.submitToLegal = submitToLegal;
+window.rerunAnalysis = rerunAnalysis;
+window.reviewManualChanges = function() {
+  alert("Manual review interface would open here for complex revisions that require human judgment.");
+};
+window.generateContractSummary = function() {
+  alert("Contract summary generation would be implemented here.");
+};
+window.applyRevision = function(clauseId) {
+  alert(`Apply revision for clause ${clauseId} would be implemented here.`);
+};
+window.reviewRevision = function(clauseId) {
+  alert(`Review revision for clause ${clauseId} would be implemented here.`);
+};
+window.viewDetails = function(clauseId) {
+  alert(`View detailed analysis for clause ${clauseId} would be implemented here.`);
+};
 
 // Dynamic utility functions that will be imported when needed
 window.clearResults = async function() {

@@ -553,3 +553,264 @@ function showStructuredSuggestionsSection(recommendations) {
   suggestionsContent.innerHTML = html;
   suggestionsSection.style.display = "block";
 }
+
+// Display contract review results with revision workflow
+export function displayContractReviewResults(reviewResults) {
+  const resultsContent = document.getElementById("results-content");
+  const resultsSection = document.getElementById("results-section");
+
+  const { acceptabilityStatus, complianceAnalysis, revisionPlan, nonAcceptableClauses } = reviewResults;
+
+  // Determine status styling
+  const statusClass = {
+    'ready-for-legal': 'status-success',
+    'minor-revisions': 'status-warning',
+    'major-revisions': 'status-error',
+    'not-acceptable': 'status-critical'
+  }[acceptabilityStatus.status] || 'status-info';
+
+  let html = `
+    <div class="contract-review-results">
+      <!-- Overall Status Header -->
+      <div class="review-header">
+        <h2>📋 Contract Review Results</h2>
+        <div class="acceptability-status ${statusClass}">
+          <div class="status-indicator">
+            <span class="status-icon">${getStatusIcon(acceptabilityStatus.status)}</span>
+            <span class="status-text">${acceptabilityStatus.message}</span>
+          </div>
+          <div class="status-metrics">
+            <span class="metric">
+              <strong>${acceptabilityStatus.acceptablePercentage}%</strong> Acceptable
+            </span>
+            <span class="metric">
+              <strong>${acceptabilityStatus.problematicClauses}</strong> Issues Found
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="review-actions">
+        ${generateActionButtons(acceptabilityStatus, revisionPlan)}
+      </div>
+
+      <!-- Compliance Overview -->
+      <div class="compliance-overview">
+        <h3>📊 Compliance Analysis</h3>
+        <div class="compliance-grid">
+          <div class="compliance-card acceptable">
+            <div class="card-number">${complianceAnalysis.acceptableClauses.length}</div>
+            <div class="card-label">Acceptable Clauses</div>
+          </div>
+          <div class="compliance-card problematic">
+            <div class="card-number">${complianceAnalysis.problematicClauses.length}</div>
+            <div class="card-label">Issues Found</div>
+          </div>
+          <div class="compliance-card missing">
+            <div class="card-number">${complianceAnalysis.missingClauses.length}</div>
+            <div class="card-label">Missing Clauses</div>
+          </div>
+          <div class="compliance-card score">
+            <div class="card-number">${complianceAnalysis.overallScore}%</div>
+            <div class="card-label">Compliance Score</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Revision Plan -->
+      ${generateRevisionPlanSection(revisionPlan, nonAcceptableClauses)}
+
+      <!-- Next Steps -->
+      <div class="next-steps-section">
+        <h3>📝 Next Steps</h3>
+        <ol class="next-steps-list">
+          ${acceptabilityStatus.nextSteps.map(step => `<li>${step}</li>`).join('')}
+        </ol>
+      </div>
+
+      <!-- Detailed Issues (Collapsible) -->
+      <div class="detailed-issues">
+        <h3>🔍 Detailed Analysis</h3>
+        <div class="issues-accordion">
+          ${generateDetailedIssuesSection(complianceAnalysis)}
+        </div>
+      </div>
+    </div>`;
+
+  resultsContent.innerHTML = html;
+  resultsSection.style.display = "block";
+
+  // Add event listeners for interactive elements
+  addReviewEventListeners(reviewResults);
+}
+
+function getStatusIcon(status) {
+  const icons = {
+    'ready-for-legal': '✅',
+    'minor-revisions': '⚠️',
+    'major-revisions': '🔧',
+    'not-acceptable': '❌'
+  };
+  return icons[status] || '📋';
+}
+
+function generateActionButtons(acceptabilityStatus, revisionPlan) {
+  let buttons = '';
+
+  if (acceptabilityStatus.status === 'ready-for-legal') {
+    buttons = `
+      <button class="primary-button" onclick="submitToLegal()">
+        📤 Submit to Legal Review
+      </button>
+      <button class="secondary-button" onclick="generateContractSummary()">
+        📄 Generate Summary
+      </button>`;
+  } else if (revisionPlan.totalRevisions > 0) {
+    const autoReplaceable = revisionPlan.revisions.filter(r => r.autoReplaceable).length;
+
+    buttons = `
+      <button class="primary-button" onclick="applyAutomaticRevisions()" ${autoReplaceable === 0 ? 'disabled' : ''}>
+        🔧 Apply ${autoReplaceable} Automatic Revisions
+      </button>
+      <button class="secondary-button" onclick="reviewManualChanges()">
+        👁️ Review Manual Changes (${revisionPlan.totalRevisions - autoReplaceable})
+      </button>
+      <button class="tertiary-button" onclick="rerunAnalysis()">
+        🔄 Re-run Analysis
+      </button>`;
+  }
+
+  return buttons;
+}
+
+function generateRevisionPlanSection(revisionPlan, nonAcceptableClauses) {
+  if (revisionPlan.totalRevisions === 0) {
+    return `
+      <div class="revision-plan-section">
+        <h3>✅ No Revisions Needed</h3>
+        <p>All clauses meet the required standards.</p>
+      </div>`;
+  }
+
+  const highPriority = revisionPlan.revisions.filter(r => r.priority === 'high');
+  const mediumPriority = revisionPlan.revisions.filter(r => r.priority === 'medium');
+  const lowPriority = revisionPlan.revisions.filter(r => r.priority === 'low');
+
+  return `
+    <div class="revision-plan-section">
+      <h3>🔧 Revision Plan (${revisionPlan.totalRevisions} items)</h3>
+
+      ${highPriority.length > 0 ? `
+        <div class="priority-group high-priority">
+          <h4>🚨 High Priority (${highPriority.length})</h4>
+          <div class="revision-items">
+            ${highPriority.map(revision => generateRevisionItem(revision)).join('')}
+          </div>
+        </div>` : ''}
+
+      ${mediumPriority.length > 0 ? `
+        <div class="priority-group medium-priority">
+          <h4>⚠️ Medium Priority (${mediumPriority.length})</h4>
+          <div class="revision-items">
+            ${mediumPriority.map(revision => generateRevisionItem(revision)).join('')}
+          </div>
+        </div>` : ''}
+
+      ${lowPriority.length > 0 ? `
+        <div class="priority-group low-priority">
+          <h4>ℹ️ Low Priority (${lowPriority.length})</h4>
+          <div class="revision-items">
+            ${lowPriority.map(revision => generateRevisionItem(revision)).join('')}
+          </div>
+        </div>` : ''}
+    </div>`;
+}
+
+function generateRevisionItem(revision) {
+  const actionIcon = {
+    'replace': '🔄',
+    'revise': '✏️',
+    'review': '👁️'
+  }[revision.recommendedAction] || '📝';
+
+  return `
+    <div class="revision-item" data-clause-id="${revision.clauseId}">
+      <div class="revision-header">
+        <span class="revision-icon">${actionIcon}</span>
+        <span class="clause-id">Clause ${revision.clauseId}</span>
+        <span class="revision-action">${revision.recommendedAction.toUpperCase()}</span>
+        ${revision.autoReplaceable ? '<span class="auto-badge">AUTO</span>' : '<span class="manual-badge">MANUAL</span>'}
+      </div>
+      <div class="revision-content">
+        <div class="current-text">
+          <strong>Current:</strong> ${revision.currentText.substring(0, 100)}...
+        </div>
+        ${revision.replacementOptions.length > 0 ? `
+          <div class="replacement-options">
+            <strong>Recommended:</strong> ${revision.replacementOptions[0].content.substring(0, 100)}...
+          </div>` : ''}
+        <div class="revision-issues">
+          <strong>Issues:</strong> ${revision.issues.map(issue => issue.description).join(', ')}
+        </div>
+      </div>
+      <div class="revision-actions">
+        ${revision.autoReplaceable ?
+          `<button class="mini-button primary" onclick="applyRevision('${revision.clauseId}')">Apply</button>` :
+          `<button class="mini-button secondary" onclick="reviewRevision('${revision.clauseId}')">Review</button>`
+        }
+        <button class="mini-button tertiary" onclick="viewDetails('${revision.clauseId}')">Details</button>
+      </div>
+    </div>`;
+}
+
+function generateDetailedIssuesSection(complianceAnalysis) {
+  return `
+    <div class="accordion-item">
+      <div class="accordion-header" onclick="toggleAccordion('problematic-clauses')">
+        <span>❌ Problematic Clauses (${complianceAnalysis.problematicClauses.length})</span>
+        <span class="accordion-icon">▼</span>
+      </div>
+      <div class="accordion-content" id="problematic-clauses">
+        ${complianceAnalysis.problematicClauses.map(clause => `
+          <div class="issue-item">
+            <strong>Clause ${clause.clauseId}:</strong> ${clause.issues.map(issue => issue.description).join(', ')}
+          </div>
+        `).join('')}
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <div class="accordion-header" onclick="toggleAccordion('missing-clauses')">
+        <span>➕ Missing Clauses (${complianceAnalysis.missingClauses.length})</span>
+        <span class="accordion-icon">▼</span>
+      </div>
+      <div class="accordion-content" id="missing-clauses">
+        ${complianceAnalysis.missingClauses.map(clause => `
+          <div class="issue-item">
+            <strong>${clause.title}:</strong> ${clause.content.substring(0, 100)}...
+          </div>
+        `).join('')}
+      </div>
+    </div>`;
+}
+
+function addReviewEventListeners(reviewResults) {
+  // Store review results globally for access by event handlers
+  window.currentReviewResults = reviewResults;
+
+  // Add accordion functionality
+  window.toggleAccordion = function(id) {
+    const content = document.getElementById(id);
+    const header = content.previousElementSibling;
+    const icon = header.querySelector('.accordion-icon');
+
+    if (content.style.display === 'none' || !content.style.display) {
+      content.style.display = 'block';
+      icon.textContent = '▲';
+    } else {
+      content.style.display = 'none';
+      icon.textContent = '▼';
+    }
+  };
+}
