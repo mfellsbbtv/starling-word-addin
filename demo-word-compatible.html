@@ -342,27 +342,38 @@ Either party may terminate with 30 days notice.</textarea>
             try {
                 const agreementType = document.getElementById('agreement-type').value;
                 const contentType = document.getElementById('content-type').value;
-                
+
                 if (!agreementType || !contentType) {
                     updateStatus('Please select both Agreement Type and Content Type', 'warning');
                     return;
                 }
-                
-                updateStatus('Generating contract...', 'info');
-                
+
+                updateStatus('Generating contract using playbook system...', 'info');
+
+                // Simulate playbook-based contract generation
                 setTimeout(() => {
                     try {
-                        displayContractResults({
-                            type: agreementType,
-                            content: contentType,
-                            generated: new Date().toLocaleString()
-                        });
+                        const contractText = generatePlaybookContract(agreementType, contentType);
+
+                        // Try to insert into Word if available
+                        if (typeof Word !== 'undefined' && Word.run) {
+                            insertContractIntoWord(contractText);
+                        } else {
+                            // Display in demo mode
+                            displayContractResults({
+                                type: agreementType,
+                                content: contentType,
+                                contractText: contractText,
+                                generated: new Date().toLocaleString()
+                            });
+                        }
+
                         updateStatus('Contract generated successfully!', 'success');
                     } catch (error) {
                         updateStatus('Generation failed: ' + error.message, 'error');
                     }
                 }, 1500);
-                
+
             } catch (error) {
                 updateStatus('Error starting generation: ' + error.message, 'error');
             }
@@ -420,20 +431,128 @@ Either party may terminate with 30 days notice.</textarea>
             }
         }
         
+        function generatePlaybookContract(agreementType, contentType) {
+            // Simulate playbook-based contract generation
+            const templates = {
+                'content-management': {
+                    'music': `MUSIC CONTENT MANAGEMENT AGREEMENT
+
+This Music Content Management Agreement ("Agreement") is entered into on ${new Date().toLocaleDateString()} between [ENTITY_NAME], a limited liability company ("Manager"), and [CONTENT_CREATOR] ("Artist").
+
+1. SCOPE OF SERVICES
+
+Manager agrees to provide comprehensive music content management services including:
+- Digital distribution across all major streaming platforms
+- Rights management and royalty collection
+- Marketing and promotional campaigns
+- Performance tracking and analytics
+- Playlist pitching and promotion
+
+2. REVENUE SHARING
+
+Artist and Manager agree to the following revenue split:
+- Artist: 80%
+- Manager: 20%
+
+3. TERM AND TERRITORY
+
+This Agreement shall remain in effect for 2 years and covers Worldwide territory.
+
+4. RIGHTS GRANTED
+
+Artist grants Manager the right to manage Master Recording Rights for the specified territory and term.
+
+5. TERMINATION
+
+Either party may terminate this Agreement with 60 days written notice.
+
+6. GOVERNING LAW
+
+This Agreement shall be governed by the laws of the State of California.
+
+IN WITNESS WHEREOF, the parties have executed this Agreement as of the date first written above.
+
+MANAGER:                           ARTIST:
+
+_________________________         _________________________
+[ENTITY_NAME]                     [CONTENT_CREATOR]
+
+Date: _______________             Date: _______________`,
+
+                    'non-music': `CONTENT MANAGEMENT AGREEMENT
+
+This Content Management Agreement covers non-music content management services.
+
+[Additional content would be generated based on playbook templates]`,
+
+                    'both': `COMPREHENSIVE CONTENT MANAGEMENT AGREEMENT
+
+This agreement covers both music and non-music content management services.
+
+[Additional content would be generated based on playbook templates]`
+                },
+                'licensing': {
+                    'music': `MUSIC LICENSING AGREEMENT
+
+[Content would be generated from licensing playbook templates]`,
+                    'non-music': `CONTENT LICENSING AGREEMENT
+
+[Content would be generated from licensing playbook templates]`
+                }
+            };
+
+            return templates[agreementType]?.[contentType] ||
+                   `${agreementType.toUpperCase()} AGREEMENT\n\nContract content would be generated from playbook templates for ${contentType} content.`;
+        }
+
+        function insertContractIntoWord(contractText) {
+            try {
+                Word.run(async (context) => {
+                    const body = context.document.body;
+                    body.clear();
+                    body.insertText(contractText, Word.InsertLocation.start);
+
+                    // Apply basic formatting
+                    const range = body.getRange();
+                    range.font.name = "Calibri";
+                    range.font.size = 11;
+
+                    await context.sync();
+                    updateStatus('Contract inserted into Word document!', 'success');
+                }).catch(error => {
+                    updateStatus('Error inserting into Word: ' + error.message, 'error');
+                });
+            } catch (error) {
+                updateStatus('Word API error: ' + error.message, 'error');
+            }
+        }
+
         function displayContractResults(data) {
             try {
                 const resultsSection = document.getElementById('results-section');
                 const resultsContent = document.getElementById('results-content');
-                
+
                 if (!resultsSection || !resultsContent) return;
-                
+
+                let contractPreview = '';
+                if (data.contractText) {
+                    const preview = data.contractText.substring(0, 300) + '...';
+                    contractPreview = `
+                        <h4>📄 Contract Preview</h4>
+                        <div style="background: #f5f5f5; padding: 10px; border-radius: 4px; font-family: monospace; font-size: 10px; max-height: 200px; overflow-y: auto;">
+                            ${preview.replace(/\n/g, '<br>')}
+                        </div>
+                    `;
+                }
+
                 resultsContent.innerHTML = `
                     <h4>✅ Contract Generated</h4>
                     <p><strong>Type:</strong> ${data.type} - ${data.content}</p>
                     <p><strong>Generated:</strong> ${data.generated}</p>
-                    <p><strong>Status:</strong> Ready for review</p>
+                    <p><strong>Status:</strong> ${typeof Word !== 'undefined' ? 'Inserted into Word document' : 'Ready for review'}</p>
+                    ${contractPreview}
                 `;
-                
+
                 resultsSection.classList.remove('hidden');
             } catch (error) {
                 updateStatus('Error displaying results: ' + error.message, 'error');

@@ -35,11 +35,16 @@ export async function generateContract() {
 
     updateStatus("Generating contract content...", "info");
 
-    // Generate contract using API service
-    const result = await apiService.generateContract(formData);
+    // Generate contract using playbook system
+    const { playbookService } = await import('../../shared/playbook-service.js');
+    const contractText = await playbookService.generateContract(
+      formData.agreement_type || 'content-management',
+      formData.content_type || 'music',
+      formData.fields || formData
+    );
 
     // Insert contract into Word document
-    await insertContractIntoDocument(result, formData);
+    await insertContractIntoDocument(contractText, formData);
 
     // Display results
     displayContractResults(result);
@@ -276,7 +281,7 @@ async function getDocumentText() {
   }
 }
 
-async function insertContractIntoDocument(result, formData) {
+async function insertContractIntoDocument(contractText, formData) {
   // Comprehensive Word API availability check
   if (typeof Word === 'undefined') {
     throw new Error('Word API not available. Please ensure you are running this add-in in Microsoft Word and that the Word API has loaded properly.');
@@ -297,6 +302,9 @@ async function insertContractIntoDocument(result, formData) {
     throw new Error('Word.run function not available. Please ensure Word API is properly loaded.');
   }
 
+  console.log("Inserting contract into Word document...");
+  console.log("Contract text length:", contractText.length);
+
   try {
     return await Word.run(async (context) => {
       const body = context.document.body;
@@ -304,22 +312,77 @@ async function insertContractIntoDocument(result, formData) {
       // Clear existing content
       body.clear();
 
-      // Generate contract content based on form data
-      const contractContent = generateContractContent(formData);
+      // Insert the contract text from playbook
+      body.insertText(contractText, Word.InsertLocation.start);
 
-      // Insert the contract
-      body.insertText(contractContent, Word.InsertLocation.start);
-
-      // Apply formatting
-      const range = body.getRange();
-      range.font.name = "Calibri";
-      range.font.size = 11;
+      // Apply professional formatting
+      await formatContractDocument(context, body);
 
       await context.sync();
     });
   } catch (error) {
     console.error("Error in Word.run during contract insertion:", error);
     throw new Error(`Failed to insert contract: ${error.message}`);
+  }
+}
+
+async function formatContractDocument(context, body) {
+  try {
+    // Get the entire document range
+    const range = body.getRange();
+
+    // Set base font formatting
+    range.font.name = "Calibri";
+    range.font.size = 11;
+    range.paragraphFormat.lineSpacing = 1.15;
+    range.paragraphFormat.spaceAfter = 6;
+
+    // Format the title (first paragraph)
+    const paragraphs = body.paragraphs;
+    paragraphs.load("items");
+    await context.sync();
+
+    if (paragraphs.items.length > 0) {
+      const titleParagraph = paragraphs.items[0];
+      titleParagraph.font.size = 16;
+      titleParagraph.font.bold = true;
+      titleParagraph.paragraphFormat.alignment = Word.Alignment.centered;
+      titleParagraph.paragraphFormat.spaceAfter = 12;
+    }
+
+    // Format section headers (paragraphs that start with numbers or uppercase words)
+    for (let i = 1; i < paragraphs.items.length; i++) {
+      const paragraph = paragraphs.items[i];
+      paragraph.load("text");
+      await context.sync();
+
+      const text = paragraph.text.trim();
+
+      // Check if it's a section header (starts with number or is all caps)
+      if (text.match(/^\d+\./) || (text.length > 0 && text === text.toUpperCase() && text.length < 50)) {
+        paragraph.font.bold = true;
+        paragraph.font.size = 12;
+        paragraph.paragraphFormat.spaceBefore = 12;
+        paragraph.paragraphFormat.spaceAfter = 6;
+      }
+    }
+
+    // Set page margins
+    const sections = context.document.sections;
+    sections.load("items");
+    await context.sync();
+
+    if (sections.items.length > 0) {
+      const section = sections.items[0];
+      section.pageSetup.topMargin = 72;    // 1 inch
+      section.pageSetup.bottomMargin = 72; // 1 inch
+      section.pageSetup.leftMargin = 72;   // 1 inch
+      section.pageSetup.rightMargin = 72;  // 1 inch
+    }
+
+  } catch (error) {
+    console.warn("Error applying formatting:", error);
+    // Continue without formatting if there's an error
   }
 }
 
