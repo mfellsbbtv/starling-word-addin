@@ -559,7 +559,7 @@ export function displayContractReviewResults(reviewResults) {
   const resultsContent = document.getElementById("results-content");
   const resultsSection = document.getElementById("results-section");
 
-  const { acceptabilityStatus, complianceAnalysis, revisionPlan, nonAcceptableClauses } = reviewResults;
+  const { acceptabilityStatus, complianceAnalysis, revisionPlan, nonAcceptableClauses, clauseBreakdown } = reviewResults;
 
   // Determine status styling
   const statusClass = {
@@ -618,8 +618,8 @@ export function displayContractReviewResults(reviewResults) {
         </div>
       </div>
 
-      <!-- Revision Plan -->
-      ${generateRevisionPlanSection(revisionPlan, nonAcceptableClauses)}
+      <!-- Detailed Clause Breakdown -->
+      ${generateClauseBreakdownSection(clauseBreakdown)}
 
       <!-- Next Steps -->
       <div class="next-steps-section">
@@ -682,6 +682,106 @@ function generateActionButtons(acceptabilityStatus, revisionPlan) {
   }
 
   return buttons;
+}
+
+function generateClauseBreakdownSection(clauseBreakdown) {
+  if (!clauseBreakdown) {
+    return '<div class="clause-breakdown-section"><p>Clause breakdown not available.</p></div>';
+  }
+
+  const hasModifications = clauseBreakdown.clausesNeedingModification > 0;
+
+  return `
+    <div class="clause-breakdown-section">
+      <div class="breakdown-header">
+        <h3>📋 Article & Clause Analysis</h3>
+        <div class="breakdown-summary">
+          <span class="summary-item acceptable">
+            ✅ ${clauseBreakdown.clausesAcceptable} Acceptable
+          </span>
+          <span class="summary-item needs-modification">
+            🔧 ${clauseBreakdown.clausesNeedingModification} Need Modification
+          </span>
+        </div>
+      </div>
+
+      ${hasModifications ? `
+        <div class="auto-update-controls">
+          <label class="auto-update-checkbox">
+            <input type="checkbox" id="auto-update-all" onchange="toggleAutoUpdate(this.checked)">
+            <span class="checkmark"></span>
+            Automatically Update All Clauses
+          </label>
+          <button class="accept-all-button" onclick="acceptAllChanges()" ${hasModifications ? '' : 'disabled'}>
+            ✅ Accept All Changes (${clauseBreakdown.clausesNeedingModification})
+          </button>
+        </div>` : ''}
+
+      <div class="articles-container">
+        ${clauseBreakdown.articles.map(article => generateArticleSection(article)).join('')}
+      </div>
+    </div>`;
+}
+
+function generateArticleSection(article) {
+  return `
+    <div class="article-section">
+      <div class="article-header">
+        <h4>${article.articleNumber}. ${article.title}</h4>
+        <div class="article-summary">
+          ${article.clausesNeedingModification > 0 ?
+            `<span class="modification-count">${article.clausesNeedingModification} modification${article.clausesNeedingModification > 1 ? 's' : ''} needed</span>` :
+            `<span class="no-modifications">No modifications needed</span>`
+          }
+        </div>
+      </div>
+
+      <div class="clauses-container">
+        ${article.clauses.map(clause => generateClauseItem(clause)).join('')}
+      </div>
+    </div>`;
+}
+
+function generateClauseItem(clause) {
+  const statusIcon = clause.needsModification ? '🔧' : '✅';
+  const statusClass = clause.needsModification ? 'needs-modification' : 'acceptable';
+  const statusText = clause.needsModification ? 'Will be modified' : 'No changes needed';
+
+  return `
+    <div class="clause-item ${statusClass}" data-clause-number="${clause.clauseNumber}">
+      <div class="clause-header">
+        <div class="clause-number-status">
+          <span class="clause-number">${clause.clauseNumber}</span>
+          <span class="status-indicator">
+            <span class="status-icon">${statusIcon}</span>
+            <span class="status-text">${statusText}</span>
+          </span>
+        </div>
+        ${clause.needsModification ? `
+          <div class="clause-actions">
+            <button class="modify-button" onclick="applyClauseModification('${clause.clauseNumber}')">
+              🔧 Apply Change
+            </button>
+            <button class="preview-button" onclick="previewClauseChange('${clause.clauseNumber}')">
+              👁️ Preview
+            </button>
+          </div>` : ''}
+      </div>
+
+      <div class="clause-content">
+        <div class="current-text">
+          <strong>Current:</strong> ${clause.text.substring(0, 150)}${clause.text.length > 150 ? '...' : ''}
+        </div>
+
+        ${clause.needsModification && clause.recommendedText ? `
+          <div class="recommended-text">
+            <strong>Recommended:</strong> ${clause.recommendedText.substring(0, 150)}${clause.recommendedText.length > 150 ? '...' : ''}
+          </div>
+          <div class="change-reason">
+            <strong>Reason:</strong> ${clause.changeReason}
+          </div>` : ''}
+      </div>
+    </div>`;
 }
 
 function generateRevisionPlanSection(revisionPlan, nonAcceptableClauses) {
@@ -813,4 +913,182 @@ function addReviewEventListeners(reviewResults) {
       icon.textContent = '▼';
     }
   };
+
+  // Add clause modification functionality
+  window.applyClauseModification = async function(clauseNumber) {
+    try {
+      const { contractReviewer } = await import('../services/contract-reviewer.js');
+      const { updateStatus } = await import('../../shared/utils.js');
+
+      // Find the clause in current review results
+      const clause = findClauseByNumber(clauseNumber);
+      if (!clause || !clause.recommendedText) {
+        updateStatus(`No recommended text found for clause ${clauseNumber}`, 'error');
+        return;
+      }
+
+      updateStatus(`Applying modification to clause ${clauseNumber}...`, 'info');
+
+      const result = await contractReviewer.applyClauseModification(clauseNumber, clause.recommendedText);
+
+      if (result.success) {
+        updateStatus(`Clause ${clauseNumber} modified successfully!`, 'success');
+
+        // Update the UI to reflect the change
+        updateClauseUI(clauseNumber, true);
+
+        // Check if auto-update is enabled
+        const autoUpdate = document.getElementById('auto-update-all');
+        if (autoUpdate && autoUpdate.checked) {
+          // Continue with next modification if auto-update is on
+          setTimeout(() => applyNextModification(), 500);
+        }
+      } else {
+        updateStatus(`Failed to modify clause ${clauseNumber}: ${result.error}`, 'error');
+      }
+    } catch (error) {
+      const { updateStatus } = await import('../../shared/utils.js');
+      updateStatus(`Error modifying clause ${clauseNumber}: ${error.message}`, 'error');
+    }
+  };
+
+  window.previewClauseChange = function(clauseNumber) {
+    const clause = findClauseByNumber(clauseNumber);
+    if (!clause) return;
+
+    // Create a modal or popup to show the full before/after comparison
+    const modal = document.createElement('div');
+    modal.className = 'clause-preview-modal';
+    modal.innerHTML = `
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>Preview Change - Clause ${clauseNumber}</h3>
+          <button class="close-modal" onclick="closePreviewModal()">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="before-after">
+            <div class="before-section">
+              <h4>Current Text:</h4>
+              <div class="text-content">${clause.text}</div>
+            </div>
+            <div class="after-section">
+              <h4>Recommended Text:</h4>
+              <div class="text-content">${clause.recommendedText}</div>
+            </div>
+            <div class="reason-section">
+              <h4>Reason for Change:</h4>
+              <div class="reason-content">${clause.changeReason}</div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="primary-button" onclick="applyClauseModification('${clauseNumber}'); closePreviewModal();">
+            Apply Change
+          </button>
+          <button class="secondary-button" onclick="closePreviewModal()">
+            Cancel
+          </button>
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(modal);
+  };
+
+  window.closePreviewModal = function() {
+    const modal = document.querySelector('.clause-preview-modal');
+    if (modal) {
+      modal.remove();
+    }
+  };
+
+  window.acceptAllChanges = async function() {
+    try {
+      const { contractReviewer } = await import('../services/contract-reviewer.js');
+      const { updateStatus } = await import('../../shared/utils.js');
+
+      updateStatus('Applying all clause modifications...', 'info');
+
+      const results = await contractReviewer.applyAllModifications();
+
+      if (results.applied.length > 0) {
+        updateStatus(`Successfully applied ${results.applied.length} modifications!`, 'success');
+
+        // Update UI for all applied changes
+        results.applied.forEach(result => {
+          updateClauseUI(result.clauseNumber, true);
+        });
+
+        // Re-run analysis to show updated status
+        setTimeout(() => {
+          window.rerunAnalysis();
+        }, 1000);
+      }
+
+      if (results.failed.length > 0) {
+        updateStatus(`${results.failed.length} modifications failed. Check console for details.`, 'warning');
+        console.error('Failed modifications:', results.failed);
+      }
+
+    } catch (error) {
+      const { updateStatus } = await import('../../shared/utils.js');
+      updateStatus(`Error applying modifications: ${error.message}`, 'error');
+    }
+  };
+
+  window.toggleAutoUpdate = function(enabled) {
+    const acceptAllButton = document.querySelector('.accept-all-button');
+    if (acceptAllButton) {
+      if (enabled) {
+        acceptAllButton.textContent = '🔄 Auto-Applying Changes...';
+        acceptAllButton.disabled = true;
+        // Start auto-applying changes
+        setTimeout(() => window.acceptAllChanges(), 500);
+      } else {
+        acceptAllButton.textContent = `✅ Accept All Changes (${window.currentReviewResults?.clauseBreakdown?.clausesNeedingModification || 0})`;
+        acceptAllButton.disabled = false;
+      }
+    }
+  };
+}
+
+function findClauseByNumber(clauseNumber) {
+  if (!window.currentReviewResults || !window.currentReviewResults.clauseBreakdown) {
+    return null;
+  }
+
+  for (const article of window.currentReviewResults.clauseBreakdown.articles) {
+    for (const clause of article.clauses) {
+      if (clause.clauseNumber === clauseNumber) {
+        return clause;
+      }
+    }
+  }
+  return null;
+}
+
+function updateClauseUI(clauseNumber, applied) {
+  const clauseElement = document.querySelector(`[data-clause-number="${clauseNumber}"]`);
+  if (clauseElement) {
+    if (applied) {
+      clauseElement.classList.remove('needs-modification');
+      clauseElement.classList.add('acceptable');
+
+      const statusIcon = clauseElement.querySelector('.status-icon');
+      const statusText = clauseElement.querySelector('.status-text');
+      const actions = clauseElement.querySelector('.clause-actions');
+
+      if (statusIcon) statusIcon.textContent = '✅';
+      if (statusText) statusText.textContent = 'Applied';
+      if (actions) actions.style.display = 'none';
+    }
+  }
+}
+
+function applyNextModification() {
+  // Find the next clause that needs modification
+  const nextClause = document.querySelector('.clause-item.needs-modification .modify-button');
+  if (nextClause) {
+    nextClause.click();
+  }
 }

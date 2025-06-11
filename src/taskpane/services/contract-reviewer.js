@@ -54,9 +54,10 @@ export class ContractReviewer {
       revisionPlan,
       acceptabilityStatus,
       playbook,
-      reviewTimestamp: new Date().toISOString()
+      reviewTimestamp: new Date().toISOString(),
+      clauseBreakdown: this.generateClauseBreakdown(contractStructure)
     };
-    
+
     return this.currentReview;
   }
 
@@ -66,17 +67,22 @@ export class ContractReviewer {
   async parseContractStructure(contractText) {
     const { parseContractStructure } = await import('./contract-parser.js');
     const structure = parseContractStructure(contractText);
-    
+
     // Enhance with clause identification
-    structure.articles.forEach(article => {
-      article.clauses.forEach(clause => {
+    structure.articles.forEach((article, articleIndex) => {
+      article.articleNumber = articleIndex + 1;
+      article.clauses.forEach((clause, clauseIndex) => {
+        clause.clauseNumber = `${article.articleNumber}.${clauseIndex + 1}`;
         clause.clauseType = this.identifyClauseType(clause.text);
         clause.keywords = this.extractKeywords(clause.text);
         clause.riskLevel = 'unknown';
         clause.complianceStatus = 'pending';
+        clause.needsModification = false;
+        clause.recommendedText = null;
+        clause.changeReason = null;
       });
     });
-    
+
     return structure;
   }
 
@@ -124,7 +130,7 @@ export class ContractReviewer {
    */
   async analyzeClause(clause, standardClauses, riskRules) {
     const analysis = {
-      clauseId: clause.number,
+      clauseId: clause.clauseNumber,
       clauseText: clause.text,
       clauseType: clause.clauseType,
       complianceStatus: 'acceptable', // Default to acceptable
@@ -132,33 +138,54 @@ export class ContractReviewer {
       issues: [],
       recommendations: [],
       standardMatch: null,
-      replacementOptions: []
+      replacementOptions: [],
+      needsModification: false,
+      recommendedText: null,
+      changeReason: null
     };
-    
+
     // Find matching standard clause
     const standardMatch = this.findMatchingStandardClause(clause, standardClauses);
     if (standardMatch) {
       analysis.standardMatch = standardMatch;
-      
+
       // Compare against standard
       const complianceCheck = this.checkClauseCompliance(clause, standardMatch);
       analysis.complianceStatus = complianceCheck.status;
       analysis.riskLevel = complianceCheck.riskLevel;
       analysis.issues = complianceCheck.issues;
-      
-      // Get replacement options if non-compliant
-      if (complianceCheck.status === 'non-acceptable') {
+
+      // Determine if modification is needed
+      if (complianceCheck.status === 'non-acceptable' || complianceCheck.riskLevel === 'high') {
+        analysis.needsModification = true;
+        analysis.recommendedText = standardMatch.content;
+        analysis.changeReason = this.generateChangeReason(complianceCheck.issues, standardMatch);
         analysis.replacementOptions = this.getReplacementOptions(standardMatch);
       }
+
+      // Update the original clause object
+      clause.needsModification = analysis.needsModification;
+      clause.recommendedText = analysis.recommendedText;
+      clause.changeReason = analysis.changeReason;
+      clause.complianceStatus = analysis.complianceStatus;
+      clause.riskLevel = analysis.riskLevel;
     }
-    
+
     // Apply risk rules
     const riskAssessment = this.applyRiskRules(clause, riskRules);
     if (riskAssessment.hasRisks) {
       analysis.riskLevel = Math.max(analysis.riskLevel, riskAssessment.maxRiskLevel);
       analysis.issues.push(...riskAssessment.risks);
+
+      // If high risk detected, mark for modification
+      if (riskAssessment.maxRiskLevel === 'high' && !analysis.needsModification) {
+        analysis.needsModification = true;
+        clause.needsModification = true;
+        analysis.changeReason = 'High risk issues detected that require clause modification';
+        clause.changeReason = analysis.changeReason;
+      }
     }
-    
+
     return analysis;
   }
 
@@ -453,7 +480,7 @@ export class ContractReviewer {
 
   generateNextSteps(status, revisionPlan) {
     const steps = [];
-    
+
     switch (status) {
       case 'ready-for-legal':
         steps.push('Contract is ready for legal team review');
@@ -476,8 +503,164 @@ export class ContractReviewer {
         steps.push('Manual review of complex clauses');
         steps.push('Re-run analysis after revisions');
     }
-    
+
     return steps;
+  }
+
+  /**
+   * Generate detailed clause breakdown for UI display
+   */
+  generateClauseBreakdown(contractStructure) {
+    const breakdown = {
+      totalClauses: 0,
+      clausesNeedingModification: 0,
+      clausesAcceptable: 0,
+      articles: []
+    };
+
+    contractStructure.articles.forEach(article => {
+      const articleBreakdown = {
+        articleNumber: article.articleNumber,
+        title: article.title,
+        clauses: [],
+        totalClauses: article.clauses.length,
+        clausesNeedingModification: 0
+      };
+
+      article.clauses.forEach(clause => {
+        const clauseInfo = {
+          clauseNumber: clause.clauseNumber,
+          text: clause.text,
+          needsModification: clause.needsModification || false,
+          recommendedText: clause.recommendedText || null,
+          changeReason: clause.changeReason || null,
+          complianceStatus: clause.complianceStatus || 'acceptable',
+          riskLevel: clause.riskLevel || 'low'
+        };
+
+        articleBreakdown.clauses.push(clauseInfo);
+        breakdown.totalClauses++;
+
+        if (clauseInfo.needsModification) {
+          articleBreakdown.clausesNeedingModification++;
+          breakdown.clausesNeedingModification++;
+        } else {
+          breakdown.clausesAcceptable++;
+        }
+      });
+
+      breakdown.articles.push(articleBreakdown);
+    });
+
+    return breakdown;
+  }
+
+  /**
+   * Generate change reason based on compliance issues
+   */
+  generateChangeReason(issues, standardClause) {
+    if (issues.length === 0) {
+      return 'Clause updated to align with playbook standards';
+    }
+
+    const primaryIssue = issues[0];
+    switch (primaryIssue.type) {
+      case 'missing_keywords':
+        return `Missing required terms: ${primaryIssue.description}`;
+      case 'non_negotiable_deviation':
+        return 'Clause deviates from non-negotiable standard requirements';
+      case 'high_risk':
+        return 'High risk clause requires replacement with standard language';
+      default:
+        return `Compliance issue: ${primaryIssue.description}`;
+    }
+  }
+
+  /**
+   * Apply a single clause modification to the contract
+   */
+  async applyClauseModification(clauseNumber, newText) {
+    try {
+      // This would integrate with Word API to replace specific clause text
+      // For now, we'll simulate the change
+      console.log(`Applying modification to clause ${clauseNumber}`);
+      console.log(`New text: ${newText.substring(0, 100)}...`);
+
+      // Update the current review results
+      if (this.currentReview && this.currentReview.clauseBreakdown) {
+        this.currentReview.clauseBreakdown.articles.forEach(article => {
+          article.clauses.forEach(clause => {
+            if (clause.clauseNumber === clauseNumber) {
+              clause.text = newText;
+              clause.needsModification = false;
+              clause.complianceStatus = 'acceptable';
+              clause.riskLevel = 'low';
+            }
+          });
+        });
+      }
+
+      return {
+        success: true,
+        clauseNumber,
+        newText,
+        timestamp: new Date().toISOString()
+      };
+    } catch (error) {
+      return {
+        success: false,
+        clauseNumber,
+        error: error.message,
+        timestamp: new Date().toISOString()
+      };
+    }
+  }
+
+  /**
+   * Apply all clause modifications at once
+   */
+  async applyAllModifications() {
+    const results = {
+      applied: [],
+      failed: [],
+      totalModifications: 0
+    };
+
+    if (!this.currentReview || !this.currentReview.clauseBreakdown) {
+      throw new Error('No review results available for modification');
+    }
+
+    // Collect all clauses that need modification
+    const clausesToModify = [];
+    this.currentReview.clauseBreakdown.articles.forEach(article => {
+      article.clauses.forEach(clause => {
+        if (clause.needsModification && clause.recommendedText) {
+          clausesToModify.push(clause);
+        }
+      });
+    });
+
+    results.totalModifications = clausesToModify.length;
+
+    // Apply each modification
+    for (const clause of clausesToModify) {
+      try {
+        const result = await this.applyClauseModification(clause.clauseNumber, clause.recommendedText);
+        if (result.success) {
+          results.applied.push(result);
+        } else {
+          results.failed.push(result);
+        }
+      } catch (error) {
+        results.failed.push({
+          success: false,
+          clauseNumber: clause.clauseNumber,
+          error: error.message
+        });
+      }
+    }
+
+    return results;
   }
 }
 
