@@ -81,6 +81,13 @@
             height: 80px;
             resize: vertical;
         }
+
+        .section-description {
+            color: #666;
+            font-style: italic;
+            margin-bottom: 15px;
+            font-size: 12px;
+        }
         
         .button {
             background-color: #0078d4;
@@ -226,26 +233,8 @@
         <!-- Contract Analysis Section -->
         <div class="section">
             <h3>🔍 Contract Analysis</h3>
-            
-            <div class="form-group">
-                <label for="contract-text">Contract Text:</label>
-                <textarea id="contract-text" placeholder="Paste contract text here...">SAMPLE CONTENT MANAGEMENT AGREEMENT
+            <p class="section-description">Analyzes the contract currently displayed in your Word document</p>
 
-This Content Management Agreement is entered into between Company A and Company B.
-
-1. SCOPE OF SERVICES
-The Manager will provide content management services including distribution and marketing.
-
-2. COMPENSATION
-Revenue will be split 80% to Artist and 20% to Manager.
-
-3. TERM
-This agreement is effective for 2 years from the date of signing.
-
-4. TERMINATION
-Either party may terminate with 30 days notice.</textarea>
-            </div>
-            
             <button class="button" onclick="analyzeContract()">Analyze Contract</button>
             <button class="button secondary" onclick="clearResults()">Clear Results</button>
         </div>
@@ -311,18 +300,39 @@ Either party may terminate with 30 days notice.</textarea>
             }
         }
         
-        function analyzeContract() {
+        async function analyzeContract() {
             try {
-                const contractText = document.getElementById('contract-text').value.trim();
-                
-                if (!contractText) {
-                    updateStatus('Please enter contract text to analyze', 'warning');
-                    return;
+                updateStatus('Reading contract from Word document...', 'info');
+
+                let contractText = '';
+
+                // Try to read from Word document if Word API is available
+                if (typeof Word !== 'undefined' && Word.run) {
+                    try {
+                        await Word.run(async (context) => {
+                            const body = context.document.body;
+                            body.load("text");
+                            await context.sync();
+                            contractText = body.text;
+                        });
+
+                        if (!contractText.trim()) {
+                            updateStatus('No contract text found in Word document. Please ensure you have a contract open.', 'warning');
+                            return;
+                        }
+
+                        updateStatus('Contract text retrieved from Word. Analyzing...', 'info');
+                    } catch (wordError) {
+                        updateStatus('Could not read from Word document. Using demo analysis...', 'warning');
+                        contractText = getDemoContractText();
+                    }
+                } else {
+                    // Fallback to demo text if Word API not available
+                    updateStatus('Word API not available. Using demo contract for analysis...', 'info');
+                    contractText = getDemoContractText();
                 }
-                
-                updateStatus('Analyzing contract...', 'info');
-                
-                // Simulate analysis
+
+                // Perform analysis
                 setTimeout(() => {
                     try {
                         currentAnalysis = performDemoAnalysis(contractText);
@@ -332,10 +342,28 @@ Either party may terminate with 30 days notice.</textarea>
                         updateStatus('Analysis failed: ' + error.message, 'error');
                     }
                 }, 1500);
-                
+
             } catch (error) {
                 updateStatus('Error starting analysis: ' + error.message, 'error');
             }
+        }
+
+        function getDemoContractText() {
+            return `SAMPLE CONTENT MANAGEMENT AGREEMENT
+
+This Content Management Agreement is entered into between Company A and Company B.
+
+1. SCOPE OF SERVICES
+The Manager will provide content management services including distribution and marketing.
+
+2. COMPENSATION
+Revenue will be split 80% to Artist and 20% to Manager.
+
+3. TERM
+This agreement is effective for 2 years from the date of signing.
+
+4. TERMINATION
+Either party may terminate with 30 days notice.`;
         }
         
         function generateContract() {
