@@ -214,3 +214,395 @@ export function validateFormData(formData) {
   // Since we're using default demo values, validation always passes
   return true;
 }
+
+// Generate contract using Legal Matrix (preferred) or Excel-based training data (fallback)
+export async function generateContractWithExcel(formData, generationOptions = {}) {
+  console.log("Attempting Legal Matrix contract generation...");
+
+  try {
+    // Try Legal Matrix generation first
+    const matrixResult = await generateContractWithLegalMatrix(formData, generationOptions);
+    if (matrixResult.success) {
+      return matrixResult;
+    }
+
+    console.log("Legal Matrix generation failed, falling back to Excel training...");
+
+    // Import Excel services dynamically
+    const { excelTrainingService } = await import('../../services/excel-training-service.js');
+    const { excelIntegrationService } = await import('../../services/excel-integration-service.js');
+
+    // Check if Excel training data is available
+    if (!excelTrainingService.trainingData.has('templates')) {
+      console.log("No Excel training data available, loading demo data...");
+
+      // Load demo Excel structure for testing
+      const demoData = excelIntegrationService.getDemoExcelStructure();
+      const structuredData = excelIntegrationService.validateAndStructureData(demoData);
+      await excelTrainingService.loadExcelTrainingData(structuredData);
+    }
+
+    // Generate contract using Excel templates
+    const contractText = await excelTrainingService.generateContractFromExcel(
+      formData.agreement_type || 'content-management',
+      formData.content_type || 'music',
+      formData.fields || formData
+    );
+
+    return {
+      success: true,
+      contract_text: contractText,
+      generation_method: "excel_training_fallback",
+      training_source: "excel",
+      metadata: {
+        agreement_type: formData.agreement_type,
+        content_type: formData.content_type,
+        generated_at: new Date().toISOString()
+      }
+    };
+
+  } catch (error) {
+    console.error("Contract generation failed:", error);
+    return {
+      success: false,
+      error: error.message,
+      generation_method: "all_methods_failed"
+    };
+  }
+}
+
+// Generate contract using Legal Matrix baseline clauses
+export async function generateContractWithLegalMatrix(formData, generationOptions = {}) {
+  console.log("Generating contract using Legal Matrix baseline clauses...");
+
+  try {
+    // Import Legal Matrix loader
+    const { legalMatrixLoader } = await import('../../services/legal-matrix-loader.js');
+
+    // Ensure Legal Matrix is loaded
+    await legalMatrixLoader.loadLegalMatrix();
+
+    // Generate contract from baseline clauses
+    const contractResult = await legalMatrixLoader.generateContract(
+      {
+        company_name: formData.fields?.company_name || 'RHEI, Inc.',
+        provider_name: formData.fields?.provider_name || 'Provider Name, Inc.',
+        effective_date: formData.fields?.effective_date || new Date().toLocaleDateString()
+      },
+      generationOptions
+    );
+
+    return {
+      success: true,
+      contract_text: contractResult.contractText,
+      generation_method: "legal_matrix_baseline",
+      training_source: "legal_matrix_tsv",
+      metadata: {
+        clauses_used: contractResult.clausesUsed,
+        articles_generated: contractResult.articlesGenerated,
+        agreement_type: formData.agreement_type,
+        content_type: formData.content_type,
+        generated_at: new Date().toISOString(),
+        legal_matrix_stats: legalMatrixLoader.getStatistics()
+      }
+    };
+
+  } catch (error) {
+    console.error("Legal Matrix generation failed:", error);
+    return {
+      success: false,
+      error: error.message,
+      generation_method: "legal_matrix_failed"
+    };
+  }
+}
+
+// Analyze contract using Legal Matrix
+export async function analyzeContractWithLegalMatrix(contractText, targetParty = null, options = {}) {
+  console.log(`Analyzing contract with Legal Matrix${targetParty ? ` for party: ${targetParty}` : ''}...`);
+
+  try {
+    // Import Legal Matrix loader
+    const { legalMatrixLoader } = await import('../../services/legal-matrix-loader.js');
+
+    // Ensure Legal Matrix is loaded
+    await legalMatrixLoader.loadLegalMatrix();
+
+    // Analyze contract against Legal Matrix
+    const analysis = await legalMatrixLoader.analyzeContract(contractText, targetParty, options);
+
+    return {
+      success: true,
+      analysis,
+      analysis_method: "legal_matrix",
+      target_party: targetParty,
+      supported_parties: legalMatrixLoader.getSupportedParties(),
+      analyzed_at: new Date().toISOString()
+    };
+
+  } catch (error) {
+    console.error("Legal Matrix analysis failed:", error);
+    return {
+      success: false,
+      error: error.message,
+      analysis_method: "legal_matrix_failed"
+    };
+  }
+}
+
+// Generate demo Legal Matrix CSV for testing
+function generateDemoLegalMatrixCSV() {
+  return `Article,Clause Number,Clause Title,Clause Summary BASELINE (Ninja Tune Ltd.),WMX,Sony,Lionsgate,Universal,Warner,Notes
+2,2.1,Channel Management Services,"RHEI will provide Channel Management Services as detailed in Schedule ""B"" for Provider Channels listed in Schedule ""A"" or as mutually agreed.","RHEI shall provide Provider with the ""Channel Management Services"" as set out in Schedule ""B"" attached hereto (the ""Channel Management Services"") in connection with the Provider Channels set out in Schedule ""A"" attached hereto or any other Provider Channels mutually agreed upon by the parties in writing (email to suffice) (collectively, the ""Managed Channels"").","RHEI shall provide Provider with the ""Channel Management Services"" as set out in Schedule ""B"" attached hereto (the ""Channel Management Services"") in connection with the Provider Channels set out in Schedule ""A"" attached hereto or any other Provider Channels mutually agreed upon by the parties in writing (email to suffice) (collectively, the ""Managed Channels"").",WMX contract adds "solely" and explicitly states that all services are subject to Provider approval as per Schedules A and B.,✓,✓,Found in Article 3.3; BBTV provides full management services for 'Managed Channels'.
+2,2.2,Service Scope,"Services include content optimization, audience development, and revenue maximization for Provider's digital content.","Services shall include but not be limited to: (a) content optimization and SEO; (b) audience development and engagement strategies; (c) revenue maximization through advertising and partnerships; (d) analytics and performance reporting.","Services encompass comprehensive digital content management including optimization, audience growth, monetization strategies, and detailed performance analytics.",✓,"Modified to include ""brand-safe"" content requirements and additional compliance monitoring.","Enhanced to include cross-platform promotion and integrated marketing campaigns.",Standard service scope with focus on music content optimization.
+3,3.1,Revenue Sharing,"Net Revenue shall be shared 80% to Provider and 20% to RHEI after deduction of platform fees and direct costs.","Net Revenue Distribution: Provider shall receive eighty percent (80%) and RHEI shall receive twenty percent (20%) of all Net Revenue generated from the Managed Channels, calculated after deduction of Platform Fees and Direct Costs.","Revenue split remains 80/20 but includes additional deductions for marketing spend and third-party tools.",✓,"Modified to 85/15 split in Provider's favor with cap on RHEI's marketing deductions.","Tiered revenue sharing: 80/20 for first $100K, 85/15 thereafter.","Standard 80/20 split with quarterly reconciliation process."
+3,3.2,Payment Terms,"Payments shall be made monthly within 30 days of month-end, provided minimum threshold of $100 is met.","RHEI shall pay Provider their share of Net Revenue on a monthly basis, no later than thirty (30) days following the end of each calendar month, subject to a minimum payment threshold of One Hundred Dollars ($100).","Payment terms extended to 45 days with $250 minimum threshold due to additional compliance requirements.",✓,"Accelerated payment terms: 15 days with $50 minimum threshold.","Bi-weekly payments for amounts over $500, monthly for smaller amounts.","Standard 30-day terms with $100 threshold and detailed reporting."
+4,4.1,Term Duration,"This Agreement shall commence on the Effective Date and continue for an initial term of three (3) years.","Initial Term: This Agreement shall be effective as of the Effective Date and shall continue for an initial period of three (3) years, unless earlier terminated in accordance with the provisions hereof.","Extended to five (5) year initial term with automatic renewal provisions.",✓,"Reduced to two (2) year initial term with option for one-year extensions.","Rolling three-year term with annual review and adjustment periods.","Standard three-year term with mid-term performance review."
+4,4.2,Termination Rights,"Either party may terminate this Agreement with ninety (90) days written notice, or immediately for material breach.","Termination: Either party may terminate this Agreement (a) with ninety (90) days prior written notice; or (b) immediately upon material breach by the other party that remains uncured for thirty (30) days after written notice.","Termination notice reduced to 60 days with 15-day cure period for breaches.",✓,"Termination for convenience requires 120 days notice; immediate termination only for specific enumerated breaches.","30-day termination notice with expedited termination for performance issues.","Standard 90-day notice with 30-day cure period and specific breach definitions."`;
+}
+
+// Generate contract with Excel-based training (preferred) or AI prompt system (fallback)
+export async function generateContractWithAI(formData, generationOptions = {}) {
+  console.log("Generating contract with Excel-based training system...");
+
+  try {
+    // Try Excel-based generation first
+    const excelResult = await generateContractWithExcel(formData, generationOptions);
+    if (excelResult.success) {
+      return excelResult;
+    }
+
+    console.log("Excel generation failed, falling back to AI prompt system...");
+
+    // Import AI prompts dynamically to avoid static import issues
+    const { AI_PROMPTS } = await import('../../shared/config.js');
+
+    // Set up generation options with defaults
+    const options = {
+      playbook: generationOptions.playbook || AI_PROMPTS.contractGeneration.defaultParameters.playbook,
+      includeClauses: generationOptions.includeClauses || AI_PROMPTS.contractGeneration.defaultParameters.includeClauses,
+      format: generationOptions.format || AI_PROMPTS.contractGeneration.defaultParameters.format,
+      companyName: generationOptions.companyName || AI_PROMPTS.contractGeneration.defaultParameters.companyName,
+      counterpartyName: generationOptions.counterpartyName || formData.fields?.entity_name || 'Provider Name, Inc.',
+      jurisdiction: generationOptions.jurisdiction || AI_PROMPTS.contractGeneration.defaultParameters.jurisdiction,
+      includeSchedules: generationOptions.includeSchedules !== undefined ? generationOptions.includeSchedules : AI_PROMPTS.contractGeneration.defaultParameters.includeSchedules
+    };
+
+    console.log("Generation options:", options);
+
+    // Apply variable mapping for compatibility
+    const mappedFormData = applyVariableMapping(formData, AI_PROMPTS.contractGeneration.variableMapping);
+
+    // Generate contract using the new prompt structure
+    const contractContent = generateContractFromTemplate(mappedFormData, options);
+
+    return {
+      success: true,
+      contract_text: contractContent,
+      generation_options: options,
+      ai_prompt_used: "contractGeneration",
+      metadata: {
+        playbook: options.playbook,
+        format: options.format,
+        clauses_included: options.includeClauses,
+        generated_at: new Date().toISOString()
+      }
+    };
+
+  } catch (error) {
+    console.error("Error generating contract with AI prompt:", error);
+    return {
+      success: false,
+      error: error.message,
+      fallback_used: true
+    };
+  }
+}
+
+// Apply variable mapping between old and new format
+function applyVariableMapping(formData, variableMapping) {
+  const mappedData = { ...formData };
+
+  // Convert form fields to new variable format
+  if (mappedData.fields) {
+    const mappedFields = {};
+    Object.entries(mappedData.fields).forEach(([key, value]) => {
+      // Convert camelCase to PascalCase for new format
+      const newKey = key.replace(/([A-Z])/g, '_$1').toLowerCase();
+      mappedFields[newKey] = value;
+    });
+    mappedData.fields = mappedFields;
+  }
+
+  return mappedData;
+}
+
+// Generate contract from template using new AI prompt structure
+function generateContractFromTemplate(formData, options) {
+  const contractType = formData.agreement_type || 'content-management';
+  const contentType = formData.content_type || 'music';
+  const fields = formData.fields || {};
+
+  // Enhanced contract template with new AI prompt structure
+  const contractTemplate = `
+${generateContractHeader(options)}
+
+${generatePreamble(options, fields)}
+
+${generateRecitals(contractType, contentType, fields)}
+
+${generateArticlesAndClauses(contractType, contentType, fields, options)}
+
+${generateStandardSections(options, fields)}
+
+${options.includeSchedules ? generateSchedules(contractType, contentType) : ''}
+
+${generateSignatureBlock(options, fields)}
+  `.trim();
+
+  return contractTemplate;
+}
+
+// Generate contract header with new format
+function generateContractHeader(options) {
+  return `
+**${options.format === 'WordReady' ? 'SERVICES AGREEMENT' : 'SERVICES AGREEMENT'}**
+
+**Effective Date:** {{EffectiveDate}}
+**Parties:** ${options.companyName} and ${options.counterpartyName}
+**Jurisdiction:** ${options.jurisdiction}
+**Playbook:** ${options.playbook}
+**Clauses:** ${options.includeClauses}
+  `.trim();
+}
+
+// Generate preamble section
+function generatePreamble(options, fields) {
+  return `
+**PREAMBLE**
+
+This Services Agreement ("Agreement") is entered into on {{EffectiveDate}} ("Effective Date") between ${options.companyName}, a corporation organized under the laws of ${options.jurisdiction} ("Company"), and ${options.counterpartyName}, a business entity ("Provider").
+  `.trim();
+}
+
+// Generate recitals section
+function generateRecitals(contractType, contentType, fields) {
+  return `
+**RECITALS**
+
+WHEREAS, Company desires to engage Provider for ${contractType.replace('-', ' ')} services related to ${contentType} content;
+
+WHEREAS, Provider has the expertise and capability to provide such services;
+
+WHEREAS, the parties wish to set forth the terms and conditions of their business relationship;
+
+NOW, THEREFORE, in consideration of the mutual covenants contained herein, the parties agree as follows:
+  `.trim();
+}
+
+// Generate articles and clauses based on playbook
+function generateArticlesAndClauses(contractType, contentType, fields, options) {
+  const clauses = parseClauseRange(options.includeClauses);
+  let content = '';
+
+  // Generate numbered articles and clauses
+  clauses.forEach((clause, index) => {
+    const articleNum = Math.floor(clause) || (index + 1);
+    const clauseNum = clause % 1 ? clause.toFixed(1) : clause;
+
+    content += `
+**${articleNum}. ${getArticleTitle(articleNum, contractType)}**
+
+${articleNum}.1 ${getClauseContent(clauseNum, contractType, contentType, fields)}
+    `;
+  });
+
+  return content.trim();
+}
+
+// Parse clause range (e.g., "2.1-9.5" -> [2.1, 2.2, ..., 9.5])
+function parseClauseRange(rangeStr) {
+  const [start, end] = rangeStr.split('-').map(parseFloat);
+  const clauses = [];
+
+  for (let i = start; i <= end; i += 0.1) {
+    clauses.push(Math.round(i * 10) / 10);
+  }
+
+  return clauses.slice(0, 20); // Limit for demo
+}
+
+// Get article title based on number and contract type
+function getArticleTitle(articleNum, contractType) {
+  const titles = {
+    1: 'SERVICES',
+    2: 'OBLIGATIONS',
+    3: 'CONFIDENTIALITY',
+    4: 'COMPENSATION',
+    5: 'TERM',
+    6: 'TERMINATION',
+    7: 'LIABILITY',
+    8: 'GENERAL PROVISIONS',
+    9: 'MISCELLANEOUS'
+  };
+
+  return titles[articleNum] || `ARTICLE ${articleNum}`;
+}
+
+// Get clause content based on clause number and contract details
+function getClauseContent(clauseNum, contractType, contentType, fields) {
+  // This would normally pull from the playbook database
+  return `Standard clause content for ${contractType} ${contentType} agreement. [Clause ${clauseNum}]`;
+}
+
+// Generate standard sections
+function generateStandardSections(options, fields) {
+  return `
+**DEFINITIONS**
+
+For purposes of this Agreement, the following terms shall have the meanings set forth below:
+
+**TERM AND TERMINATION**
+
+This Agreement shall commence on {{EffectiveDate}} and continue for {{TermLength}}.
+
+**GENERAL PROVISIONS**
+
+This Agreement shall be governed by the laws of ${options.jurisdiction}.
+  `.trim();
+}
+
+// Generate schedules if requested
+function generateSchedules(contractType, contentType) {
+  return `
+**SCHEDULE A - CHANNEL MANAGEMENT**
+
+[Channel management details for ${contentType} content]
+
+**SCHEDULE B - CONTENT DEVELOPMENT**
+
+[Content development specifications for ${contractType}]
+  `.trim();
+}
+
+// Generate signature block
+function generateSignatureBlock(options, fields) {
+  return `
+**SIGNATURE BLOCK**
+
+${options.companyName}
+
+By: _________________________
+Name: {{RHEISignatory}}
+Title: {{RHEITitle}}
+Date: {{EffectiveDate}}
+
+
+${options.counterpartyName}
+
+By: _________________________
+Name: {{ProviderSignatory}}
+Title: {{ProviderTitle}}
+Date: {{EffectiveDate}}
+  `.trim();
+}

@@ -224,5 +224,87 @@ For each clause, provide:
 - Improved language suggestion
 - Business benefit explanation
 - Legal rationale`
+  },
+
+  contractGeneration: {
+    systemPrompt: `You are a legal contract generation AI specialized in drafting commercial services agreements. Generate a complete, formalized contract document using the selected clause library ("playbook"). Include:
+
+1. **Header, Title, and Preamble** with party names, effective date, and jurisdiction placeholders.
+2. **Recitals** explaining the context and purpose.
+3. **All Articles and Clauses** provided in the selected playbook.
+4. **Standard Definitions, Term, Termination, and Boilerplate Sections**.
+5. Include **Schedules or Exhibits** if referenced in clauses.
+6. Use formal legal style and consistent numbering.
+7. Output as clean text or structured data as needed by the system.
+8. Allow dynamic insertion of variables such as:
+   - {{EffectiveDate}}
+   - {{ProviderName}}
+   - {{RHEIAddress}}
+   - {{GoverningLaw}}
+   - {{TermLength}}
+
+**OUTPUT EXPECTATIONS:**
+
+- Full contract including:
+  - Articles: Services, Obligations, Confidentiality, Term, Miscellaneous
+  - Clause Numbering: Preserved (e.g. 2.1, 2.2, ..., 9.5)
+  - Schedules: Appendix A (Channel Management), B (Content Dev), if invoked
+- Clean formatting for contract lifecycle systems (e.g., Clause Library Matching, Redline Support)`,
+
+    userPromptTemplate: `Generate a complete Services Agreement using the following parameters:
+
+**PLAYBOOK**: {playbook}
+**INCLUDE CLAUSES**: {includeClauses}
+**FORMAT**: {format}
+**PARTIES**:
+  - Company: {companyName}
+  - Counterparty: {counterpartyName}
+**JURISDICTION**: {jurisdiction}
+**INCLUDE SCHEDULES**: {includeSchedules}
+
+**CONTRACT TYPE**: {contractType}
+**CONTENT TYPE**: {contentType}
+
+**FORM DATA**: {formData}
+
+Please generate a complete contract following the system instructions above, ensuring:
+1. All specified clauses are included in the range {includeClauses}
+2. Output format matches {format} specification
+3. All variables are properly substituted with provided values
+4. Professional legal formatting and structure
+5. Schedules/exhibits included if {includeSchedules} is true
+
+Return the contract in the specified format with proper legal structure and numbering.`,
+
+    // Default parameters for contract generation
+    defaultParameters: {
+      playbook: "Custom",
+      includeClauses: "1.1-9.5",
+      format: "FullText",
+      companyName: "RHEI, Inc.",
+      jurisdiction: "State of California",
+      includeSchedules: true
+    },
+
+    // Supported playbooks
+    supportedPlaybooks: ["Ninja Tune Ltd.", "WMX", "Sony", "Lionsgate", "Custom"],
+
+    // Supported output formats
+    supportedFormats: ["FullText", "StructuredJSON", "WordReady"],
+
+    // Variable mapping between old and new format
+    variableMapping: {
+      // Old format -> New format
+      "{effectiveDate}": "{{EffectiveDate}}",
+      "{providerName}": "{{ProviderName}}",
+      "{rheiAddress}": "{{RHEIAddress}}",
+      "{governingLaw}": "{{GoverningLaw}}",
+      "{termLength}": "{{TermLength}}",
+      "{entityName}": "{{EntityName}}",
+      "{contentCreator}": "{{ContentCreator}}",
+      "{scopeDescription}": "{{ScopeDescription}}",
+      "{revenueSplit}": "{{RevenueSplit}}",
+      "{territory}": "{{Territory}}"
+    }
   }
 };

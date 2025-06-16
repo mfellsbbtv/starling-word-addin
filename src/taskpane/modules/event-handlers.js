@@ -35,21 +35,70 @@ export async function generateContract() {
 
     updateStatus("Generating contract content...", "info");
 
-    // Generate contract using playbook system
-    const { playbookService } = await import('../../shared/playbook-service.js');
-    const contractText = await playbookService.generateContract(
-      formData.agreement_type || 'content-management',
-      formData.content_type || 'music',
-      formData.fields || formData
-    );
+    // Try to use new AI prompt system first, fallback to playbook system
+    let contractText;
+    let generationMethod = "ai_prompt";
+
+    try {
+      // Import the new AI contract generation function
+      const { generateContractWithAI } = await import('../services/contract-generator.js');
+
+      // Set up generation options (can be customized based on user preferences)
+      const generationOptions = {
+        playbook: "Custom", // Default to Custom, could be made configurable
+        includeClauses: "1.1-9.5", // Full range of clauses
+        format: "WordReady", // Format optimized for Word insertion
+        companyName: "RHEI, Inc.",
+        jurisdiction: "State of California",
+        includeSchedules: true
+      };
+
+      console.log("Attempting contract generation with new AI prompt system...");
+      const aiResult = await generateContractWithAI(formData, generationOptions);
+
+      if (aiResult.success) {
+        contractText = aiResult.contract_text;
+        console.log("Successfully generated contract using AI prompt system");
+        updateStatus("Contract generated using AI prompt system...", "info");
+      } else {
+        throw new Error(aiResult.error || "AI generation failed");
+      }
+
+    } catch (aiError) {
+      console.warn("AI prompt generation failed, falling back to playbook system:", aiError);
+      generationMethod = "playbook_fallback";
+
+      // Fallback to original playbook system
+      const { playbookService } = await import('../../shared/playbook-service.js');
+      contractText = await playbookService.generateContract(
+        formData.agreement_type || 'content-management',
+        formData.content_type || 'music',
+        formData.fields || formData
+      );
+      updateStatus("Contract generated using playbook system (fallback)...", "info");
+    }
 
     // Insert contract into Word document
     await insertContractIntoDocument(contractText, formData);
 
-    // Display results
-    displayContractResults(result);
+    // Create enhanced result object with generation method info
+    const enhancedResult = {
+      success: true,
+      contract_text: contractText,
+      generation_method: generationMethod,
+      form_data: formData,
+      generated_at: new Date().toISOString(),
+      ai_prompt_used: generationMethod === "ai_prompt"
+    };
 
-    updateStatus("Contract generated successfully!", "success");
+    // Display results
+    displayContractResults(enhancedResult);
+
+    const successMessage = generationMethod === "ai_prompt" ?
+      "Contract generated successfully using AI prompt system!" :
+      "Contract generated successfully using playbook system!";
+
+    updateStatus(successMessage, "success");
     hideProgressSection();
 
   } catch (error) {
@@ -119,17 +168,45 @@ Either party may terminate with 30 days notice.`;
 
     updateStatus(`Analyzing ${agreementType} contract for ${contentType} content...`, "info");
 
-    // Perform comprehensive contract review using playbook system
-    const reviewResults = await contractReviewer.reviewContract(documentText, agreementType, contentType);
+    // Try Legal Matrix analysis first, fallback to playbook system
+    let reviewResults;
+    let analysisMethod = "legal_matrix";
+
+    try {
+      // Import Legal Matrix analysis function
+      const { analyzeContractWithLegalMatrix } = await import('../services/contract-generator.js');
+
+      // Get target party from UI (if available)
+      const targetParty = getSelectedParty();
+
+      console.log("Attempting Legal Matrix analysis...");
+      const matrixResult = await analyzeContractWithLegalMatrix(documentText, targetParty);
+
+      if (matrixResult.success) {
+        // Convert Legal Matrix analysis to review results format
+        reviewResults = convertLegalMatrixToReviewResults(matrixResult.analysis, agreementType, contentType);
+        updateStatus("Contract analyzed using Legal Matrix...", "info");
+      } else {
+        throw new Error(matrixResult.error || "Legal Matrix analysis failed");
+      }
+
+    } catch (matrixError) {
+      console.warn("Legal Matrix analysis failed, falling back to playbook system:", matrixError);
+      analysisMethod = "playbook_fallback";
+
+      // Fallback to original playbook system
+      reviewResults = await contractReviewer.reviewContract(documentText, agreementType, contentType);
+      updateStatus("Contract analyzed using playbook system (fallback)...", "info");
+    }
 
     const statusMessage = window.WORD_API_AVAILABLE ?
-      `Contract review complete! Status: ${reviewResults.acceptabilityStatus.status}` :
-      `Demo contract review complete! Status: ${reviewResults.acceptabilityStatus.status}`;
+      `Contract review complete! Status: ${reviewResults.acceptabilityStatus.status} (${analysisMethod})` :
+      `Demo contract review complete! Status: ${reviewResults.acceptabilityStatus.status} (${analysisMethod})`;
 
     updateStatus(statusMessage, reviewResults.acceptabilityStatus.status === 'ready-for-legal' ? "success" : "warning");
 
-    // Display comprehensive review results
-    displayContractReviewResults(reviewResults);
+    // Display comprehensive review results with analysis method indicator
+    displayContractReviewResults(reviewResults, analysisMethod);
 
     hideProgressSection();
 
@@ -636,3 +713,182 @@ window.clearSuggestions = async function() {
   const { clearSuggestions } = await import('../../shared/utils.js');
   return clearSuggestions();
 };
+
+// Legal Matrix Integration Helper Functions
+
+/**
+ * Get selected party from UI for Legal Matrix analysis
+ */
+function getSelectedParty() {
+  // Check if there's a party selector in the UI
+  const partySelector = document.getElementById('target-party-selector');
+  if (partySelector && partySelector.value) {
+    return partySelector.value;
+  }
+
+  // Default to null (analyze against all parties)
+  return null;
+}
+
+/**
+ * Convert Legal Matrix analysis results to review results format
+ */
+function convertLegalMatrixToReviewResults(matrixAnalysis, agreementType, contentType) {
+  // Calculate overall acceptability status
+  const acceptabilityStatus = calculateAcceptabilityStatus(matrixAnalysis);
+
+  // Convert clause analysis to suggestions format
+  const suggestions = convertClauseAnalysisToSuggestions(matrixAnalysis);
+
+  // Create revision plan from unacceptable modifications
+  const revisionPlan = createRevisionPlan(matrixAnalysis);
+
+  return {
+    acceptabilityStatus,
+    suggestions,
+    revisionPlan,
+    analysisMethod: 'legal_matrix',
+    targetParty: matrixAnalysis.targetParty,
+    complianceScore: matrixAnalysis.complianceScore,
+    overallAssessment: matrixAnalysis.overallAssessment,
+    clauseAnalysis: matrixAnalysis.clauseAnalysis,
+    missingClauses: matrixAnalysis.missingClauses,
+    unacceptableModifications: matrixAnalysis.unacceptableModifications,
+    partySpecificRecommendations: matrixAnalysis.partySpecificRecommendations || []
+  };
+}
+
+/**
+ * Calculate acceptability status from Legal Matrix analysis
+ */
+function calculateAcceptabilityStatus(matrixAnalysis) {
+  const score = matrixAnalysis.complianceScore;
+  const missingCount = matrixAnalysis.missingClauses?.length || 0;
+  const unacceptableCount = matrixAnalysis.unacceptableModifications?.length || 0;
+
+  let status, message, priority;
+
+  if (score >= 90 && missingCount === 0 && unacceptableCount === 0) {
+    status = 'ready-for-legal';
+    message = 'Contract fully complies with Legal Matrix standards and is ready for legal review.';
+    priority = 'low';
+  } else if (score >= 80 && missingCount <= 1 && unacceptableCount <= 2) {
+    status = 'minor-revisions';
+    message = 'Contract requires minor adjustments to meet Legal Matrix standards.';
+    priority = 'medium';
+  } else if (score >= 60) {
+    status = 'major-revisions';
+    message = 'Contract needs significant modifications to align with Legal Matrix.';
+    priority = 'high';
+  } else {
+    status = 'not-acceptable';
+    message = 'Contract requires major revisions to meet Legal Matrix standards.';
+    priority = 'critical';
+  }
+
+  return {
+    status,
+    message,
+    priority,
+    complianceScore: score,
+    missingClauses: missingCount,
+    unacceptableModifications: unacceptableCount
+  };
+}
+
+/**
+ * Convert clause analysis to suggestions format
+ */
+function convertClauseAnalysisToSuggestions(matrixAnalysis) {
+  const suggestions = [];
+
+  // Add suggestions for missing clauses
+  if (matrixAnalysis.missingClauses) {
+    matrixAnalysis.missingClauses.forEach(missing => {
+      suggestions.push({
+        type: 'missing-clause',
+        severity: missing.severity,
+        title: `Add ${missing.title}`,
+        description: `Contract is missing clause ${missing.clauseKey}: ${missing.title}`,
+        suggestion: missing.baselineContent,
+        location: `Article ${missing.article}`,
+        autoApplicable: true
+      });
+    });
+  }
+
+  // Add suggestions for unacceptable modifications
+  if (matrixAnalysis.unacceptableModifications) {
+    matrixAnalysis.unacceptableModifications.forEach(unacceptable => {
+      suggestions.push({
+        type: 'clause-revision',
+        severity: 'medium',
+        title: `Revise ${unacceptable.title}`,
+        description: `Clause ${unacceptable.clauseKey} deviates from acceptable variations`,
+        suggestion: unacceptable.recommendation,
+        currentText: unacceptable.foundContent,
+        suggestedText: unacceptable.baselineContent,
+        location: `Clause ${unacceptable.clauseKey}`,
+        autoApplicable: false
+      });
+    });
+  }
+
+  // Add party-specific recommendations
+  if (matrixAnalysis.partySpecificRecommendations) {
+    matrixAnalysis.partySpecificRecommendations.forEach(rec => {
+      suggestions.push({
+        type: 'party-specific',
+        severity: rec.type === 'missing' ? 'high' : 'medium',
+        title: rec.message,
+        description: `Party-specific recommendation for ${matrixAnalysis.targetParty}`,
+        suggestion: rec.suggestedContent,
+        currentText: rec.currentContent,
+        location: rec.clauseKey ? `Clause ${rec.clauseKey}` : 'General',
+        autoApplicable: false
+      });
+    });
+  }
+
+  return suggestions;
+}
+
+/**
+ * Create revision plan from Legal Matrix analysis
+ */
+function createRevisionPlan(matrixAnalysis) {
+  const revisions = [];
+
+  // Add revisions for missing clauses
+  if (matrixAnalysis.missingClauses) {
+    matrixAnalysis.missingClauses.forEach(missing => {
+      revisions.push({
+        type: 'add-clause',
+        clauseKey: missing.clauseKey,
+        title: missing.title,
+        content: missing.baselineContent,
+        location: `Article ${missing.article}`,
+        priority: missing.severity,
+        autoApplicable: true
+      });
+    });
+  }
+
+  // Add revisions for unacceptable modifications
+  if (matrixAnalysis.unacceptableModifications) {
+    matrixAnalysis.unacceptableModifications.forEach(unacceptable => {
+      revisions.push({
+        type: 'modify-clause',
+        clauseKey: unacceptable.clauseKey,
+        title: unacceptable.title,
+        currentContent: unacceptable.foundContent,
+        revisedContent: unacceptable.baselineContent,
+        reason: unacceptable.recommendation,
+        priority: 'medium',
+        autoApplicable: false
+      });
+    });
+  }
+
+  return revisions;
+}

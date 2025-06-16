@@ -109,10 +109,49 @@ export class APIService {
     });
   }
 
-  async generateContract(formData) {
+  async generateContract(formData, generationOptions = {}) {
+    // Prepare the AI prompt for contract generation
+    const {
+      playbook = AI_PROMPTS.contractGeneration.defaultParameters.playbook,
+      includeClauses = AI_PROMPTS.contractGeneration.defaultParameters.includeClauses,
+      format = AI_PROMPTS.contractGeneration.defaultParameters.format,
+      companyName = AI_PROMPTS.contractGeneration.defaultParameters.companyName,
+      counterpartyName = formData.fields?.entity_name || 'Provider Name, Inc.',
+      jurisdiction = AI_PROMPTS.contractGeneration.defaultParameters.jurisdiction,
+      includeSchedules = AI_PROMPTS.contractGeneration.defaultParameters.includeSchedules
+    } = generationOptions;
+
+    const userPrompt = AI_PROMPTS.contractGeneration.userPromptTemplate
+      .replace('{playbook}', playbook)
+      .replace('{includeClauses}', includeClauses)
+      .replace('{format}', format)
+      .replace('{companyName}', companyName)
+      .replace('{counterpartyName}', counterpartyName)
+      .replace('{jurisdiction}', jurisdiction)
+      .replace('{includeSchedules}', includeSchedules)
+      .replace('{contractType}', formData.agreement_type || 'general')
+      .replace('{contentType}', formData.content_type || 'general')
+      .replace('{formData}', JSON.stringify(formData.fields || {}));
+
     return this.makeRequest('/contracts/generate', {
       method: 'POST',
-      body: formData
+      body: {
+        ...formData,
+        generation_options: generationOptions,
+        ai_prompt: {
+          system_prompt: AI_PROMPTS.contractGeneration.systemPrompt,
+          user_prompt: userPrompt
+        },
+        parameters: {
+          playbook,
+          include_clauses: includeClauses,
+          format,
+          company_name: companyName,
+          counterparty_name: counterpartyName,
+          jurisdiction,
+          include_schedules: includeSchedules
+        }
+      }
     });
   }
 
