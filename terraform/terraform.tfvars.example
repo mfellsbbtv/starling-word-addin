@@ -1,0 +1,101 @@
+# Example Terraform Variables for RHEI Word Add-in
+# Copy this file to terraform.tfvars and customize the values
+
+# Basic Configuration
+aws_region   = "us-east-1"
+project_name = "rhei-word-addin"
+environment  = "prod"
+owner        = "RHEI"
+
+# Domain Configuration (Optional)
+# Set these if you want to use a custom domain
+enable_custom_domain = false
+domain_name          = ""  # e.g., "word-addin.yourcompany.com"
+api_domain           = ""  # e.g., "api.word-addin.yourcompany.com"
+
+# Backend Configuration
+# Set enable_backend = true if you want to deploy the FastAPI backend
+enable_backend  = false
+enable_database = false
+
+# S3 Configuration
+s3_bucket_name      = ""  # Leave empty to auto-generate
+enable_s3_versioning = true
+
+# CloudFront Configuration
+cloudfront_price_class              = "PriceClass_100"  # PriceClass_All, PriceClass_200, PriceClass_100
+cloudfront_minimum_protocol_version = "TLSv1.2_2021"
+
+# ECS Configuration (if backend is enabled)
+ecs_cpu           = 256   # 256, 512, 1024, 2048, 4096
+ecs_memory        = 512   # Must be compatible with CPU
+ecs_desired_count = 1
+api_image_uri     = "nginx:latest"  # Replace with your actual API image
+
+# Database Configuration (if database is enabled)
+db_instance_class    = "db.t3.micro"  # db.t3.micro, db.t3.small, db.t3.medium, etc.
+db_allocated_storage = 20
+db_engine_version    = "15.4"
+db_name              = "rhei_word_addin"
+db_username          = "rhei_admin"
+
+# Security Configuration
+allowed_origins = [
+  "https://word.office.com",
+  "https://word-edit.officeapps.live.com",
+  "https://outlook.office.com",
+  "https://outlook.live.com"
+]
+
+# Monitoring Configuration
+enable_monitoring    = true
+log_retention_days   = 30
+
+# Backup and Security
+backup_retention_period   = 7
+enable_deletion_protection = true
+
+# Example configurations for different environments:
+
+# Development Environment
+# aws_region                 = "us-east-1"
+# project_name              = "rhei-word-addin"
+# environment               = "dev"
+# enable_custom_domain      = false
+# enable_backend            = false
+# enable_database           = false
+# enable_monitoring         = false
+# enable_deletion_protection = false
+# cloudfront_price_class    = "PriceClass_100"
+
+# Staging Environment
+# aws_region                 = "us-east-1"
+# project_name              = "rhei-word-addin"
+# environment               = "staging"
+# enable_custom_domain      = true
+# domain_name               = "staging-word-addin.yourcompany.com"
+# enable_backend            = true
+# enable_database           = true
+# enable_monitoring         = true
+# enable_deletion_protection = false
+# ecs_desired_count         = 1
+# db_instance_class         = "db.t3.micro"
+
+# Production Environment
+# aws_region                 = "us-east-1"
+# project_name              = "rhei-word-addin"
+# environment               = "prod"
+# enable_custom_domain      = true
+# domain_name               = "word-addin.yourcompany.com"
+# api_domain                = "api.word-addin.yourcompany.com"
+# enable_backend            = true
+# enable_database           = true
+# enable_monitoring         = true
+# enable_deletion_protection = true
+# ecs_desired_count         = 2
+# ecs_cpu                   = 512
+# ecs_memory                = 1024
+# db_instance_class         = "db.t3.small"
+# db_allocated_storage      = 100
+# cloudfront_price_class    = "PriceClass_200"
+# backup_retention_period   = 30

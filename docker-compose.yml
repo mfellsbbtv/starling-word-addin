@@ -1,0 +1,143 @@
+# Docker Compose for RHEI Word Add-in Local Development
+# This file sets up the complete development environment
+
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: rhei-word-addin-db
+    environment:
+      POSTGRES_DB: rhei_word_addin
+      POSTGRES_USER: rhei_admin
+      POSTGRES_PASSWORD: dev_password_123
+      POSTGRES_INITDB_ARGS: "--encoding=UTF-8"
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U rhei_admin -d rhei_word_addin"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - rhei-network
+
+  # Redis for caching (optional)
+  redis:
+    image: redis:7-alpine
+    container_name: rhei-word-addin-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - rhei-network
+
+  # FastAPI Backend
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: rhei-word-addin-api
+    environment:
+      # Database configuration
+      DATABASE_URL: postgresql://rhei_admin:dev_password_123@postgres:5432/rhei_word_addin
+      
+      # Redis configuration
+      REDIS_URL: redis://redis:6379/0
+      
+      # Application configuration
+      ENVIRONMENT: development
+      DEBUG: "true"
+      LOG_LEVEL: DEBUG
+      
+      # CORS configuration
+      ALLOWED_ORIGINS: >
+        https://word.office.com,
+        https://word-edit.officeapps.live.com,
+        https://outlook.office.com,
+        https://outlook.live.com,
+        http://localhost:3000,
+        https://localhost:3000
+      
+      # API configuration
+      API_V1_STR: /api/v1
+      SECRET_KEY: dev-secret-key-change-in-production
+      
+      # AI/ML API keys (set these in .env file)
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+      GOOGLE_API_KEY: ${GOOGLE_API_KEY:-}
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./src:/app/src:ro
+      - ./Legal Matrix - Test.tsv:/app/Legal Matrix - Test.tsv:ro
+      - ./playbooks:/app/playbooks:ro
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - rhei-network
+    restart: unless-stopped
+
+  # Nginx reverse proxy (optional, for production-like setup)
+  nginx:
+    image: nginx:alpine
+    container_name: rhei-word-addin-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./ssl:/etc/nginx/ssl:ro
+      - ./dist:/usr/share/nginx/html:ro
+    depends_on:
+      - api
+    networks:
+      - rhei-network
+    restart: unless-stopped
+
+  # Database migration service
+  migrate:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: rhei-word-addin-migrate
+    environment:
+      DATABASE_URL: postgresql://rhei_admin:dev_password_123@postgres:5432/rhei_word_addin
+    command: ["python", "-m", "alembic", "upgrade", "head"]
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - rhei-network
+    profiles:
+      - migration
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+
+networks:
+  rhei-network:
+    driver: bridge
