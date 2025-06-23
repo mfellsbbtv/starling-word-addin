@@ -103,9 +103,34 @@
             }
         }
 
+        // Enhanced Office.onReady with HostApplication fix
+        function initializeOfficeWithFix() {
+            if (typeof Office !== 'undefined') {
+                Office.onReady((info) => {
+                    console.log("Office.onReady called with info:", info);
+                    window.OFFICE_READY = true;
+
+                    // CRITICAL FIX: Check if Office.HostApplication is available
+                    if (typeof Office.HostApplication === 'undefined') {
+                        console.warn("Office.HostApplication is undefined, assuming Word environment");
+                        // Proceed with Word API check anyway
+                        startWordApiCheck();
+                    } else if (info.host === Office.HostApplication.Word) {
+                        console.log("RHEI AI Legal Assistant loaded successfully in Word");
+                        startWordApiCheck();
+                    } else {
+                        console.error("This add-in is designed for Microsoft Word only. Current host:", info.host);
+                    }
+                });
+            } else {
+                console.error("Office.js not available");
+                setTimeout(checkOfficeLoading, 1000);
+            }
+        }
+
         // Start checking after page load
         window.addEventListener('load', function() {
-            setTimeout(checkOfficeLoading, 1000);
+            setTimeout(initializeOfficeWithFix, 1000);
         });
     </script>
 
