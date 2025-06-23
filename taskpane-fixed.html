@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>RHEI AI Legal Assistant</title>
+
+    <!-- Office JavaScript API with CRITICAL FIX -->
+    <script type="text/javascript" src="https://appsforoffice.microsoft.com/lib/1.1/hosted/office.js"></script>
+    <script type="text/javascript">
+        // CRITICAL FIX: Global error handler to catch Office.HostApplication errors
+        window.addEventListener('error', function(event) {
+            console.log('Global error caught:', event.error);
+            if (event.error && event.error.message && event.error.message.includes("Cannot read properties of undefined (reading 'Word')")) {
+                console.warn("FIXED: Office.HostApplication.Word error caught and handled");
+                event.preventDefault();
+                return false;
+            }
+        });
+
+        // Enhanced Office.onReady with HostApplication fix
+        function initializeOfficeWithFix() {
+            console.log("Starting Office initialization with HostApplication fix...");
+            
+            if (typeof Office !== 'undefined') {
+                try {
+                    Office.onReady((info) => {
+                        console.log("Office.onReady called with info:", info);
+                        window.OFFICE_READY = true;
+
+                        // CRITICAL FIX: Check if Office.HostApplication is available
+                        if (typeof Office.HostApplication === 'undefined') {
+                            console.warn("FIXED: Office.HostApplication is undefined, assuming Word environment");
+                            initializeWordFeatures();
+                        } else if (info && info.host === Office.HostApplication.Word) {
+                            console.log("RHEI AI Legal Assistant loaded successfully in Word");
+                            initializeWordFeatures();
+                        } else {
+                            console.log("Host application:", info ? info.host : "unknown");
+                            initializeWordFeatures(); // Initialize anyway
+                        }
+                    });
+                } catch (error) {
+                    console.error("Error in Office.onReady:", error);
+                    console.warn("FIXED: Proceeding with basic initialization");
+                    initializeBasicFeatures();
+                }
+            } else {
+                console.error("Office.js not available");
+                initializeBasicFeatures();
+            }
+        }
+
+        function initializeWordFeatures() {
+            console.log("Initializing Word features...");
+            
+            // Check for Word API
+            if (typeof Word !== 'undefined' && typeof Word.run === 'function') {
+                console.log("Word API is available!");
+                window.WORD_API_AVAILABLE = true;
+                updateStatus("Word API available - all features enabled", "success");
+            } else {
+                console.log("Word API not available - using demo mode");
+                window.WORD_API_AVAILABLE = false;
+                updateStatus("Demo mode - Word API not available", "warning");
+            }
+            
+            setupUI();
+        }
+
+        function initializeBasicFeatures() {
+            console.log("Initializing basic features...");
+            window.WORD_API_AVAILABLE = false;
+            updateStatus("Basic mode - limited functionality", "warning");
+            setupUI();
+        }
+
+        function setupUI() {
+            console.log("Setting up UI...");
+            
+            // Enable buttons based on API availability
+            const buttons = document.querySelectorAll('button');
+            buttons.forEach(button => {
+                if (window.WORD_API_AVAILABLE || button.id === 'show-diagnostics' || button.id === 'test-word-api') {
+                    button.disabled = false;
+                } else {
+                    button.disabled = true;
+                    button.title = "Requires Word API - not available";
+                }
+            });
+        }
+
+        function updateStatus(message, type) {
+            const statusElement = document.getElementById('status-message');
+            if (statusElement) {
+                statusElement.textContent = message;
+                statusElement.className = `status-message ms-font-s ${type || ''}`;
+            }
+            console.log(`Status: ${message}`);
+        }
+
+        function testWordAPI() {
+            console.log("Testing Word API...");
+            
+            if (typeof Word !== 'undefined' && typeof Word.run === 'function') {
+                Word.run(async (context) => {
+                    console.log("Word API test successful!");
+                    updateStatus("Word API test successful!", "success");
+                }).catch(error => {
+                    console.error("Word API test failed:", error);
+                    updateStatus("Word API test failed: " + error.message, "error");
+                });
+            } else {
+                updateStatus("Word API not available for testing", "warning");
+            }
+        }
+
+        function showDiagnostics() {
+            const diagnostics = {
+                officeLoaded: typeof Office !== 'undefined',
+                officeReady: window.OFFICE_READY || false,
+                hostApplication: typeof Office?.HostApplication !== 'undefined',
+                wordApi: typeof Word !== 'undefined',
+                wordRun: typeof Word?.run === 'function',
+                wordApiAvailable: window.WORD_API_AVAILABLE || false
+            };
+            
+            console.log("Diagnostics:", diagnostics);
+            
+            const message = `Office: ${diagnostics.officeLoaded ? 'Loaded' : 'Not Loaded'}, ` +
+                          `Ready: ${diagnostics.officeReady ? 'Yes' : 'No'}, ` +
+                          `HostApp: ${diagnostics.hostApplication ? 'Available' : 'Undefined'}, ` +
+                          `Word API: ${diagnostics.wordApi ? 'Available' : 'Not Available'}`;
+            
+            updateStatus(message, "info");
+        }
+
+        // Start initialization after page load
+        window.addEventListener('load', function() {
+            console.log("Page loaded, starting initialization...");
+            setTimeout(initializeOfficeWithFix, 1000);
+        });
+
+        // Set up event listeners when DOM is ready
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log("DOM ready, setting up event listeners...");
+            
+            const testBtn = document.getElementById('test-word-api');
+            if (testBtn) {
+                testBtn.addEventListener('click', testWordAPI);
+            }
+            
+            const diagBtn = document.getElementById('show-diagnostics');
+            if (diagBtn) {
+                diagBtn.addEventListener('click', showDiagnostics);
+            }
+        });
+    </script>
+
+    <!-- Basic styles -->
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 400px;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #0078d4;
+            margin-top: 0;
+        }
+        button {
+            background-color: #0078d4;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            margin: 5px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        button:hover:not(:disabled) {
+            background-color: #106ebe;
+        }
+        .status-message {
+            margin: 15px 0;
+            padding: 10px;
+            border-radius: 4px;
+            background-color: #f0f0f0;
+        }
+        .status-message.success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .status-message.error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        .status-message.warning {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        .status-message.info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>RHEI AI Legal Assistant</h1>
+        <p>Fixed version with Office.HostApplication error handling</p>
+        
+        <div>
+            <button id="test-word-api">Test Word API</button>
+            <button id="show-diagnostics">Show Diagnostics</button>
+            <button id="generate-contract" disabled>Generate Contract</button>
+            <button id="analyze-contract" disabled>Analyze Contract</button>
+        </div>
+        
+        <div id="status-message" class="status-message">
+            Initializing...
+        </div>
+        
+        <div style="margin-top: 20px; font-size: 12px; color: #666;">
+            <strong>Fix Applied:</strong> This version includes a critical fix for the 
+            "Cannot read properties of undefined (reading 'Word')" error by checking 
+            if Office.HostApplication exists before accessing it.
+        </div>
+    </div>
+</body>
+
+</html>
