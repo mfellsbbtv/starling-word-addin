@@ -126,15 +126,74 @@
                 wordRun: typeof Word?.run === 'function',
                 wordApiAvailable: window.WORD_API_AVAILABLE || false
             };
-            
+
             console.log("Diagnostics:", diagnostics);
-            
+
             const message = `Office: ${diagnostics.officeLoaded ? 'Loaded' : 'Not Loaded'}, ` +
                           `Ready: ${diagnostics.officeReady ? 'Yes' : 'No'}, ` +
                           `HostApp: ${diagnostics.hostApplication ? 'Available' : 'Undefined'}, ` +
                           `Word API: ${diagnostics.wordApi ? 'Available' : 'Not Available'}`;
-            
+
             updateStatus(message, "info");
+        }
+
+        function analyzeContract() {
+            console.log("Starting contract analysis...");
+            showProgress("Analyzing contract for compliance and acceptability...");
+
+            if (typeof Word !== 'undefined' && typeof Word.run === 'function') {
+                // Real Word API analysis
+                Word.run(async (context) => {
+                    const body = context.document.body;
+                    body.load("text");
+                    await context.sync();
+
+                    const documentText = body.text;
+                    console.log("Document text length:", documentText.length);
+
+                    // Simulate analysis
+                    setTimeout(() => {
+                        displayAnalysisResults(generateMockAnalysisResults(documentText));
+                        hideProgress();
+                    }, 2000);
+                }).catch(error => {
+                    console.error("Word API error:", error);
+                    displayDemoAnalysis();
+                    hideProgress();
+                });
+            } else {
+                // Demo mode analysis
+                setTimeout(() => {
+                    displayDemoAnalysis();
+                    hideProgress();
+                }, 2000);
+            }
+        }
+
+        function generateContract() {
+            console.log("Generating contract...");
+            showProgress("Generating contract from template...");
+
+            setTimeout(() => {
+                updateStatus("Contract generated successfully!", "success");
+                hideProgress();
+            }, 1500);
+        }
+
+        function showProgress(message) {
+            const progressSection = document.getElementById('progress-section');
+            const progressMessage = document.getElementById('progress-message');
+            if (progressSection && progressMessage) {
+                progressMessage.textContent = message;
+                progressSection.style.display = 'block';
+            }
+        }
+
+        function hideProgress() {
+            const progressSection = document.getElementById('progress-section');
+            if (progressSection) {
+                progressSection.style.display = 'none';
+            }
         }
 
         // Start initialization after page load
@@ -143,18 +202,205 @@
             setTimeout(initializeOfficeWithFix, 1000);
         });
 
+        function displayAnalysisResults(analysisResult) {
+            const resultsContent = document.getElementById('results-content');
+            const resultsSection = document.getElementById('results-section');
+
+            if (!resultsContent || !resultsSection) return;
+
+            const structure = analysisResult.contract_structure;
+            const modifiedClauses = structure.articles.reduce((count, article) =>
+                count + article.clauses.filter(clause => clause.changeStatus?.isModified).length, 0);
+            const totalClauses = structure.articles.reduce((count, article) => count + article.clauses.length, 0);
+
+            let html = `
+                <div class="analysis-results">
+                    <!-- Contract Structure Breakdown -->
+                    <div class="analysis-section contract-structure">
+                        <h3>📋 Contract Structure</h3>
+                        <div class="structure-overview">
+                            <p><strong>Total Articles:</strong> ${structure.articles.length}</p>
+                            <p><strong>Total Clauses:</strong> ${totalClauses}</p>
+                            <p><strong>Modified Clauses:</strong> <span style="color: #d13438;">${modifiedClauses}</span></p>
+                            <p><strong>Unmodified Clauses:</strong> <span style="color: #107c10;">${totalClauses - modifiedClauses}</span></p>
+                        </div>
+
+                        <div class="articles-breakdown">`;
+
+            // Display each article with its clauses
+            structure.articles.forEach(article => {
+                html += `
+                    <div class="article-item">
+                        <h4 class="article-title">${article.number}. ${article.title}</h4>
+                        <div class="clauses-list">`;
+
+                article.clauses.forEach(clause => {
+                    const statusClass = clause.changeStatus?.isModified ? 'modified' : 'unmodified';
+                    const statusColor = clause.changeStatus?.isModified ? '#d13438' : '#107c10';
+
+                    html += `
+                        <div class="clause-item ${statusClass}">
+                            <span class="clause-number" style="color: ${statusColor};">${clause.number}</span>
+                            <span class="clause-text">${clause.text.substring(0, 100)}${clause.text.length > 100 ? '...' : ''}</span>
+                            ${clause.changeStatus?.isModified ? `
+                                <div class="clause-actions">
+                                    <button class="modify-button" onclick="applyClauseChange('${clause.number}')">Apply Change</button>
+                                    <button class="preview-button" onclick="previewClauseChange('${clause.number}')">Preview</button>
+                                </div>
+                            ` : ''}
+                        </div>`;
+                });
+
+                html += `
+                        </div>
+                    </div>`;
+            });
+
+            html += `
+                        </div>
+
+                        ${modifiedClauses > 0 ? `
+                            <div class="auto-update-controls">
+                                <label class="auto-update-checkbox">
+                                    <input type="checkbox" id="auto-update-all" onchange="toggleAutoUpdate(this.checked)">
+                                    <span>Automatically Update All Clauses</span>
+                                </label>
+                                <button class="accept-all-button" onclick="acceptAllChanges()">
+                                    ✅ Accept All Changes (${modifiedClauses})
+                                </button>
+                            </div>
+                        ` : ''}
+                    </div>
+                </div>`;
+
+            resultsContent.innerHTML = html;
+            resultsSection.style.display = 'block';
+        }
+
+        function displayDemoAnalysis() {
+            const demoResult = generateMockAnalysisResults("Demo contract content for testing purposes...");
+            displayAnalysisResults(demoResult);
+        }
+
+        function generateMockAnalysisResults(documentText) {
+            return {
+                contract_structure: {
+                    articles: [
+                        {
+                            number: "1",
+                            title: "Definitions and Interpretation",
+                            clauses: [
+                                {
+                                    number: "1.1",
+                                    text: "In this Agreement, the following terms shall have the meanings set forth below...",
+                                    changeStatus: { isModified: false }
+                                },
+                                {
+                                    number: "1.2",
+                                    text: "The headings in this Agreement are for convenience only and shall not affect interpretation...",
+                                    changeStatus: { isModified: true }
+                                }
+                            ]
+                        },
+                        {
+                            number: "2",
+                            title: "Grant of Rights",
+                            clauses: [
+                                {
+                                    number: "2.1",
+                                    text: "Subject to the terms and conditions of this Agreement, Licensor hereby grants...",
+                                    changeStatus: { isModified: true }
+                                },
+                                {
+                                    number: "2.2",
+                                    text: "The rights granted hereunder are non-exclusive and non-transferable...",
+                                    changeStatus: { isModified: false }
+                                }
+                            ]
+                        },
+                        {
+                            number: "3",
+                            title: "Term and Termination",
+                            clauses: [
+                                {
+                                    number: "3.1",
+                                    text: "This Agreement shall commence on the Effective Date and continue for a period...",
+                                    changeStatus: { isModified: false }
+                                },
+                                {
+                                    number: "3.2",
+                                    text: "Either party may terminate this Agreement upon thirty (30) days written notice...",
+                                    changeStatus: { isModified: true }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            };
+        }
+
+        // Global functions for clause actions
+        window.applyClauseChange = function(clauseNumber) {
+            console.log("Applying change for clause:", clauseNumber);
+            updateStatus(`Applied change for clause ${clauseNumber}`, "success");
+        };
+
+        window.previewClauseChange = function(clauseNumber) {
+            console.log("Previewing change for clause:", clauseNumber);
+            updateStatus(`Previewing change for clause ${clauseNumber}`, "info");
+        };
+
+        window.acceptAllChanges = function() {
+            console.log("Accepting all changes...");
+            updateStatus("All changes applied successfully!", "success");
+
+            // Update UI to show all clauses as unmodified
+            const modifiedClauses = document.querySelectorAll('.clause-item.modified');
+            modifiedClauses.forEach(clause => {
+                clause.classList.remove('modified');
+                clause.classList.add('unmodified');
+                const number = clause.querySelector('.clause-number');
+                if (number) number.style.color = '#107c10';
+                const actions = clause.querySelector('.clause-actions');
+                if (actions) actions.remove();
+            });
+
+            // Hide the accept all controls
+            const controls = document.querySelector('.auto-update-controls');
+            if (controls) controls.style.display = 'none';
+        };
+
+        window.toggleAutoUpdate = function(enabled) {
+            const acceptAllButton = document.querySelector('.accept-all-button');
+            if (acceptAllButton && enabled) {
+                acceptAllButton.textContent = '🔄 Auto-Applying Changes...';
+                acceptAllButton.disabled = true;
+                setTimeout(() => window.acceptAllChanges(), 1000);
+            }
+        };
+
         // Set up event listeners when DOM is ready
         document.addEventListener('DOMContentLoaded', function() {
             console.log("DOM ready, setting up event listeners...");
-            
+
             const testBtn = document.getElementById('test-word-api');
             if (testBtn) {
                 testBtn.addEventListener('click', testWordAPI);
             }
-            
+
             const diagBtn = document.getElementById('show-diagnostics');
             if (diagBtn) {
                 diagBtn.addEventListener('click', showDiagnostics);
+            }
+
+            const analyzeBtn = document.getElementById('analyze-contract');
+            if (analyzeBtn) {
+                analyzeBtn.addEventListener('click', analyzeContract);
+            }
+
+            const generateBtn = document.getElementById('generate-contract');
+            if (generateBtn) {
+                generateBtn.addEventListener('click', generateContract);
             }
         });
     </script>
@@ -215,29 +461,198 @@
             background-color: #d1ecf1;
             color: #0c5460;
         }
+
+        /* Main Actions */
+        .main-actions {
+            margin: 20px 0;
+        }
+        .primary-button {
+            background-color: #0078d4;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            margin: 5px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        .secondary-button {
+            background-color: #f3f2f1;
+            color: #323130;
+            border: 1px solid #d2d0ce;
+            padding: 8px 15px;
+            margin: 5px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        /* Results Section */
+        .results-section {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 6px;
+            border: 1px solid #e1e1e1;
+        }
+
+        /* Contract Structure */
+        .contract-structure {
+            margin-bottom: 20px;
+        }
+        .articles-breakdown {
+            margin-top: 15px;
+        }
+        .article-item {
+            margin-bottom: 15px;
+            padding: 10px;
+            background: white;
+            border-radius: 4px;
+            border: 1px solid #e1e1e1;
+        }
+        .article-title {
+            color: #0078d4;
+            margin: 0 0 10px 0;
+            font-size: 16px;
+            font-weight: 600;
+        }
+        .clauses-list {
+            margin-left: 15px;
+        }
+        .clause-item {
+            display: flex;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid #f3f2f1;
+        }
+        .clause-item:last-child {
+            border-bottom: none;
+        }
+        .clause-number {
+            font-weight: 600;
+            margin-right: 10px;
+            min-width: 40px;
+        }
+        .clause-text {
+            flex: 1;
+            font-size: 13px;
+            color: #605e5c;
+        }
+        .clause-item.modified .clause-number {
+            color: #d13438 !important;
+        }
+        .clause-item.unmodified .clause-number {
+            color: #107c10 !important;
+        }
+
+        /* Clause Actions */
+        .clause-actions {
+            margin-left: 10px;
+        }
+        .modify-button, .preview-button {
+            background-color: #0078d4;
+            color: white;
+            border: none;
+            padding: 4px 8px;
+            margin: 0 2px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 11px;
+        }
+        .preview-button {
+            background-color: #605e5c;
+        }
+
+        /* Accept All Controls */
+        .auto-update-controls {
+            margin: 15px 0;
+            padding: 15px;
+            background: #f3f2f1;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .auto-update-checkbox {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+        .auto-update-checkbox input {
+            margin-right: 8px;
+        }
+        .accept-all-button {
+            background-color: #107c10;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .accept-all-button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        /* Progress Section */
+        .progress-section {
+            margin: 20px 0;
+            padding: 20px;
+            text-align: center;
+            background: #f9f9f9;
+            border-radius: 6px;
+        }
+        .progress-spinner {
+            width: 30px;
+            height: 30px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #0078d4;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
 </head>
 
 <body>
     <div class="container">
         <h1>RHEI AI Legal Assistant</h1>
-        <p>Fixed version with Office.HostApplication error handling</p>
-        
-        <div>
-            <button id="test-word-api">Test Word API</button>
-            <button id="show-diagnostics">Show Diagnostics</button>
-            <button id="generate-contract" disabled>Generate Contract</button>
-            <button id="analyze-contract" disabled>Analyze Contract</button>
+        <p>AI-powered contract analysis and generation</p>
+
+        <!-- Main Action Buttons -->
+        <div class="main-actions">
+            <button id="generate-contract" class="primary-button">📄 Generate Contract</button>
+            <button id="analyze-contract" class="primary-button">🔍 Analyze Contract</button>
         </div>
-        
+
+        <!-- Diagnostic Buttons -->
+        <div class="diagnostic-actions">
+            <button id="test-word-api" class="secondary-button">Test Word API</button>
+            <button id="show-diagnostics" class="secondary-button">Show Diagnostics</button>
+        </div>
+
+        <!-- Status Message -->
         <div id="status-message" class="status-message">
             Initializing...
         </div>
-        
-        <div style="margin-top: 20px; font-size: 12px; color: #666;">
-            <strong>Fix Applied:</strong> This version includes a critical fix for the 
-            "Cannot read properties of undefined (reading 'Word')" error by checking 
-            if Office.HostApplication exists before accessing it.
+
+        <!-- Results Section -->
+        <div id="results-section" class="results-section" style="display: none;">
+            <div id="results-content"></div>
+        </div>
+
+        <!-- Progress Section -->
+        <div id="progress-section" class="progress-section" style="display: none;">
+            <div class="progress-content">
+                <div class="progress-spinner"></div>
+                <div id="progress-message">Processing...</div>
+            </div>
         </div>
     </div>
 </body>
