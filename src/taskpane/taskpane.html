@@ -8,7 +8,7 @@
     <title>RHEI AI Legal Assistant</title>
 
     <!-- Office JavaScript API with enhanced loading and Word API optimization -->
-    <script type="text/javascript" src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
+    <script type="text/javascript" src="https://appsforoffice.microsoft.com/lib/1.1/hosted/office.js"></script>
     <script type="text/javascript">
         // Enhanced Office.js loading with Word API optimization
         let officeLoadAttempts = 0;
@@ -184,12 +184,40 @@
                 </div>
             </div>
 
+            <!-- RHEI Contract Form -->
+            <div class="form-group">
+                <label for="provider-name" class="ms-font-m">Provider Name:</label>
+                <input type="text" id="provider-name" class="ms-TextField-field" placeholder="Enter Provider company name" value="Ninja Tune Ltd.">
+            </div>
+
+            <div class="form-group">
+                <label for="provider-address" class="ms-font-m">Provider Address:</label>
+                <textarea id="provider-address" class="ms-TextField-field" placeholder="Enter Provider address" rows="2">90 Kennington Ln, London SE11 4XD, UK</textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="revenue-model" class="ms-font-m">Revenue Model:</label>
+                <select id="revenue-model" class="ms-Dropdown">
+                    <option value="baseline">Baseline (Ninja Tune) - Tiered: 50% first $5K, then 30%</option>
+                    <option value="mnrk">MNRK Model - Flat 30% to RHEI, 70% to Provider</option>
+                    <option value="custom">Custom Revenue Share</option>
+                </select>
+            </div>
+
+            <!-- Test Word API Button -->
+            <div class="form-group">
+                <button id="test-word-api" class="ms-Button ms-Button--secondary">
+                    <span class="ms-Button-label">Test Word API</span>
+                </button>
+                <p class="ms-font-s">Test if Word API is working properly</p>
+            </div>
+
             <!-- Generate Button - ALWAYS VISIBLE -->
             <div class="form-group" id="generate-button-group">
                 <button id="generate-contract" class="ms-Button ms-Button--primary">
-                    <span class="ms-Button-label">Generate Contract</span>
+                    <span class="ms-Button-label">Generate RHEI Contract</span>
                 </button>
-                <p class="ms-font-s">Generate demo contract with realistic terms</p>
+                <p class="ms-font-s">Generate Digital Video Services Agreement using RHEI playbook data</p>
             </div>
         </section>
 

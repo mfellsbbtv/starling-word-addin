@@ -30,12 +30,15 @@ async function safeInitialize() {
         console.log("Office.onReady called with info:", info);
         window.OFFICE_READY = true;
 
-        if (info.host === Office.HostApplication.Word) {
+        // Check if Office.HostApplication is available
+        if (typeof Office.HostApplication === 'undefined') {
+          console.warn("Office.HostApplication is undefined, assuming Word environment");
+          // Proceed with Word API check anyway
+          checkWordAPIAvailabilityWithRetry();
+        } else if (info.host === Office.HostApplication.Word) {
           console.log("RHEI AI Legal Assistant loaded successfully in Word");
-
           // Use enhanced Word API availability check with retry logic
           checkWordAPIAvailabilityWithRetry();
-
         } else {
           console.error("This add-in is designed for Microsoft Word only. Current host:", info.host);
           updateStatus("Error: This add-in requires Microsoft Word", "error");
@@ -285,11 +288,24 @@ function basicInitialization() {
     statusElement.textContent = "Add-in loaded in basic mode. Limited functionality available.";
   }
 
-  // Disable all buttons
+  // Disable all buttons except always-enabled ones
   const allButtons = document.querySelectorAll('button');
+  const alwaysEnabledIds = ['test-word-api', 'show-diagnostics'];
+
   allButtons.forEach(button => {
-    button.disabled = true;
-    button.title = "Feature not available in basic mode";
+    if (!alwaysEnabledIds.includes(button.id)) {
+      button.disabled = true;
+      button.title = "Feature not available in basic mode";
+    }
+  });
+
+  // Explicitly enable always-enabled buttons
+  alwaysEnabledIds.forEach(buttonId => {
+    const button = document.getElementById(buttonId);
+    if (button) {
+      button.disabled = false;
+      button.title = buttonId === 'test-word-api' ? "Test Word API functionality" : "Show diagnostic information";
+    }
   });
 
   console.log("Basic initialization complete");
@@ -320,6 +336,19 @@ function enableWordFeatures() {
     if (button) {
       button.disabled = false;
       button.title = "";
+    }
+  });
+
+  // Always enable diagnostic buttons
+  const alwaysEnabledButtons = [
+    "test-word-api"
+  ];
+
+  alwaysEnabledButtons.forEach(buttonId => {
+    const button = document.getElementById(buttonId);
+    if (button) {
+      button.disabled = false;
+      button.title = "Test Word API functionality";
     }
   });
 
@@ -361,6 +390,19 @@ function enableDemoMode() {
     }
   });
 
+  // Always enable diagnostic buttons even in demo mode
+  const alwaysEnabledButtons = [
+    "test-word-api"
+  ];
+
+  alwaysEnabledButtons.forEach(buttonId => {
+    const button = document.getElementById(buttonId);
+    if (button) {
+      button.disabled = false;
+      button.title = "Test Word API functionality";
+    }
+  });
+
   // Hide generate button group since it requires Word API
   const generateButtonGroup = document.getElementById("generate-button-group");
   if (generateButtonGroup) {
@@ -388,13 +430,29 @@ async function initializeLimitedMode() {
 }
 
 // Enhanced diagnostic information for debugging Word API issues
-function showDiagnosticInfo() {
+async function showDiagnosticInfo() {
+  try {
+    // Use the comprehensive diagnostics from event-handlers
+    const { showWordAPIDiagnostics } = await import('./modules/event-handlers.js');
+    await showWordAPIDiagnostics();
+    return;
+  } catch (error) {
+    console.error("Error loading comprehensive diagnostics, using fallback:", error);
+  }
+
+  // Fallback to original diagnostics
+  showBasicDiagnosticInfo();
+}
+
+function showBasicDiagnosticInfo() {
   const diagnosticInfo = {
     // Office.js information
     officeVersion: Office?.context?.diagnostics?.version || "Unknown",
     platform: Office?.context?.diagnostics?.platform || "Unknown",
     host: Office?.context?.diagnostics?.host || "Unknown",
     officeJsLoaded: typeof Office !== 'undefined',
+    hostApplicationAvailable: typeof Office?.HostApplication !== 'undefined',
+    wordHostConstant: Office?.HostApplication?.Word || "Not available",
 
     // Word API information
     wordApiAvailable: typeof Word !== 'undefined',
@@ -449,6 +507,8 @@ function displayDiagnosticInfo(diagnosticInfo) {
           • Version: ${diagnosticInfo.officeVersion}<br>
           • Platform: ${diagnosticInfo.platform}<br>
           • Host: ${diagnosticInfo.host}<br>
+          • HostApplication Available: ${diagnosticInfo.hostApplicationAvailable ? '✅ Yes' : '❌ No'}<br>
+          • Word Host Constant: ${diagnosticInfo.wordHostConstant}<br>
           • Online: ${diagnosticInfo.isOnline ? 'Yes' : 'No'}
         </div>
 
@@ -547,6 +607,12 @@ function setupEventListeners() {
     suggestChangesBtn.addEventListener("click", suggestChanges);
   }
 
+  // Add Test Word API button
+  const testWordAPIBtn = document.getElementById("test-word-api");
+  if (testWordAPIBtn) {
+    testWordAPIBtn.addEventListener("click", safeTestWordAPI);
+  }
+
   // Add diagnostic button if it exists
   const diagnosticBtn = document.getElementById("show-diagnostics");
   if (diagnosticBtn) {
@@ -589,11 +655,25 @@ async function initializeBasicUI() {
     "check-compliance"
   ];
 
+  // Always-enabled buttons (diagnostic tools)
+  const alwaysEnabledButtons = [
+    "test-word-api"
+  ];
+
   allButtons.forEach(buttonId => {
     const button = document.getElementById(buttonId);
     if (button) {
       button.disabled = true;
       button.title = "Initializing...";
+    }
+  });
+
+  // Enable always-enabled buttons (diagnostic tools)
+  alwaysEnabledButtons.forEach(buttonId => {
+    const button = document.getElementById(buttonId);
+    if (button) {
+      button.disabled = false;
+      button.title = "Test Word API functionality";
     }
   });
 
@@ -643,6 +723,19 @@ function initializeLimitedUI() {
     if (button) {
       button.disabled = true;
       button.title = "Word API not available - feature disabled";
+    }
+  });
+
+  // Always enable diagnostic buttons even in limited mode
+  const alwaysEnabledButtons = [
+    "test-word-api"
+  ];
+
+  alwaysEnabledButtons.forEach(buttonId => {
+    const button = document.getElementById(buttonId);
+    if (button) {
+      button.disabled = false;
+      button.title = "Test Word API functionality";
     }
   });
 
@@ -747,6 +840,22 @@ async function safeAnalyzeContract() {
     try {
       const { updateStatus } = await import('../shared/utils.js');
       updateStatus("Error: Failed to analyze contract. " + error.message, "error");
+    } catch (importError) {
+      console.error("Error importing updateStatus:", importError);
+    }
+  }
+}
+
+// Safe wrapper for Word API test
+async function safeTestWordAPI() {
+  try {
+    const { testWordAPI } = await import('./modules/event-handlers.js');
+    await testWordAPI();
+  } catch (error) {
+    console.error("Error in Word API test:", error);
+    try {
+      const { updateStatus } = await import('../shared/utils.js');
+      updateStatus("Error: Failed to test Word API. " + error.message, "error");
     } catch (importError) {
       console.error("Error importing updateStatus:", importError);
     }
