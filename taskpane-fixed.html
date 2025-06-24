@@ -10,7 +10,9 @@
     <!-- Office JavaScript API with CRITICAL FIX -->
     <script type="text/javascript" src="https://appsforoffice.microsoft.com/lib/1.1/hosted/office.js"></script>
     <script type="text/javascript">
-        // CRITICAL FIX: Global error handler to catch Office.HostApplication errors
+        // CRITICAL FIX: Multiple layers of error handling for Office.HostApplication
+
+        // Layer 1: Global error handler to catch Office.HostApplication errors
         window.addEventListener('error', function(event) {
             console.log('Global error caught:', event.error);
             if (event.error && event.error.message && event.error.message.includes("Cannot read properties of undefined (reading 'Word')")) {
@@ -20,31 +22,98 @@
             }
         });
 
-        // Enhanced Office.onReady with HostApplication fix
+        // Layer 2: Unhandled promise rejection handler
+        window.addEventListener('unhandledrejection', function(event) {
+            console.log('Unhandled promise rejection caught:', event.reason);
+            if (event.reason && event.reason.message && event.reason.message.includes("Cannot read properties of undefined (reading 'Word')")) {
+                console.warn("FIXED: Office.HostApplication.Word promise rejection caught and handled");
+                event.preventDefault();
+                return false;
+            }
+        });
+
+        // Layer 3: Override Office.HostApplication if undefined
+        function ensureOfficeHostApplication() {
+            if (typeof Office !== 'undefined' && typeof Office.HostApplication === 'undefined') {
+                console.warn("FIXING: Office.HostApplication is undefined, creating mock object");
+                Office.HostApplication = {
+                    Word: 'Word',
+                    Excel: 'Excel',
+                    PowerPoint: 'PowerPoint',
+                    Outlook: 'Outlook',
+                    OneNote: 'OneNote',
+                    Project: 'Project',
+                    Access: 'Access'
+                };
+                console.log("FIXED: Office.HostApplication mock object created");
+            }
+        }
+
+        // Layer 4: Try to fix Office.HostApplication before any other code runs
+        if (typeof Office !== 'undefined') {
+            ensureOfficeHostApplication();
+        } else {
+            // Wait for Office to load, then fix it
+            let officeCheckInterval = setInterval(() => {
+                if (typeof Office !== 'undefined') {
+                    ensureOfficeHostApplication();
+                    clearInterval(officeCheckInterval);
+                }
+            }, 100);
+        }
+
+        // Enhanced Office.onReady with multiple layers of HostApplication fixes
         function initializeOfficeWithFix() {
-            console.log("Starting Office initialization with HostApplication fix...");
-            
+            console.log("Starting Office initialization with comprehensive HostApplication fix...");
+
             if (typeof Office !== 'undefined') {
+                // Ensure Office.HostApplication exists before calling Office.onReady
+                ensureOfficeHostApplication();
+
                 try {
-                    Office.onReady((info) => {
+                    // Wrap Office.onReady in additional error handling
+                    const safeOfficeOnReady = function(callback) {
+                        try {
+                            return Office.onReady(callback);
+                        } catch (error) {
+                            console.error("Office.onReady error:", error);
+                            if (error.message && error.message.includes("Cannot read properties of undefined (reading 'Word')")) {
+                                console.warn("FIXED: Office.onReady HostApplication error caught, proceeding with fallback");
+                                // Call the callback with a mock info object
+                                callback({ host: 'Word', platform: 'Web' });
+                            } else {
+                                throw error;
+                            }
+                        }
+                    };
+
+                    safeOfficeOnReady((info) => {
                         console.log("Office.onReady called with info:", info);
                         window.OFFICE_READY = true;
 
-                        // CRITICAL FIX: Check if Office.HostApplication is available
+                        // CRITICAL FIX: Multiple checks for Office.HostApplication
+                        let hostType = 'unknown';
+
                         if (typeof Office.HostApplication === 'undefined') {
                             console.warn("FIXED: Office.HostApplication is undefined, assuming Word environment");
-                            initializeWordFeatures();
+                            hostType = 'Word';
                         } else if (info && info.host === Office.HostApplication.Word) {
                             console.log("RHEI AI Legal Assistant loaded successfully in Word");
-                            initializeWordFeatures();
+                            hostType = 'Word';
+                        } else if (info && typeof info.host === 'string' && info.host.toLowerCase().includes('word')) {
+                            console.log("Host detected as Word via string comparison");
+                            hostType = 'Word';
                         } else {
-                            console.log("Host application:", info ? info.host : "unknown");
-                            initializeWordFeatures(); // Initialize anyway
+                            console.log("Host application:", info ? info.host : "unknown", "- proceeding anyway");
+                            hostType = 'Word'; // Assume Word for our add-in
                         }
+
+                        console.log("Detected host type:", hostType);
+                        initializeWordFeatures();
                     });
                 } catch (error) {
-                    console.error("Error in Office.onReady:", error);
-                    console.warn("FIXED: Proceeding with basic initialization");
+                    console.error("Error in Office.onReady setup:", error);
+                    console.warn("FIXED: Proceeding with basic initialization due to Office.onReady error");
                     initializeBasicFeatures();
                 }
             } else {

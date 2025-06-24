@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<OfficeApp xmlns="http://schemas.microsoft.com/office/appforoffice/1.1" 
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+           xsi:type="TaskPaneApp">
+
+  <Id>e5f6a7b8-c9d0-1234-efab-56789012cdef</Id>
+  <Version>1.0.2.0</Version>
+  <ProviderName>RHEI</ProviderName>
+  <DefaultLocale>en-US</DefaultLocale>
+  <DisplayName DefaultValue="RHEI AI Legal Assistant (v1.0.2)"/>
+  <Description DefaultValue="AI-powered contract analysis - FIXED VERSION with numbered clause UI"/>
+
+  <IconUrl DefaultValue="https://mfellsbbtv.github.io/starling-word-addin/assets/icon-32.png"/>
+  
+  <Hosts>
+    <Host Name="Document"/>
+  </Hosts>
+  
+  <DefaultSettings>
+    <SourceLocation DefaultValue="https://mfellsbbtv.github.io/starling-word-addin/taskpane-fixed.html"/>
+  </DefaultSettings>
+  
+  <Permissions>ReadWriteDocument</Permissions>
+
+</OfficeApp>
