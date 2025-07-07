@@ -1,20 +1,27 @@
-name: Deploy RHEI Word Add-in to AWS
+name: Deploy RHEI Word Add-in to AWS (DISABLED)
+
+# DISABLED: This workflow has been disabled to prevent automatic AWS deployments
+# To re-enable, replace 'workflow_call' with the original triggers
 
 on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
-  workflow_dispatch:
-    inputs:
-      environment:
-        description: 'Environment to deploy to'
-        required: true
-        default: 'staging'
-        type: choice
-        options:
-          - staging
-          - prod
+  workflow_call:  # This prevents automatic triggering
+
+# Original triggers (commented out):
+# on:
+#   push:
+#     branches: [main]
+#   pull_request:
+#     branches: [main]
+#   workflow_dispatch:
+#     inputs:
+#       environment:
+#         description: 'Environment to deploy to'
+#         required: true
+#         default: 'staging'
+#         type: choice
+#         options:
+#           - staging
+#           - prod
 
 env:
   AWS_REGION: us-east-1
