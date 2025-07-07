@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>RHEI AI Legal Assistant</title>
+
+    <!-- Office JavaScript API -->
+    <script type="text/javascript" src="https://appsforoffice.microsoft.com/lib/1.1/hosted/office.js"></script>
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="./src/styles/main.css">
+    
+    <!-- Core modules -->
+    <script type="module" src="./src/core/office-init.js"></script>
+    <script type="module" src="./src/utils/ui-utils.js"></script>
+    <script type="module" src="./src/services/api-service.js"></script>
+    <script type="module" src="./src/services/contract-generator.js"></script>
+    <script type="module" src="./src/features/clause-replacement.js"></script>
+    <script type="module" src="./src/features/contract-analysis.js"></script>
+    
+    <!-- Main application -->
+    <script type="module" src="./src/main.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1 class="app-title">RHEI AI Legal Assistant</h1>
+            <p class="app-subtitle">AI-powered contract analysis and generation for Microsoft Word</p>
+        </div>
+
+        <!-- Contract Type Selection -->
+        <div class="contract-type-section">
+            <label for="contract-type-select" class="form-label">Contract Type:</label>
+            <select id="contract-type-select" class="form-select">
+                <option value="content-management">Content Management Agreement</option>
+                <option value="data-pro">Data Pro Agreement</option>
+            </select>
+        </div>
+
+        <!-- Contract Form -->
+        <div class="contract-form-section">
+            <h3>Contract Details</h3>
+            
+            <!-- Company Information (Read-only) -->
+            <div class="form-group">
+                <label for="company-name" class="form-label">Company Name:</label>
+                <input type="text" id="company-name" class="form-input" value="RHEI Creations Inc." readonly>
+            </div>
+            
+            <div class="form-group">
+                <label for="company-address" class="form-label">Company Address:</label>
+                <input type="text" id="company-address" class="form-input" value="600-777 Hornby St, Vancouver, BC, Canada, V6Z1S4" readonly>
+            </div>
+
+            <!-- Provider Information (Editable) -->
+            <div class="form-group">
+                <label for="provider-name" class="form-label">Provider Name:</label>
+                <input type="text" id="provider-name" class="form-input" placeholder="Enter provider name">
+            </div>
+            
+            <div class="form-group">
+                <label for="provider-address" class="form-label">Provider Address:</label>
+                <input type="text" id="provider-address" class="form-input" placeholder="Enter provider address">
+            </div>
+
+            <!-- Contract Details -->
+            <div class="form-group">
+                <label for="effective-date" class="form-label">Effective Date:</label>
+                <input type="date" id="effective-date" class="form-input">
+            </div>
+            
+            <div class="form-group">
+                <label for="agreement-title" class="form-label">Agreement Title:</label>
+                <input type="text" id="agreement-title" class="form-input" value="DIGITAL VIDEO SERVICES AGREEMENT" readonly>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-section">
+            <button id="generate-contract" class="primary-button">📄 Generate Contract</button>
+            <button id="analyze-contract" class="secondary-button">🔍 Analyze Contract</button>
+        </div>
+
+        <!-- Status Message -->
+        <div id="status-message" class="status-message">
+            Initializing...
+        </div>
+
+        <!-- Results Section -->
+        <div id="results-section" class="results-section" style="display: none;">
+            <div id="results-content"></div>
+        </div>
+
+        <!-- Progress Section -->
+        <div id="progress-section" class="progress-section" style="display: none;">
+            <div class="progress-content">
+                <div class="progress-spinner"></div>
+                <div id="progress-message">Processing...</div>
+            </div>
+        </div>
+
+        <!-- Debug Section -->
+        <div class="debug-section" style="display: none;">
+            <h3>Debug Tools</h3>
+            <div id="debug-content">
+                <button id="test-word-api" class="debug-button">Test Word API</button>
+                <button id="show-diagnostics" class="debug-button">Show Diagnostics</button>
+                <button id="test-contract-generation" class="debug-button">Test Contract Generation</button>
+                <button id="test-clause-replacement" class="debug-button">Test Clause Replacement</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <!-- Clause Replacement Modal -->
+    <div id="replacement-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Replace Clause</h3>
+                <button class="modal-close" onclick="closeReplacementModal()">&times;</button>
+            </div>
+            
+            <div class="modal-body">
+                <div id="current-clause-display"></div>
+                <div id="alternatives-container"></div>
+            </div>
+
+            <div class="modal-actions">
+                <button class="modal-button modal-button-cancel" onclick="closeReplacementModal()">Cancel</button>
+                <button class="modal-button modal-button-preview" onclick="previewReplacement()" id="preview-replacement-btn" disabled>Preview</button>
+                <button class="modal-button modal-button-apply" onclick="applyReplacement()" id="apply-replacement-btn" disabled>Apply Replacement</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Preview Modal -->
+    <div id="preview-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Preview Changes</h3>
+                <button class="modal-close" onclick="closePreviewModal()">&times;</button>
+            </div>
+            
+            <div class="modal-body">
+                <div id="preview-content"></div>
+            </div>
+
+            <div class="modal-actions">
+                <button class="modal-button modal-button-cancel" onclick="closePreviewModal()">Cancel</button>
+                <button class="modal-button modal-button-apply" onclick="confirmReplacement()">Confirm Changes</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

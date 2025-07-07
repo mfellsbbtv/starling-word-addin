@@ -280,7 +280,9 @@ function basicInitialization() {
   console.log("Running basic initialization fallback...");
 
   // Basic theme setup
-  document.body.classList.add('ms-font-m', 'ms-welcome', 'ms-Fabric');
+  if (document.body) {
+    document.body.classList.add('ms-font-m', 'ms-welcome', 'ms-Fabric');
+  }
 
   // Basic UI setup
   const statusElement = document.getElementById("status-message");
@@ -555,7 +557,7 @@ function setupEventListeners() {
   // Contract generation events
   const generateBtn = document.getElementById("generate-contract");
   if (generateBtn) {
-    generateBtn.addEventListener("click", safeGenerateContract);
+    generateBtn.addEventListener("click", safeGenerateSimpleContract);
   }
 
   // Contract analysis events
@@ -800,6 +802,31 @@ async function safeClearSuggestions() {
 }
 
 // Safe wrapper functions that check Word API availability
+async function safeGenerateSimpleContract() {
+  if (!window.WORD_API_AVAILABLE) {
+    try {
+      const { updateStatus } = await import('../shared/utils.js');
+      updateStatus("Error: Word API not available. Cannot generate contract.", "error");
+    } catch (error) {
+      console.error("Error importing updateStatus:", error);
+    }
+    return;
+  }
+
+  try {
+    const { generateSimpleContractHandler } = await import('./modules/event-handlers.js');
+    await generateSimpleContractHandler();
+  } catch (error) {
+    console.error("Error importing or calling generateSimpleContractHandler:", error);
+    try {
+      const { updateStatus } = await import('../shared/utils.js');
+      updateStatus("Error: Failed to generate contract. " + error.message, "error");
+    } catch (importError) {
+      console.error("Error importing updateStatus:", importError);
+    }
+  }
+}
+
 async function safeGenerateContract() {
   if (!window.WORD_API_AVAILABLE) {
     try {

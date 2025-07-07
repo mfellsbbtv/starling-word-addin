@@ -367,6 +367,182 @@ export class PlaybookService {
   }
 
   /**
+   * Get alternative clauses for a specific clause from the Legal Matrix
+   * @param {string} clauseNumber - The clause number (e.g., "1.1", "2.3")
+   * @param {string} agreementType - The agreement type
+   * @param {string} contentType - The content type
+   * @returns {Promise<Array>} Array of alternative clauses
+   */
+  async getAlternativeClauses(clauseNumber, agreementType = 'content-management', contentType = 'general') {
+    try {
+      // First try to get alternatives from the loaded playbook
+      const playbook = await this.loadPlaybook(agreementType, contentType);
+      const playbookAlternatives = this.extractPlaybookAlternatives(clauseNumber, playbook);
+
+      // Then try to get alternatives from Legal Matrix if available
+      const legalMatrixAlternatives = await this.getLegalMatrixAlternatives(clauseNumber);
+
+      // Combine and deduplicate alternatives
+      const allAlternatives = [...playbookAlternatives, ...legalMatrixAlternatives];
+
+      // If no alternatives found, provide fallback options
+      if (allAlternatives.length === 0) {
+        return this.getFallbackAlternatives(clauseNumber);
+      }
+
+      return allAlternatives;
+
+    } catch (error) {
+      console.error(`Error getting alternatives for clause ${clauseNumber}:`, error);
+      return this.getFallbackAlternatives(clauseNumber);
+    }
+  }
+
+  /**
+   * Extract alternatives from loaded playbook
+   * @param {string} clauseNumber
+   * @param {Object} playbook
+   * @returns {Array} Playbook alternatives
+   */
+  extractPlaybookAlternatives(clauseNumber, playbook) {
+    const alternatives = [];
+
+    if (!playbook.clauses || !playbook.clauses.clauses) {
+      return alternatives;
+    }
+
+    // Find matching clause in playbook
+    const matchingClause = playbook.clauses.clauses.find(clause =>
+      clause.id.includes(clauseNumber) ||
+      clause.title.toLowerCase().includes(clauseNumber.toLowerCase())
+    );
+
+    if (matchingClause) {
+      // Add the main clause as baseline
+      alternatives.push({
+        id: 'playbook_baseline',
+        title: `Playbook Baseline - ${matchingClause.title}`,
+        content: matchingClause.content,
+        riskLevel: matchingClause.risk_level || 'low',
+        recommended: true,
+        source: 'playbook'
+      });
+
+      // Add alternatives if available
+      if (matchingClause.alternatives) {
+        matchingClause.alternatives.forEach((alt, index) => {
+          alternatives.push({
+            id: `playbook_alt_${index}`,
+            title: alt.title,
+            content: alt.content,
+            riskLevel: alt.risk_level || 'medium',
+            recommended: false,
+            source: 'playbook'
+          });
+        });
+      }
+    }
+
+    return alternatives;
+  }
+
+  /**
+   * Get alternatives from Legal Matrix service
+   * @param {string} clauseNumber
+   * @returns {Promise<Array>} Legal Matrix alternatives
+   */
+  async getLegalMatrixAlternatives(clauseNumber) {
+    const alternatives = [];
+
+    try {
+      // Check if Legal Matrix service is available
+      if (typeof window !== 'undefined' && window.legalMatrixService) {
+        const matrixData = window.legalMatrixService.getClauseVariations(clauseNumber);
+
+        if (matrixData) {
+          // Add baseline clause
+          if (matrixData.baseline) {
+            alternatives.push({
+              id: 'matrix_baseline',
+              title: 'BASELINE (Ninja Tune Ltd.)',
+              content: matrixData.baseline,
+              riskLevel: 'low',
+              recommended: true,
+              source: 'legal_matrix'
+            });
+          }
+
+          // Add party variations
+          if (matrixData.partyVariations) {
+            Object.entries(matrixData.partyVariations).forEach(([party, content]) => {
+              if (content && content.trim()) {
+                alternatives.push({
+                  id: `matrix_${party.toLowerCase()}`,
+                  title: `${party} Alternative`,
+                  content: content,
+                  riskLevel: this.assessRiskLevel(party),
+                  recommended: false,
+                  source: 'legal_matrix'
+                });
+              }
+            });
+          }
+        }
+      }
+    } catch (error) {
+      console.log('Legal Matrix not available, using playbook alternatives only');
+    }
+
+    return alternatives;
+  }
+
+  /**
+   * Assess risk level based on party name
+   * @param {string} party
+   * @returns {string} Risk level
+   */
+  assessRiskLevel(party) {
+    const lowRiskParties = ['ninja tune', 'yoola', 'baseline'];
+    const highRiskParties = ['sony', 'lionsgate'];
+
+    const partyLower = party.toLowerCase();
+
+    if (lowRiskParties.some(p => partyLower.includes(p))) {
+      return 'low';
+    } else if (highRiskParties.some(p => partyLower.includes(p))) {
+      return 'high';
+    }
+
+    return 'medium';
+  }
+
+  /**
+   * Get fallback alternatives when no specific alternatives are found
+   * @param {string} clauseNumber
+   * @returns {Array} Fallback alternatives
+   */
+  getFallbackAlternatives(clauseNumber) {
+    return [
+      {
+        id: 'fallback_standard',
+        title: 'Standard Clause',
+        content: `Standard clause text for ${clauseNumber}. This is a generic fallback clause that should be reviewed and customized for your specific needs.`,
+        riskLevel: 'medium',
+        recommended: true,
+        source: 'fallback'
+      },
+      {
+        id: 'fallback_conservative',
+        title: 'Conservative Alternative',
+        content: `Conservative alternative for ${clauseNumber}. This version includes additional protections and stricter terms to minimize risk.`,
+        riskLevel: 'low',
+        recommended: false,
+        source: 'fallback'
+      }
+    ];
+  }
+
+  /**
    * Get list of available playbooks
    * @returns {Array} List of available playbook combinations
    */
@@ -375,6 +551,7 @@ export class PlaybookService {
       { agreementType: 'content-management', contentType: 'music' },
       { agreementType: 'content-management', contentType: 'non-music' },
       { agreementType: 'content-management', contentType: 'both' },
+      { agreementType: 'data-pro', contentType: 'general' },
       { agreementType: 'licensing', contentType: 'music' },
       { agreementType: 'licensing', contentType: 'non-music' },
       { agreementType: 'licensing', contentType: 'both' },

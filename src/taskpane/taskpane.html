@@ -171,32 +171,17 @@
         <section class="ms-welcome__features">
             <h2 class="ms-font-xl">Contract Generation</h2>
 
-            <!-- Agreement Type Selection - HIDDEN -->
-            <div class="form-group" style="display: none;">
-                <label for="agreement-type" class="ms-font-m">Agreement Type:</label>
-                <select id="agreement-type" class="ms-Dropdown">
-                    <option value="">Select Agreement Type</option>
-                    <option value="content-management">Content Management</option>
-                    <option value="licensing">Licensing Agreement</option>
-                    <option value="distribution">Distribution Agreement</option>
-                    <option value="talent">Talent Agreement</option>
+            <!-- Contract Type Selection -->
+            <div class="form-group">
+                <label for="contract-type" class="ms-font-m">Contract Type:</label>
+                <select id="contract-type" class="ms-Dropdown">
+                    <option value="">Select Contract Type</option>
+                    <option value="content-management">Content Management Agreement</option>
+                    <option value="data-pro">Data Pro Agreement</option>
                 </select>
-            </div>
-
-            <!-- Content Type Selection - HIDDEN -->
-            <div class="form-group" id="content-type-group" style="display: none;">
-                <label for="content-type" class="ms-font-m">Content Type:</label>
-                <select id="content-type" class="ms-Dropdown">
-                    <option value="">Select Content Type</option>
-                    <option value="music">Music</option>
-                    <option value="non-music">Non-Music</option>
-                    <option value="both">Both</option>
-                </select>
-            </div>
-
-            <!-- Dynamic Form Fields - HIDDEN -->
-            <div id="dynamic-form" class="dynamic-form" style="display: none;">
-                <!-- Fields will be populated dynamically -->
+                <p class="ms-font-xs" style="margin: 4px 0 0 0; color: #666;">
+                    Choose the type of contract to generate from RHEI's legal templates
+                </p>
             </div>
 
             <!-- Contract Preview -->
@@ -237,12 +222,12 @@
                 <p class="ms-font-s">Test if Word API is working properly</p>
             </div>
 
-            <!-- Generate Button - ALWAYS VISIBLE -->
+            <!-- Generate Button -->
             <div class="form-group" id="generate-button-group">
                 <button id="generate-contract" class="ms-Button ms-Button--primary">
-                    <span class="ms-Button-label">Generate RHEI Contract</span>
+                    <span class="ms-Button-label">Generate Contract</span>
                 </button>
-                <p class="ms-font-s">Generate Digital Video Services Agreement using RHEI playbook data</p>
+                <p class="ms-font-s">Generate a professional contract template ready for completion</p>
             </div>
         </section>
 

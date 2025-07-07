@@ -110,9 +110,15 @@ function handleOfficeReady(info) {
     console.log("Office.onReady called with info:", info);
     window.OFFICE_READY = true;
 
-    if (info.host === Office.HostApplication.Word) {
+    // Handle undefined Office.HostApplication
+    if (!Office.HostApplication) {
+      console.warn("Office.HostApplication is undefined, assuming Word environment");
+      updateProgress(3, "Word environment assumed, testing API...");
+      setTimeout(() => {
+        checkSimpleWordAPI();
+      }, 500);
+    } else if (info.host === Office.HostApplication.Word) {
       updateProgress(3, "Word environment confirmed, testing API...");
-
       setTimeout(() => {
         checkSimpleWordAPI();
       }, 500);
@@ -136,12 +142,14 @@ function handleOfficeReady(info) {
       console.log("Office.onReady called with info:", info);
       window.OFFICE_READY = true;
       
-      if (info.host === Office.HostApplication.Word) {
-        console.log("RHEI AI Legal Assistant loaded successfully in Word");
-        
-        // Check for Word API availability
+      // Handle undefined Office.HostApplication
+      if (!Office.HostApplication) {
+        console.warn("Office.HostApplication is undefined, assuming Word environment");
+        console.log("RHEI AI Legal Assistant loaded (assuming Word environment)");
         checkSimpleWordAPI();
-        
+      } else if (info.host === Office.HostApplication.Word) {
+        console.log("RHEI AI Legal Assistant loaded successfully in Word");
+        checkSimpleWordAPI();
       } else {
         console.error("This add-in is designed for Microsoft Word only. Current host:", info.host);
         updateSimpleStatus("Error: This add-in requires Microsoft Word", "error");

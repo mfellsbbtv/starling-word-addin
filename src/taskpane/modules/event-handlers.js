@@ -3,8 +3,104 @@
 
 // Dynamic imports will be used throughout this module to prevent early Word API access
 
-// Contract Generation Event Handlers
+// Simplified Contract Generation Event Handler
+export async function generateSimpleContractHandler() {
+  console.log("🚀 Starting simplified contract generation...");
+  try {
+    // Dynamic imports to prevent early Word API access
+    const { updateStatus, showProgressSection, hideProgressSection, handleError, setButtonLoading } = await import('../../shared/utils.js');
+
+    console.log("📋 Setting button loading state...");
+    setButtonLoading("generate-contract", true);
+    console.log("📊 Showing progress section...");
+    showProgressSection("Generating contract...");
+    console.log("📝 Updating status...");
+    updateStatus("Preparing contract generation...", "info");
+
+    // Get contract type selection
+    const contractType = document.getElementById("contract-type")?.value;
+
+    if (!contractType) {
+      throw new Error("Please select a contract type before generating");
+    }
+
+    console.log("Contract type selected:", contractType);
+
+    let contractText = "";
+
+    // Generate contract based on type
+    try {
+      console.log("Generating contract from TSV data...");
+      const { generateSimpleContract } = await import('../services/contract-generator.js');
+
+      const result = await generateSimpleContract(contractType);
+
+      if (result && result.contractText) {
+        contractText = result.contractText;
+        console.log("Successfully generated contract");
+      } else {
+        throw new Error("Contract generation returned empty result");
+      }
+    } catch (generationError) {
+      console.error("Contract generation failed:", generationError.message);
+      throw new Error(`Failed to generate contract: ${generationError.message}`);
+    }
+
+    if (!contractText) {
+      throw new Error("Failed to generate contract text");
+    }
+
+    updateStatus("Inserting contract into document...", "info");
+
+    // Insert contract into Word document
+    await insertContractIntoDocument(contractText, {});
+
+    // Success
+    hideProgressSection();
+    updateStatus(`${contractType === 'content-management' ? 'Content Management' : 'Data Pro'} contract generated successfully!`, "success");
+
+    console.log("✅ Contract generation completed successfully");
+
+  } catch (error) {
+    console.error("🚨 Contract generation error:", error);
+    console.error("Error stack:", error.stack);
+
+    try {
+      const { handleError } = await import('../../shared/utils.js');
+      handleError(error);
+    } catch (importError) {
+      console.error("Error importing handleError:", importError);
+      console.error("Original error:", error);
+
+      // Fallback error display
+      const statusElement = document.getElementById("status-message");
+      if (statusElement) {
+        statusElement.textContent = `Error: ${error.message}`;
+        statusElement.className = "status-message ms-font-s error";
+      }
+    }
+  } finally {
+    try {
+      const { setButtonLoading } = await import('../../shared/utils.js');
+      setButtonLoading("generate-contract", false);
+    } catch (importError) {
+      console.error("Error importing setButtonLoading:", importError);
+
+      // Fallback button reset
+      const button = document.getElementById("generate-contract");
+      if (button) {
+        button.disabled = false;
+        if (button.classList) {
+          button.classList.remove("loading");
+        }
+      }
+    }
+  }
+}
+
+// Original Contract Generation Event Handler (kept for compatibility)
 export async function generateContract() {
+  console.log("🚀 Starting contract generation...");
   try {
     // Dynamic imports to prevent early Word API access
     const { updateStatus, showProgressSection, hideProgressSection, handleError, setButtonLoading } = await import('../../shared/utils.js');
@@ -13,14 +109,36 @@ export async function generateContract() {
     const { collectFormData, validateFormData } = await import('../services/contract-generator.js');
     const { displayContractResults } = await import('./ui-display.js');
 
-    // Check if Word API is available
+    // Enhanced Word API availability check
     if (!window.WORD_API_AVAILABLE) {
-      updateStatus("Error: Word API not available. Cannot generate contract in current environment.", "error");
+      updateStatus("Word API not available. Running diagnostics...", "warning");
+
+      // Run quick diagnostic
+      if (typeof Word === 'undefined') {
+        updateStatus("Error: Word API object not found. Please ensure you're running this in Microsoft Word and refresh the add-in.", "error");
+      } else if (typeof Word.run !== 'function') {
+        updateStatus("Error: Word.run function not available. Please refresh the add-in and try again.", "error");
+      } else {
+        updateStatus("Error: Word API initialization incomplete. Please wait a moment and try again.", "error");
+      }
+
+      // Show diagnostics automatically
+      setTimeout(async () => {
+        try {
+          await showWordAPIDiagnostics();
+        } catch (diagError) {
+          console.error("Error showing diagnostics:", diagError);
+        }
+      }, 1000);
+
       return;
     }
 
-    setButtonLoading("generate-contract-btn", true);
+    console.log("📋 Setting button loading state...");
+    setButtonLoading("generate-contract", true);
+    console.log("📊 Showing progress section...");
     showProgressSection("Generating contract...");
+    console.log("📝 Updating status...");
     updateStatus("Preparing contract generation...", "info");
 
     // Initialize API service
@@ -35,87 +153,273 @@ export async function generateContract() {
 
     updateStatus("Generating contract content...", "info");
 
-    // Try to use new AI prompt system first, fallback to playbook system
+    // Try to use RHEI playbook system first, fallback to other methods
     let contractText;
-    let generationMethod = "ai_prompt";
+    let generationMethod = "rhei_playbook";
+    let generationResult;
 
     try {
-      // Import the new AI contract generation function
-      const { generateContractWithAI } = await import('../services/contract-generator.js');
+      // Import the new RHEI playbook generation function
+      const { generateContractWithPlaybook } = await import('../services/contract-generator.js');
 
-      // Set up generation options (can be customized based on user preferences)
+      // Set up generation options for RHEI contract
       const generationOptions = {
-        playbook: "Custom", // Default to Custom, could be made configurable
-        includeClauses: "1.1-9.5", // Full range of clauses
-        format: "WordReady", // Format optimized for Word insertion
-        companyName: "RHEI, Inc.",
-        jurisdiction: "State of California",
-        includeSchedules: true
+        revenue_model: "baseline", // Use Ninja Tune baseline by default
+        includeTableOfContents: true,
+        includeSchedules: true,
+        format: "WordReady" // Format optimized for Word insertion
       };
 
-      console.log("Attempting contract generation with new AI prompt system...");
-      const aiResult = await generateContractWithAI(formData, generationOptions);
+      console.log("Attempting contract generation with RHEI playbook system...");
+      generationResult = await generateContractWithPlaybook(formData, generationOptions);
 
-      if (aiResult.success) {
-        contractText = aiResult.contract_text;
-        console.log("Successfully generated contract using AI prompt system");
-        updateStatus("Contract generated using AI prompt system...", "info");
+      if (generationResult.success) {
+        contractText = generationResult.contract_text;
+        console.log("Successfully generated contract using RHEI playbook system");
+        updateStatus("Contract generated using RHEI playbook system...", "info");
       } else {
-        throw new Error(aiResult.error || "AI generation failed");
+        throw new Error(generationResult.error || "RHEI playbook generation failed");
       }
 
-    } catch (aiError) {
-      console.warn("AI prompt generation failed, falling back to playbook system:", aiError);
-      generationMethod = "playbook_fallback";
+    } catch (playbookError) {
+      console.warn("RHEI playbook generation failed, falling back to AI system:", playbookError);
+      generationMethod = "ai_fallback";
 
-      // Fallback to original playbook system
-      const { playbookService } = await import('../../shared/playbook-service.js');
-      contractText = await playbookService.generateContract(
-        formData.agreement_type || 'content-management',
-        formData.content_type || 'music',
-        formData.fields || formData
-      );
-      updateStatus("Contract generated using playbook system (fallback)...", "info");
+      try {
+        // Fallback to AI prompt system
+        const { generateContractWithAI } = await import('../services/contract-generator.js');
+
+        const aiOptions = {
+          playbook: "Custom",
+          includeClauses: "1.1-9.5",
+          format: "WordReady",
+          companyName: "RHEI, Inc.",
+          jurisdiction: "State of California",
+          includeSchedules: true
+        };
+
+        generationResult = await generateContractWithAI(formData, aiOptions);
+
+        if (generationResult.success) {
+          contractText = generationResult.contract_text;
+          updateStatus("Contract generated using AI system (fallback)...", "info");
+        } else {
+          throw new Error(generationResult.error || "AI generation failed");
+        }
+      } catch (aiError) {
+        console.warn("AI generation failed, falling back to original playbook system:", aiError);
+        generationMethod = "original_playbook_fallback";
+
+        // Final fallback to original playbook system
+        const { playbookService } = await import('../../shared/playbook-service.js');
+        contractText = await playbookService.generateContract(
+          formData.agreement_type || 'content-management',
+          formData.content_type || 'music',
+          formData.fields || formData
+        );
+        updateStatus("Contract generated using original playbook system (final fallback)...", "info");
+      }
     }
 
     // Insert contract into Word document
     await insertContractIntoDocument(contractText, formData);
 
     // Create enhanced result object with generation method info
-    const enhancedResult = {
+    const enhancedResult = generationResult || {
       success: true,
       contract_text: contractText,
       generation_method: generationMethod,
       form_data: formData,
-      generated_at: new Date().toISOString(),
-      ai_prompt_used: generationMethod === "ai_prompt"
+      generated_at: new Date().toISOString()
     };
+
+    // Ensure the enhanced result has the correct generation method
+    enhancedResult.generation_method = generationMethod;
 
     // Display results
     displayContractResults(enhancedResult);
 
-    const successMessage = generationMethod === "ai_prompt" ?
-      "Contract generated successfully using AI prompt system!" :
-      "Contract generated successfully using playbook system!";
-
+    const successMessage = getSuccessMessage(generationMethod);
     updateStatus(successMessage, "success");
     hideProgressSection();
 
   } catch (error) {
+    console.error("🚨 Contract generation error:", error);
+    console.error("Error stack:", error.stack);
+
+    // Check if it's a classList error
+    if (error.message && error.message.includes('classList')) {
+      console.error("🔍 ClassList error detected - checking DOM state:");
+      console.error("Document ready state:", document.readyState);
+      console.error("Body exists:", !!document.body);
+      console.error("Generate button exists:", !!document.getElementById("generate-contract"));
+      console.error("Status message exists:", !!document.getElementById("status-message"));
+    }
+
     try {
       const { handleError } = await import('../../shared/utils.js');
       handleError(error);
     } catch (importError) {
       console.error("Error importing handleError:", importError);
       console.error("Original error:", error);
+
+      // Fallback error display
+      const statusElement = document.getElementById("status-message");
+      if (statusElement) {
+        statusElement.textContent = `Error: ${error.message}`;
+        statusElement.className = "status-message ms-font-s error";
+      }
     }
   } finally {
     try {
       const { setButtonLoading } = await import('../../shared/utils.js');
-      setButtonLoading("generate-contract-btn", false);
+      setButtonLoading("generate-contract", false);
     } catch (importError) {
       console.error("Error importing setButtonLoading:", importError);
+
+      // Fallback button reset
+      const button = document.getElementById("generate-contract");
+      if (button) {
+        button.disabled = false;
+        if (button.classList) {
+          button.classList.remove("loading");
+        }
+      }
     }
+  }
+}
+
+// Helper function to get success message based on generation method
+function getSuccessMessage(generationMethod) {
+  switch (generationMethod) {
+    case "rhei_playbook":
+      return "Contract generated successfully using RHEI playbook system!";
+    case "ai_fallback":
+      return "Contract generated successfully using AI system (fallback)!";
+    case "original_playbook_fallback":
+      return "Contract generated successfully using original playbook system (fallback)!";
+    default:
+      return "Contract generated successfully!";
+  }
+}
+
+// Word API Diagnostics
+export async function showWordAPIDiagnostics() {
+  try {
+    const { updateStatus } = await import('../../shared/utils.js');
+
+    console.log("Running Word API diagnostics...");
+
+    let diagnosticInfo = "=== WORD API DIAGNOSTICS ===\n\n";
+
+    // Check Office.js availability
+    diagnosticInfo += `Office.js Available: ${typeof Office !== 'undefined'}\n`;
+    if (typeof Office !== 'undefined') {
+      diagnosticInfo += `Office.context Available: ${!!Office.context}\n`;
+      if (Office.context) {
+        diagnosticInfo += `Office Host: ${Office.context.host}\n`;
+        diagnosticInfo += `Office Platform: ${Office.context.platform}\n`;
+        diagnosticInfo += `Office Requirements: ${Office.context.requirements}\n`;
+      }
+    }
+
+    // Check Word API availability
+    diagnosticInfo += `\nWord API Available: ${typeof Word !== 'undefined'}\n`;
+    if (typeof Word !== 'undefined') {
+      diagnosticInfo += `Word.run Available: ${typeof Word.run === 'function'}\n`;
+      diagnosticInfo += `Word.InsertLocation Available: ${typeof Word.InsertLocation !== 'undefined'}\n`;
+    }
+
+    // Check global state variables
+    diagnosticInfo += `\nGlobal State:\n`;
+    diagnosticInfo += `OFFICE_READY: ${window.OFFICE_READY}\n`;
+    diagnosticInfo += `WORD_API_AVAILABLE: ${window.WORD_API_AVAILABLE}\n`;
+    diagnosticInfo += `WORD_API_READY: ${window.WORD_API_READY}\n`;
+    diagnosticInfo += `INITIALIZATION_COMPLETE: ${window.INITIALIZATION_COMPLETE}\n`;
+
+    // Check browser environment
+    diagnosticInfo += `\nBrowser Environment:\n`;
+    diagnosticInfo += `User Agent: ${navigator.userAgent}\n`;
+    diagnosticInfo += `URL: ${window.location.href}\n`;
+    diagnosticInfo += `Protocol: ${window.location.protocol}\n`;
+
+    // Test Word API if available
+    if (typeof Word !== 'undefined' && typeof Word.run === 'function') {
+      diagnosticInfo += `\nTesting Word API...\n`;
+      try {
+        await Word.run(async (context) => {
+          diagnosticInfo += `Word.run executed successfully\n`;
+          diagnosticInfo += `Context available: ${!!context}\n`;
+          if (context && context.document) {
+            diagnosticInfo += `Document context available: ${!!context.document}\n`;
+          }
+        });
+        diagnosticInfo += `Word API test: PASSED\n`;
+      } catch (error) {
+        diagnosticInfo += `Word API test: FAILED - ${error.message}\n`;
+      }
+    }
+
+    // Display diagnostics
+    const resultsSection = document.getElementById("results-section");
+    if (resultsSection) {
+      resultsSection.innerHTML = `
+        <div class="results-header">
+          <h2>Word API Diagnostics</h2>
+        </div>
+        <div class="results-content">
+          <pre style="white-space: pre-wrap; font-family: monospace; font-size: 12px; line-height: 1.4;">${diagnosticInfo}</pre>
+        </div>
+      `;
+      resultsSection.style.display = "block";
+    }
+
+    updateStatus("Diagnostics complete - check results below", "info");
+
+  } catch (error) {
+    console.error("Error running diagnostics:", error);
+    const { updateStatus } = await import('../../shared/utils.js');
+    updateStatus(`Diagnostics error: ${error.message}`, "error");
+  }
+}
+
+// Simple Word API test function
+export async function testWordAPI() {
+  try {
+    const { updateStatus } = await import('../../shared/utils.js');
+
+    updateStatus("Testing Word API...", "info");
+
+    // Check basic availability
+    if (typeof Word === 'undefined') {
+      throw new Error("Word API object not found");
+    }
+
+    if (typeof Word.run !== 'function') {
+      throw new Error("Word.run function not available");
+    }
+
+    // Test actual Word API call
+    await Word.run(async (context) => {
+      // Simple test - just access the document
+      const document = context.document;
+      document.load("saved");
+      await context.sync();
+
+      console.log("Word API test successful - document accessed");
+    });
+
+    updateStatus("Word API test successful! ✅", "success");
+    window.WORD_API_AVAILABLE = true;
+    window.WORD_API_READY = true;
+
+  } catch (error) {
+    console.error("Word API test failed:", error);
+    const { updateStatus } = await import('../../shared/utils.js');
+    updateStatus(`Word API test failed: ${error.message}`, "error");
+
+    window.WORD_API_AVAILABLE = false;
+    window.WORD_API_READY = false;
   }
 }
 
@@ -127,7 +431,7 @@ export async function analyzeContract() {
     const { contractReviewer } = await import('../services/contract-reviewer.js');
     const { displayContractReviewResults } = await import('./ui-display.js');
 
-    setButtonLoading("analyze-contract-btn", true);
+    setButtonLoading("analyze-contract", true);
     showProgressSection("Analyzing contract for compliance and acceptability...");
 
     let documentText;
@@ -221,7 +525,7 @@ Either party may terminate with 30 days notice.`;
   } finally {
     try {
       const { setButtonLoading } = await import('../../shared/utils.js');
-      setButtonLoading("analyze-contract-btn", false);
+      setButtonLoading("analyze-contract", false);
     } catch (importError) {
       console.error("Error importing setButtonLoading:", importError);
     }
@@ -232,7 +536,9 @@ Either party may terminate with 30 days notice.`;
 function determineAgreementType(documentText) {
   const lowerText = documentText.toLowerCase();
 
-  if (lowerText.includes('content management') || lowerText.includes('management agreement')) {
+  if (lowerText.includes('data license') || lowerText.includes('data licensing')) {
+    return 'data-pro';
+  } else if (lowerText.includes('content management') || lowerText.includes('management agreement')) {
     return 'content-management';
   } else if (lowerText.includes('licensing') || lowerText.includes('license agreement')) {
     return 'licensing';
@@ -345,7 +651,7 @@ export async function applySuggestion(suggestionIndex) {
     
     // Update the UI to show the suggestion as applied
     const suggestionCard = document.querySelectorAll('.suggestion-card')[suggestionIndex];
-    if (suggestionCard) {
+    if (suggestionCard && suggestionCard.classList) {
       suggestionCard.classList.add('applied');
       const applyBtn = suggestionCard.querySelector('.apply-suggestion-btn');
       if (applyBtn) {
@@ -372,7 +678,9 @@ export async function applyAllChanges() {
     // Update UI to show all suggestions as applied
     const suggestionCards = document.querySelectorAll('.suggestion-card');
     suggestionCards.forEach(card => {
-      card.classList.add('applied');
+      if (card && card.classList) {
+        card.classList.add('applied');
+      }
       const applyBtn = card.querySelector('.apply-suggestion-btn');
       if (applyBtn) {
         applyBtn.textContent = '✓ Applied';
@@ -381,7 +689,10 @@ export async function applyAllChanges() {
     });
     
     // Hide the apply all button
-    document.getElementById("apply-all-changes-btn").style.display = 'none';
+    const applyAllBtn = document.getElementById("apply-all-changes-btn");
+    if (applyAllBtn) {
+      applyAllBtn.style.display = 'none';
+    }
     
   } catch (error) {
     handleError(error);
@@ -411,8 +722,8 @@ async function getDocumentText() {
     throw new Error('Office.js not properly initialized. Please refresh the add-in.');
   }
 
-  // Check if we're in a Word context
-  if (Office.context.host !== Office.HostApplication.Word) {
+  // Check if we're in a Word context (handle undefined Office.HostApplication)
+  if (Office.HostApplication && Office.context.host !== Office.HostApplication.Word) {
     console.error("Not running in Word context:", Office.context.host);
     throw new Error('This add-in must be run in Microsoft Word.');
   }
@@ -469,8 +780,8 @@ async function insertContractIntoDocument(contractText, formData) {
     throw new Error('Office.js not properly initialized. Please refresh the add-in.');
   }
 
-  // Check if we're in a Word context
-  if (Office.context.host !== Office.HostApplication.Word) {
+  // Check if we're in a Word context (handle undefined Office.HostApplication)
+  if (Office.HostApplication && Office.context.host !== Office.HostApplication.Word) {
     throw new Error('This add-in must be run in Microsoft Word.');
   }
 

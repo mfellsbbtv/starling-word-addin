@@ -38,6 +38,26 @@ export const FORM_TEMPLATES = {
       { name: 'content_platforms', label: 'Content Platforms', type: 'select', required: true, options: ['YouTube', 'TikTok', 'Instagram', 'Multi-Platform', 'Other'], description: 'Primary platforms for content distribution' },
       { name: 'termination_notice', label: 'Termination Notice (days)', type: 'number', required: true, description: 'Notice period required for termination' }
     ]
+  },
+  'data-pro': {
+    'general': [
+      { name: 'licensor_name', label: 'Licensor Legal Name', type: 'text', required: true, description: 'Legal name of the Licensor entity' },
+      { name: 'licensor_entity_type', label: 'Entity Type', type: 'select', required: true, options: ['Corporation', 'LLC', 'Partnership', 'Individual', 'Other'], description: 'Type of legal entity for the Licensor' },
+      { name: 'licensor_street', label: 'Street Address', type: 'text', required: true, description: 'Street address of the Licensor' },
+      { name: 'licensor_city', label: 'City', type: 'text', required: true, description: 'City where the Licensor is located' },
+      { name: 'licensor_state', label: 'State/Province', type: 'text', required: true, description: 'State or province where the Licensor is located' },
+      { name: 'licensor_country', label: 'Country', type: 'select', required: true, options: ['United States', 'Canada', 'United Kingdom', 'Australia', 'Germany', 'France', 'Israel', 'Cyprus', 'Other'], description: 'Country where the Licensor is located' },
+      { name: 'licensor_postal', label: 'Postal/Zip Code', type: 'text', required: true, description: 'Postal or zip code' },
+      { name: 'licensor_email', label: 'Email Address', type: 'email', required: true, description: 'Primary email address for the Licensor' },
+      { name: 'licensor_phone', label: 'Phone Number', type: 'text', required: true, description: 'Phone number including area code' },
+      { name: 'licensor_signatory_name', label: 'Signatory Name', type: 'text', required: true, description: 'Full name of the person authorized to sign' },
+      { name: 'licensor_signatory_title', label: 'Signatory Title', type: 'text', required: true, description: 'Title or position of the authorized signatory' },
+      { name: 'content_type', label: 'Content Type', type: 'select', required: true, options: ['Video Content', 'Audio Content', 'Mixed Audio/Video Content', 'Other Media Content'], description: 'Type of content being licensed' },
+      { name: 'content_description', label: 'Content Description', type: 'textarea', required: true, description: 'Brief description of the content being licensed' },
+      { name: 'content_volume', label: 'Estimated Content Volume', type: 'select', required: true, options: ['Small (< 100 hours)', 'Medium (100-1000 hours)', 'Large (1000+ hours)', 'Ongoing/Continuous'], description: 'Estimated volume of content to be licensed' },
+      { name: 'effective_date', label: 'Effective Date', type: 'date', required: true, description: 'Date when the agreement becomes effective' },
+      { name: 'license_scope', label: 'License Scope', type: 'select', required: true, options: ['AI/ML Training Only', 'Research and Development', 'Full AI Development and Sublicensing', 'Custom Scope'], description: 'Scope of the license being granted' }
+    ]
   }
 };
 
@@ -154,59 +174,46 @@ function getNextContractPreview() {
   return previews[Math.floor(Math.random() * previews.length)];
 }
 
-// Collect form data - simplified for demo
+// Collect form data from the UI
 export function collectFormData() {
-  // Since form fields are hidden, use varied demo values for more realistic contracts
-  const demoVariations = [
-    {
-      agreement_type: 'content-management',
-      content_type: 'music',
-      fields: {
-        entity_name: 'Starling Music Management LLC',
-        content_creator: 'Alex Rivera',
-        scope_description: 'Comprehensive music content management including digital distribution across all major platforms, rights management, marketing campaigns, and revenue collection services.',
-        revenue_split: '20',
-        term_length: '3 years',
-        territory: 'Worldwide',
-        music_rights: 'Master Rights',
-        advance_amount: '15000',
-        termination_notice: '60'
-      }
-    },
-    {
-      agreement_type: 'content-management',
-      content_type: 'non-music',
-      fields: {
-        entity_name: 'Digital Content Partners',
-        content_creator: 'Jordan Smith',
-        scope_description: 'Full-service content management for video content including YouTube optimization, brand partnerships, content strategy, and monetization.',
-        revenue_split: '25',
-        term_length: '2 years',
-        territory: 'North America',
-        content_type: 'Video Content',
-        platform_focus: 'YouTube',
-        termination_notice: '30'
-      }
-    },
-    {
-      agreement_type: 'licensing',
-      content_type: 'music',
-      fields: {
-        entity_name: 'Harmony Licensing Group',
-        content_creator: 'Taylor Music Productions',
-        scope_description: 'Licensing agreement for synchronization rights in film, television, and digital media.',
-        license_fee: '5000',
-        term_length: '5 years',
-        territory: 'Worldwide',
-        music_rights: 'Synchronization Rights',
-        termination_notice: '90'
-      }
-    }
-  ];
+  const agreementType = document.getElementById("agreement-type")?.value || "content-management";
+  const contentType = document.getElementById("content-type")?.value || "music";
 
-  // Randomly select a demo variation for variety
-  const selectedDemo = demoVariations[Math.floor(Math.random() * demoVariations.length)];
-  return selectedDemo;
+  // Collect RHEI-specific form fields from the UI
+  const rheiFields = {
+    provider_name: document.getElementById("provider-name")?.value || "Provider Name Ltd.",
+    provider_address: document.getElementById("provider-address")?.value || "123 Provider Street, City, State, Country",
+    provider_entity_type: "an incorporated company", // Default for now
+    effective_date: new Date().toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    }),
+    term_length: "2 years",
+    territory: "worldwide",
+    governing_law: "British Columbia, Canada",
+    revenue_model: document.getElementById("revenue-model")?.value || "baseline"
+  };
+
+  // Collect any additional dynamic form fields
+  const dynamicFields = {};
+  const formInputs = document.querySelectorAll("#dynamic-form input, #dynamic-form select, #dynamic-form textarea");
+
+  formInputs.forEach(input => {
+    if (input.name) {
+      dynamicFields[input.name] = input.value;
+    }
+  });
+
+  // Merge RHEI fields with dynamic fields (RHEI fields take precedence)
+  const allFields = { ...dynamicFields, ...rheiFields };
+
+  return {
+    agreement_type: agreementType,
+    content_type: contentType,
+    fields: allFields,
+    timestamp: new Date().toISOString()
+  };
 }
 
 // Validate form data - simplified for demo
@@ -215,18 +222,13 @@ export function validateFormData(formData) {
   return true;
 }
 
-// Generate contract using Legal Matrix (preferred) or Excel-based training data (fallback)
+// Generate contract using Excel-based training data (Legal Matrix disabled for browser compatibility)
 export async function generateContractWithExcel(formData, generationOptions = {}) {
-  console.log("Attempting Legal Matrix contract generation...");
+  console.log("Using Excel training data for contract generation...");
 
   try {
-    // Try Legal Matrix generation first
-    const matrixResult = await generateContractWithLegalMatrix(formData, generationOptions);
-    if (matrixResult.success) {
-      return matrixResult;
-    }
-
-    console.log("Legal Matrix generation failed, falling back to Excel training...");
+    // Skip Legal Matrix generation (disabled for browser compatibility)
+    console.log("Legal Matrix generation disabled, using Excel training...");
 
     // Import Excel services dynamically
     const { excelTrainingService } = await import('../../services/excel-training-service.js');
@@ -271,83 +273,26 @@ export async function generateContractWithExcel(formData, generationOptions = {}
   }
 }
 
-// Generate contract using Legal Matrix baseline clauses
+// Generate contract using Legal Matrix baseline clauses - DISABLED for browser compatibility
 export async function generateContractWithLegalMatrix(formData, generationOptions = {}) {
-  console.log("Generating contract using Legal Matrix baseline clauses...");
+  console.log("Legal Matrix generation disabled for browser compatibility");
 
-  try {
-    // Import Legal Matrix loader
-    const { legalMatrixLoader } = await import('../../services/legal-matrix-loader.js');
-
-    // Ensure Legal Matrix is loaded
-    await legalMatrixLoader.loadLegalMatrix();
-
-    // Generate contract from baseline clauses
-    const contractResult = await legalMatrixLoader.generateContract(
-      {
-        company_name: formData.fields?.company_name || 'RHEI, Inc.',
-        provider_name: formData.fields?.provider_name || 'Provider Name, Inc.',
-        effective_date: formData.fields?.effective_date || new Date().toLocaleDateString()
-      },
-      generationOptions
-    );
-
-    return {
-      success: true,
-      contract_text: contractResult.contractText,
-      generation_method: "legal_matrix_baseline",
-      training_source: "legal_matrix_tsv",
-      metadata: {
-        clauses_used: contractResult.clausesUsed,
-        articles_generated: contractResult.articlesGenerated,
-        agreement_type: formData.agreement_type,
-        content_type: formData.content_type,
-        generated_at: new Date().toISOString(),
-        legal_matrix_stats: legalMatrixLoader.getStatistics()
-      }
-    };
-
-  } catch (error) {
-    console.error("Legal Matrix generation failed:", error);
-    return {
-      success: false,
-      error: error.message,
-      generation_method: "legal_matrix_failed"
-    };
-  }
+  return {
+    success: false,
+    error: "Legal Matrix generation disabled for browser compatibility",
+    generation_method: "legal_matrix_disabled"
+  };
 }
 
-// Analyze contract using Legal Matrix
+// Analyze contract using Legal Matrix - DISABLED for browser compatibility
 export async function analyzeContractWithLegalMatrix(contractText, targetParty = null, options = {}) {
-  console.log(`Analyzing contract with Legal Matrix${targetParty ? ` for party: ${targetParty}` : ''}...`);
+  console.log("Legal Matrix analysis disabled for browser compatibility");
 
-  try {
-    // Import Legal Matrix loader
-    const { legalMatrixLoader } = await import('../../services/legal-matrix-loader.js');
-
-    // Ensure Legal Matrix is loaded
-    await legalMatrixLoader.loadLegalMatrix();
-
-    // Analyze contract against Legal Matrix
-    const analysis = await legalMatrixLoader.analyzeContract(contractText, targetParty, options);
-
-    return {
-      success: true,
-      analysis,
-      analysis_method: "legal_matrix",
-      target_party: targetParty,
-      supported_parties: legalMatrixLoader.getSupportedParties(),
-      analyzed_at: new Date().toISOString()
-    };
-
-  } catch (error) {
-    console.error("Legal Matrix analysis failed:", error);
-    return {
-      success: false,
-      error: error.message,
-      analysis_method: "legal_matrix_failed"
-    };
-  }
+  return {
+    success: false,
+    error: "Legal Matrix analysis disabled for browser compatibility",
+    analysis_method: "legal_matrix_disabled"
+  };
 }
 
 // Generate demo Legal Matrix CSV for testing
@@ -361,16 +306,82 @@ function generateDemoLegalMatrixCSV() {
 4,4.2,Termination Rights,"Either party may terminate this Agreement with ninety (90) days written notice, or immediately for material breach.","Termination: Either party may terminate this Agreement (a) with ninety (90) days prior written notice; or (b) immediately upon material breach by the other party that remains uncured for thirty (30) days after written notice.","Termination notice reduced to 60 days with 15-day cure period for breaches.",✓,"Termination for convenience requires 120 days notice; immediate termination only for specific enumerated breaches.","30-day termination notice with expedited termination for performance issues.","Standard 90-day notice with 30-day cure period and specific breach definitions."`;
 }
 
-// Generate contract with Excel-based training (preferred) or AI prompt system (fallback)
-export async function generateContractWithAI(formData, generationOptions = {}) {
-  console.log("Generating contract with Excel-based training system...");
+// Generate contract using RHEI playbook data (primary method)
+export async function generateContractWithPlaybook(formData, generationOptions = {}) {
+  console.log("Generating contract with RHEI playbook system...");
 
   try {
-    // Try Excel-based generation first
-    const excelResult = await generateContractWithExcel(formData, generationOptions);
-    if (excelResult.success) {
-      return excelResult;
+    // Import PlaybookService
+    const { PlaybookService } = await import('../../shared/playbook-service.js');
+    const playbookService = new PlaybookService();
+
+    // Load the RHEI content-management playbook
+    const playbook = await playbookService.loadPlaybook('content-management', 'music');
+
+    if (!playbook || !playbook.template) {
+      throw new Error("Failed to load RHEI playbook template");
     }
+
+    console.log("RHEI playbook loaded successfully:", playbook.metadata);
+
+    // Prepare form data with RHEI-specific defaults
+    const rheiFormData = {
+      provider_name: formData.fields?.provider_name || formData.fields?.entity_name || 'Provider Name Ltd.',
+      provider_address: formData.fields?.provider_address || '123 Provider Street, City, State, Country',
+      provider_entity_type: formData.fields?.provider_entity_type || 'an incorporated company',
+      effective_date: formData.fields?.effective_date || new Date().toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      }),
+      term_length: formData.fields?.term_length || '2 years',
+      territory: formData.fields?.territory || 'worldwide',
+      governing_law: formData.fields?.governing_law || 'British Columbia, Canada',
+      revenue_model: generationOptions.revenue_model || 'baseline',
+      ...formData.fields
+    };
+
+    // Generate contract using the RHEI template
+    const contractText = await generateRHEIContract(playbook, rheiFormData, generationOptions);
+
+    return {
+      success: true,
+      contract_text: contractText,
+      generation_method: "rhei_playbook",
+      playbook_metadata: playbook.metadata,
+      form_data: rheiFormData,
+      metadata: {
+        baseline: playbook.metadata.baseline,
+        alternatives: playbook.metadata.alternatives,
+        generated_at: new Date().toISOString()
+      }
+    };
+
+  } catch (error) {
+    console.error("Error generating contract with RHEI playbook:", error);
+
+    // Return error instead of falling back to avoid legal-matrix-loader issues
+    return {
+      success: false,
+      error: error.message,
+      generation_method: "rhei_playbook_failed"
+    };
+  }
+}
+
+// Generate contract with Excel-based training (fallback) or AI prompt system (final fallback)
+export async function generateContractWithAI(formData, generationOptions = {}) {
+  console.log("Generating contract with RHEI playbook system...");
+
+  try {
+    // Try RHEI playbook generation first
+    const playbookResult = await generateContractWithPlaybook(formData, generationOptions);
+    if (playbookResult.success) {
+      return playbookResult;
+    }
+
+    // Skip Excel-based generation to avoid legal-matrix-loader issues
+    console.log("Skipping Excel generation to avoid browser compatibility issues...");
 
     console.log("Excel generation failed, falling back to AI prompt system...");
 
@@ -417,6 +428,295 @@ export async function generateContractWithAI(formData, generationOptions = {}) {
       fallback_used: true
     };
   }
+}
+
+// Generate RHEI contract using playbook template
+async function generateRHEIContract(playbook, formData, generationOptions = {}) {
+  console.log("Generating RHEI contract from playbook template...");
+
+  const template = playbook.template;
+  let contractText = '';
+
+  // Process each section in order
+  const sortedSections = template.template.sections.sort((a, b) => a.order - b.order);
+
+  for (const section of sortedSections) {
+    // Skip sections based on generation options
+    if (section.id === 'table_of_contents' && !generationOptions.includeTableOfContents) {
+      continue;
+    }
+    if (section.id === 'schedules' && !generationOptions.includeSchedules) {
+      continue;
+    }
+
+    // Add section content
+    contractText += `${section.title}\n\n`;
+
+    // Process section content with variable replacement
+    let sectionContent = section.content;
+
+    // Replace variables with form data
+    sectionContent = replaceRHEIVariables(sectionContent, formData, generationOptions);
+
+    // Handle alternative clauses based on revenue model
+    if (section.id.includes('revenue') && formData.revenue_model && formData.revenue_model !== 'baseline') {
+      const alternatives = template.alternatives;
+      if (alternatives && alternatives[formData.revenue_model] && alternatives[formData.revenue_model][section.id]) {
+        sectionContent = alternatives[formData.revenue_model][section.id].content;
+        sectionContent = replaceRHEIVariables(sectionContent, formData, generationOptions);
+      }
+    }
+
+    contractText += sectionContent + '\n\n';
+  }
+
+  // Add signature block
+  contractText += generateRHEISignatureBlock(formData);
+
+  return contractText;
+}
+
+// Simplified contract generation from TSV data
+export async function generateSimpleContract(contractType) {
+  console.log(`Generating ${contractType} contract from TSV data...`);
+
+  try {
+    let tsvData;
+
+    // Load the appropriate TSV file
+    if (contractType === 'content-management') {
+      const response = await fetch('./playbooks/ContentManagement.tsv');
+      tsvData = await response.text();
+    } else if (contractType === 'data-pro') {
+      const response = await fetch('./playbooks/DataPro.tsv');
+      tsvData = await response.text();
+    } else {
+      throw new Error(`Unknown contract type: ${contractType}`);
+    }
+
+    // Parse TSV data
+    const lines = tsvData.split('\n');
+    // Skip the first line (tier info) and use the second line as headers
+    const headers = lines[1].split('\t');
+
+    console.log('TSV Headers found:', headers);
+
+    // Find the baseline clause text column
+    let clauseTextColumn = -1;
+    for (let i = 0; i < headers.length; i++) {
+      const header = headers[i].trim();
+      console.log(`Checking header ${i}: "${header}"`);
+      if (header.includes('Full Clause Text BASELINE') ||
+          header.includes('Full Clause Text (Original)') ||
+          header.includes('Clause Summary BASELINE') ||
+          header.toLowerCase().includes('baseline') && header.toLowerCase().includes('clause')) {
+        clauseTextColumn = i;
+        console.log(`Found baseline column at index ${i}: "${header}"`);
+        break;
+      }
+    }
+
+    if (clauseTextColumn === -1) {
+      // Fallback: try column 6 which should be "Full Clause Text BASELINE (Ninja Tune Ltd.)"
+      if (headers.length > 6 && headers[6] && headers[6].includes('BASELINE')) {
+        clauseTextColumn = 6;
+        console.log(`Using fallback column 6: "${headers[6]}"`);
+      } else {
+        console.error('Available headers:', headers);
+        throw new Error('Could not find baseline clause text column in TSV data');
+      }
+    }
+
+    // Build the contract
+    let contractText = '';
+
+    if (contractType === 'content-management') {
+      contractText = buildContentManagementContract(lines, clauseTextColumn);
+    } else if (contractType === 'data-pro') {
+      contractText = buildDataProContract(lines, clauseTextColumn);
+    }
+
+    return {
+      contractText: contractText,
+      method: 'tsv_template'
+    };
+
+  } catch (error) {
+    console.error('Error generating simple contract:', error);
+    throw error;
+  }
+}
+
+function buildContentManagementContract(lines, clauseTextColumn) {
+  let contract = '';
+
+  // Add header
+  contract += 'DIGITAL VIDEO SERVICES AGREEMENT\n\n';
+  contract += 'This Digital Video Services Agreement (the "Agreement") is made as of _____________ (the "Effective Date").\n\n';
+  contract += 'BETWEEN:\n';
+  contract += 'RHEI CREATIONS CORP., a British Columbia company having an address at 600-700 Hornby Street Vancouver, British Columbia, Canada V6Z 1S4 ("RHEI")\n\n';
+  contract += 'AND:\n';
+  contract += '_____________________________________________, an incorporated company having a principal place of business at _____________________________________________ ("Provider")\n\n';
+
+  // Add recitals
+  contract += 'WHEREAS:\n';
+  contract += 'A. RHEI is a media and technology company that specializes in the optimization, monetization, claiming of video content and the management of online video channels;\n';
+  contract += 'B. Provider is _____________________________________________;\n';
+  contract += 'C. Provider operates a network of channels on YouTube and wishes to engage RHEI to assist in the management of such channels, and provide content production services with respect to such channels; and\n';
+  contract += 'D. RHEI has agreed to accept such engagement on the terms and conditions herein provided.\n\n';
+  contract += 'NOW THEREFORE THIS AGREEMENT WITNESSES that in consideration of the premises, the mutual covenants and agreements set forth in this Agreement and other good and valuable consideration (the receipt and sufficiency of which is hereby acknowledged by each of the parties), the parties hereby agree as follows:\n\n';
+
+  // Process clauses from TSV (start from line 2 since line 1 is now headers)
+  for (let i = 2; i < lines.length; i++) {
+    const columns = lines[i].split('\t');
+    if (columns.length > clauseTextColumn && columns[clauseTextColumn] && columns[clauseTextColumn].trim()) {
+      const clauseText = columns[clauseTextColumn].trim();
+
+      // Skip title page and table of contents entries
+      if (clauseText.includes('DIGITAL VIDEO SERVICES AGREEMENT BETWEEN') ||
+          clauseText.includes('ARTICLE 1 INTERPRETATION')) {
+        continue;
+      }
+
+      // Add article/clause number if available
+      const articleColumn = columns[1] || '';
+      const clauseColumn = columns[2] || '';
+
+      if (articleColumn && clauseColumn) {
+        contract += `${articleColumn} ${clauseColumn}\n`;
+      }
+
+      contract += clauseText + '\n\n';
+    }
+  }
+
+  // Add signature block
+  contract += 'IN WITNESS WHEREOF, the parties have executed this Agreement.\n\n';
+  contract += 'RHEI CREATIONS CORP.\n\n';
+  contract += 'Per: _________________________\n';
+  contract += 'Name: _______________________\n';
+  contract += 'Title: ______________________\n';
+  contract += 'Date: _______________________\n\n';
+  contract += 'PROVIDER\n\n';
+  contract += 'Per: _________________________\n';
+  contract += 'Name: _______________________\n';
+  contract += 'Title: ______________________\n';
+  contract += 'Date: _______________________\n';
+
+  return contract;
+}
+
+function buildDataProContract(lines, clauseTextColumn) {
+  let contract = '';
+
+  // Add header
+  contract += 'DATA LICENSE AGREEMENT\n\n';
+  contract += 'This Data License Agreement (the "Agreement") is entered into between RHEI CREATIONS CORP., a company having an address at Suite 600 - 777 Hornby St., Vancouver, B.C., Canada V6Z 1S4 ("RHEI" or the "Company") and _____________________________________________ ("Licensor" or "You").\n\n';
+  contract += 'This Agreement consists of this Cover Sheet and the Terms and Conditions attached hereto as Schedule A.\n\n';
+
+  // Add licensor information section
+  contract += 'LICENSOR INFORMATION\n';
+  contract += 'The following is to be completed by the provider of media content pursuant to this Agreement:\n';
+  contract += 'Full Legal name: _____________________________________________ ("Licensor" or "You")\n';
+  contract += 'Address: _____________________________________________\n';
+  contract += 'Street: _____________________________________________\n';
+  contract += 'City: _____________________________________________\n';
+  contract += 'State/Province: _____________________________________________\n';
+  contract += 'Country: _____________________________________________\n';
+  contract += 'Postal/Zip Code: _____________________________________________\n';
+  contract += 'Email address: _____________________________________________ ("Authorized Email")\n';
+  contract += 'Phone number: _____________________________________________ (include area code)\n\n';
+
+  // Process clauses from TSV (start from line 2 since line 1 is now headers)
+  for (let i = 2; i < lines.length; i++) {
+    const columns = lines[i].split('\t');
+    if (columns.length > clauseTextColumn && columns[clauseTextColumn] && columns[clauseTextColumn].trim()) {
+      const clauseText = columns[clauseTextColumn].trim();
+
+      // Skip cover sheet entries that are already included
+      if (clauseText.includes('This Data License Agreement') ||
+          clauseText.includes('The following is to be completed')) {
+        continue;
+      }
+
+      // Add section headers
+      const sectionColumn = columns[2] || '';
+      if (sectionColumn && sectionColumn.trim()) {
+        contract += `${sectionColumn.toUpperCase()}\n`;
+      }
+
+      contract += clauseText + '\n\n';
+    }
+  }
+
+  // Add signature block
+  contract += 'EXECUTION\n';
+  contract += 'DO NOT SIGN THIS COVER SHEET UNLESS AND UNTIL YOU HAVE READ AND AGREED TO THE TERMS AND CONDITIONS. THE TERMS AND CONDITIONS SHALL BE BINDING ON YOU UNDER THIS AGREEMENT.\n\n';
+  contract += 'LICENSOR:\n';
+  contract += '_____________________________________________\n';
+  contract += 'Name of Company or other entity (if applicable)\n\n';
+  contract += '_____________________________________________\n';
+  contract += 'Signature of Authorized Signatory\n\n';
+  contract += '_____________________________________________\n';
+  contract += 'Name of Authorized Signatory\n\n';
+  contract += '_____________________________________________\n';
+  contract += 'Title of Authorized Signatory (if applicable)\n\n';
+  contract += '_____________________________________________\n';
+  contract += 'Execution Date\n\n';
+  contract += 'Following Your completion of both (a) and (b) above, RHEI will send You an email communication to the Authorized Email confirming that this Agreement is complete ("RHEI Acceptance Email"). This email shall be deemed to constitute RHEI\'s acceptance, execution and delivery of this Agreement, and the date on which RHEI sends you this email shall be the "Effective Date" of this Agreement.\n';
+
+  return contract;
+}
+
+// Replace RHEI-specific variables in contract text
+function replaceRHEIVariables(content, formData, generationOptions = {}) {
+  let processedContent = content;
+
+  // RHEI-specific variable replacements
+  const replacements = {
+    '[PROVIDER_NAME]': formData.provider_name || 'Provider Name Ltd.',
+    '[PROVIDER_ADDRESS]': formData.provider_address || '123 Provider Street, City, State, Country',
+    '[PROVIDER_ENTITY_TYPE]': formData.provider_entity_type || 'an incorporated company',
+    '[EFFECTIVE_DATE]': formData.effective_date || new Date().toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    }),
+    '[TERM_LENGTH]': formData.term_length || '2 years',
+    '[TERRITORY]': formData.territory || 'worldwide',
+    '[GOVERNING_LAW]': formData.governing_law || 'British Columbia, Canada'
+  };
+
+  // Apply all replacements
+  Object.entries(replacements).forEach(([placeholder, value]) => {
+    processedContent = processedContent.replace(new RegExp(placeholder, 'g'), value);
+  });
+
+  return processedContent;
+}
+
+// Generate RHEI signature block
+function generateRHEISignatureBlock(formData) {
+  return `
+SIGNATURE BLOCK
+
+IN WITNESS WHEREOF, the parties have executed this Digital Video Services Agreement as of the date first written above.
+
+RHEI CREATIONS CORP.
+
+By: _________________________
+Name: [Name]
+Title: [Title]
+Date: ${formData.effective_date || new Date().toLocaleDateString()}
+
+
+${formData.provider_name || 'PROVIDER NAME'}
+
+By: _________________________
+Name: [Name]
+Title: [Title]
+Date: ${formData.effective_date || new Date().toLocaleDateString()}
+  `.trim();
 }
 
 // Apply variable mapping between old and new format
