@@ -28,11 +28,15 @@ app.use('/playbooks', express.static(path.join(__dirname, 'playbooks')));
 // Serve assets
 app.use('/assets', express.static(path.join(__dirname, 'assets')));
 
+// Serve src directory for modular files
+app.use('/src', express.static(path.join(__dirname, 'src')));
+
 // Serve all HTML files in root directory
 app.use('/taskpane-fixed.html', express.static(path.join(__dirname, 'taskpane-fixed.html')));
 app.use('/taskpane-minimal.html', express.static(path.join(__dirname, 'taskpane-minimal.html')));
 app.use('/taskpane-debug.html', express.static(path.join(__dirname, 'taskpane-debug.html')));
 app.use('/taskpane-ultra-minimal.html', express.static(path.join(__dirname, 'taskpane-ultra-minimal.html')));
+app.use('/taskpane-modular.html', express.static(path.join(__dirname, 'taskpane-modular.html')));
 app.use('/test-clause-replacement.html', express.static(path.join(__dirname, 'test-clause-replacement.html')));
 
 // Serve test files
@@ -43,6 +47,10 @@ app.use('/debug-tsv-parsing.html', express.static(path.join(__dirname, 'debug-ts
 // Serve debug files
 app.use('/debug-contract-generation.js', express.static(path.join(__dirname, 'debug-contract-generation.js')));
 app.use('/simple-contract-test.js', express.static(path.join(__dirname, 'simple-contract-test.js')));
+
+// Serve manifest files
+app.use('/manifest-localhost.xml', express.static(path.join(__dirname, 'manifest-localhost.xml')));
+app.use('/manifest.xml', express.static(path.join(__dirname, 'manifest.xml')));
 
 // Default route to serve taskpane-fixed.html (simplified version)
 app.get('/', (req, res) => {
@@ -98,6 +106,58 @@ if (fs.existsSync(keyPath) && fs.existsSync(certFilePath)) {
     console.log('To install HTTPS certificates, run: npm run start');
   });
 }
+
+// Also start HTTP server on port 3001 for testing
+const httpApp = express();
+httpApp.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+  if (req.method === 'OPTIONS') {
+    res.sendStatus(200);
+  } else {
+    next();
+  }
+});
+
+// Copy all the same routes for HTTP
+httpApp.use(express.static(path.join(__dirname, 'dist')));
+httpApp.use('/playbooks', express.static(path.join(__dirname, 'playbooks')));
+httpApp.use('/assets', express.static(path.join(__dirname, 'assets')));
+httpApp.use('/src', express.static(path.join(__dirname, 'src')));
+httpApp.use('/taskpane-fixed.html', express.static(path.join(__dirname, 'taskpane-fixed.html')));
+httpApp.use('/taskpane-minimal.html', express.static(path.join(__dirname, 'taskpane-minimal.html')));
+httpApp.use('/taskpane-debug.html', express.static(path.join(__dirname, 'taskpane-debug.html')));
+httpApp.use('/taskpane-ultra-minimal.html', express.static(path.join(__dirname, 'taskpane-ultra-minimal.html')));
+httpApp.use('/taskpane-modular.html', express.static(path.join(__dirname, 'taskpane-modular.html')));
+httpApp.use('/test-clause-replacement.html', express.static(path.join(__dirname, 'test-clause-replacement.html')));
+httpApp.use('/test-playbooks.html', express.static(path.join(__dirname, 'test-playbooks.html')));
+httpApp.use('/debug-contract.html', express.static(path.join(__dirname, 'debug-contract.html')));
+httpApp.use('/debug-tsv-parsing.html', express.static(path.join(__dirname, 'debug-tsv-parsing.html')));
+httpApp.use('/debug-contract-generation.js', express.static(path.join(__dirname, 'debug-contract-generation.js')));
+httpApp.use('/simple-contract-test.js', express.static(path.join(__dirname, 'simple-contract-test.js')));
+httpApp.use('/manifest-localhost.xml', express.static(path.join(__dirname, 'manifest-localhost.xml')));
+httpApp.use('/manifest.xml', express.static(path.join(__dirname, 'manifest.xml')));
+
+httpApp.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'taskpane-modular.html'));
+});
+
+httpApp.get('/health', (req, res) => {
+  res.json({
+    status: 'OK',
+    timestamp: new Date().toISOString(),
+    protocol: 'HTTP',
+    playbooks: {
+      'content-management': fs.existsSync(path.join(__dirname, 'playbooks', 'content-management')),
+      'data-pro': fs.existsSync(path.join(__dirname, 'playbooks', 'data-pro'))
+    }
+  });
+});
+
+httpApp.listen(3001, () => {
+  console.log(`🌐 HTTP Server also running at http://localhost:3001 (for testing)`);
+});
 
 // Graceful shutdown
 process.on('SIGINT', () => {
