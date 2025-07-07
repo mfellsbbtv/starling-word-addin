@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Test ClassList Fixes</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .test-button {
+            background-color: #0078d4;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .test-button:hover {
+            background-color: #106ebe;
+        }
+        .test-button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        .test-button.loading {
+            background-color: #666;
+            animation: pulse 1s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .status-message {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            border-left: 4px solid #0078d4;
+        }
+        .status-message.success {
+            background-color: #dff6dd;
+            color: #0f5132;
+            border-left-color: #198754;
+        }
+        .status-message.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border-left-color: #dc3545;
+        }
+        .progress-container {
+            margin: 15px 0;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background-color: #f3f2f1;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background-color: #0078d4;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        .console {
+            background-color: #1e1e1e;
+            color: #d4d4d4;
+            padding: 15px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            height: 200px;
+            overflow-y: auto;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>ClassList Fixes Test</h1>
+        <p>This page tests all the classList fixes to ensure no null reference errors occur.</p>
+        
+        <!-- Test Elements -->
+        <button id="generate-contract" class="test-button">Generate Contract (Test)</button>
+        <button id="test-button-loading" class="test-button">Test Button Loading</button>
+        <button id="test-progress" class="test-button">Test Progress</button>
+        <button id="test-status" class="test-button">Test Status Update</button>
+        <button id="clear-console" class="test-button">Clear Console</button>
+        
+        <!-- Status and Progress Elements -->
+        <div id="status-message" class="status-message">Ready for testing</div>
+        
+        <div id="progress-section" style="display: none;">
+            <h3>Progress</h3>
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div id="progress-fill" class="progress-fill"></div>
+                </div>
+                <p id="progress-text">Processing...</p>
+            </div>
+        </div>
+        
+        <!-- Results and Suggestions (for testing) -->
+        <div id="results-section" style="display: none;">
+            <h3>Results</h3>
+            <div id="results-content">Test results content</div>
+        </div>
+        
+        <div id="suggestions-section" style="display: none;">
+            <h3>Suggestions</h3>
+            <div id="suggestions-content">Test suggestions content</div>
+        </div>
+        
+        <div class="console" id="console">
+            <div>Console output will appear here...</div>
+        </div>
+    </div>
+
+    <script>
+        let consoleElement = document.getElementById('console');
+        
+        function log(message) {
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = document.createElement('div');
+            logEntry.textContent = `[${timestamp}] ${message}`;
+            consoleElement.appendChild(logEntry);
+            consoleElement.scrollTop = consoleElement.scrollHeight;
+            console.log(message);
+        }
+        
+        function clearConsole() {
+            consoleElement.innerHTML = '<div>Console cleared...</div>';
+        }
+        
+        // Import the utility functions to test
+        async function loadUtils() {
+            try {
+                const utils = await import('./src/shared/utils.js');
+                window.setButtonLoading = utils.setButtonLoading;
+                window.updateStatus = utils.updateStatus;
+                window.showProgressSection = utils.showProgressSection;
+                window.hideProgressSection = utils.hideProgressSection;
+                window.clearResults = utils.clearResults;
+                window.clearSuggestions = utils.clearSuggestions;
+                log('✅ Utils loaded successfully');
+                return true;
+            } catch (error) {
+                log(`❌ Failed to load utils: ${error.message}`);
+                return false;
+            }
+        }
+        
+        // Test button loading functionality
+        function testButtonLoading() {
+            log('🔘 Testing button loading...');
+            
+            try {
+                if (window.setButtonLoading) {
+                    window.setButtonLoading('test-button-loading', true);
+                    log('✅ Button loading set to true');
+                    
+                    setTimeout(() => {
+                        window.setButtonLoading('test-button-loading', false);
+                        log('✅ Button loading set to false');
+                    }, 2000);
+                } else {
+                    log('❌ setButtonLoading function not available');
+                }
+            } catch (error) {
+                log(`❌ Button loading test failed: ${error.message}`);
+            }
+        }
+        
+        // Test progress functionality
+        function testProgress() {
+            log('📊 Testing progress...');
+            
+            try {
+                if (window.showProgressSection) {
+                    window.showProgressSection('Testing progress...');
+                    log('✅ Progress section shown');
+                    
+                    setTimeout(() => {
+                        window.hideProgressSection();
+                        log('✅ Progress section hidden');
+                    }, 3000);
+                } else {
+                    log('❌ Progress functions not available');
+                }
+            } catch (error) {
+                log(`❌ Progress test failed: ${error.message}`);
+            }
+        }
+        
+        // Test status update functionality
+        function testStatusUpdate() {
+            log('📢 Testing status update...');
+            
+            try {
+                if (window.updateStatus) {
+                    window.updateStatus('Testing status update...', 'info');
+                    log('✅ Status updated to info');
+                    
+                    setTimeout(() => {
+                        window.updateStatus('Success test!', 'success');
+                        log('✅ Status updated to success');
+                    }, 1000);
+                    
+                    setTimeout(() => {
+                        window.updateStatus('Error test!', 'error');
+                        log('✅ Status updated to error');
+                    }, 2000);
+                    
+                    setTimeout(() => {
+                        window.updateStatus('Ready for testing', 'info');
+                        log('✅ Status reset');
+                    }, 3000);
+                } else {
+                    log('❌ updateStatus function not available');
+                }
+            } catch (error) {
+                log(`❌ Status update test failed: ${error.message}`);
+            }
+        }
+        
+        // Test contract generation (mock)
+        async function testContractGeneration() {
+            log('🚀 Testing contract generation...');
+            
+            try {
+                if (window.setButtonLoading && window.updateStatus && window.showProgressSection) {
+                    window.setButtonLoading('generate-contract', true);
+                    window.showProgressSection('Generating contract...');
+                    window.updateStatus('Preparing contract generation...', 'info');
+                    
+                    // Simulate contract generation
+                    setTimeout(() => {
+                        window.updateStatus('Contract generated successfully!', 'success');
+                        window.hideProgressSection();
+                        window.setButtonLoading('generate-contract', false);
+                        log('✅ Contract generation simulation completed');
+                    }, 3000);
+                } else {
+                    log('❌ Required functions not available for contract generation test');
+                }
+            } catch (error) {
+                log(`❌ Contract generation test failed: ${error.message}`);
+            }
+        }
+        
+        // Set up event listeners
+        document.getElementById('test-button-loading').addEventListener('click', testButtonLoading);
+        document.getElementById('test-progress').addEventListener('click', testProgress);
+        document.getElementById('test-status').addEventListener('click', testStatusUpdate);
+        document.getElementById('generate-contract').addEventListener('click', testContractGeneration);
+        document.getElementById('clear-console').addEventListener('click', clearConsole);
+        
+        // Initialize
+        window.addEventListener('load', async () => {
+            log('🚀 Page loaded, initializing tests...');
+            const utilsLoaded = await loadUtils();
+            if (utilsLoaded) {
+                log('✅ All tests ready - click buttons to test functionality');
+            } else {
+                log('❌ Utils failed to load - some tests may not work');
+            }
+        });
+        
+        // Global error handler
+        window.addEventListener('error', (event) => {
+            log(`🚨 Error: ${event.error.message}`);
+            if (event.error.message.includes('classList')) {
+                log('🔍 ClassList error detected!');
+                log(`Stack: ${event.error.stack}`);
+            }
+        });
+    </script>
+</body>
+</html>

@@ -73,6 +73,10 @@ module.exports = async (env, options) => {
           {
             from: "manifest*.xml",
             to: "[name]" + (dev ? ".dev" : "") + "[ext]"
+          },
+          {
+            from: "playbooks/**/*",
+            to: "[path][name][ext]"
           }
         ]
       })

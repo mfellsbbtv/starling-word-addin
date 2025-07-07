@@ -1,0 +1,313 @@
+{
+  "metadata": {
+    "name": "RHEI Digital Video Services Agreement - Clause Library",
+    "version": "1.0.0",
+    "created": "2024-12-30",
+    "updated": "2024-12-30",
+    "author": "RHEI Legal Team",
+    "description": "Standard clauses for RHEI Digital Video Services agreements based on RHEI Legal Matrix",
+    "baseline": "Ninja Tune Ltd.",
+    "alternatives": ["MNRK Music Group LP", "WMX", "Sony", "Create Music Group", "Lionsgate"]
+  },
+  "clauses": [
+    {
+      "id": "definitions",
+      "category": "definitions",
+      "article": "1",
+      "clause": "1.1",
+      "title": "Definitions",
+      "content": "In this Agreement, the following terms shall have the following meanings: \"Ads\" means advertisements, including without limitation, pre-roll and banner ads, provided, obtained or placed on or in connection with Provider Content on the Managed Channels or RHEI Owner and Operated Channels. An \"Affiliate\" of a Person means, any other Person that directly or indirectly controls, is controlled by, or is under common control with such Person. For purposes of this definition, a Person \"controls\" another Person if such Person possesses, directly or indirectly, the power to direct the management and policies of that other Person, whether through ownership of voting securities, by contract or otherwise and \"controlled by\" and \"under common control with\" have similar meanings. \"Channel Management Services\" has the meaning set out in Section 2.1. \"Confidential Information\" has the meaning set forth in Section 7.1. \"Content Development Services\" has the meaning set out in Section 2.3. \"End User\" means the person(s) accessing all or any part of the Provider Content. \"Force Majeure Event\" means any of the following: (a) acts of God including fire, flood, earthquake, windstorm or other natural disaster; (b) act of any government or authority including refusal or revocation of any license or consent; (c) any act of war, riot, civil disturbance, act of terrorism; (d) power failure, failure of utilities, failure of necessary plant or equipment, machinery or vehicles; (e) theft, malicious damage, strike, lock-out or industrial action of any kind; and (f) any circumstance beyond the reasonable control of either party, provided that, in each case, the relevant party shall have taken all reasonable precautions and used commercially reasonable and good faith efforts to mitigate the causes and effects of such circumstance. \"Google\" means Google LLC or any of its Affiliates, including YouTube LLC, and their successors and assigns. \"Intellectual Property\" means all research data, discoveries, inventions, ideas, developments, improvements, methodology, design, know-how, work product, copyrighted material (including without limitation, reports, recommendations, designs, sketches, proposals, notes, writings, correspondence, research results and data), patents, trade secrets, trade marks, trade names, service marks, circuit layouts, domain names, symbols, logos, and other intellectual property or matter (whether or not the same are capable of patent, copyright, registered design or like protection), and all applications for and registrations of any of the foregoing. \"Managed Channels\" has the meaning set out in Section 2.1. \"Net Ad Revenue\" means, for any given month during the Term, gross revenue actually received by RHEI or Provider in such period from Ads placed on or in connection with Provider Content on the Managed Channels and/or RHEI Owner and Operated Channels, less amounts due to Google to the extent not previously deducted from revenue paid to Provider or RHEI. \"Net Revenue\" means, for any given month during the Term, the Net Ad Revenue and the Net Subscription Revenue actually received by RHEI or Provider in such periods. \"Net Subscription Revenue\" means, for any given month during the Term, gross revenues actually received by RHEI or Provider in such periods from YouTube's subscription services for or in connection with Provider Content on the Managed Channels and/or RHEI Owner and Operated Channels, less amounts due to Google to the extent not previously deducted from revenue paid to Provider or RHEI. \"Network\" means YouTube and all online, wireless, digital cable or broadcast outlets where End Users are able to view Provider Content displayed on YouTube or through YouTube's embeddable player. \"Person\" means an individual, corporation, society, association, partnership, joint venture, or any other type of entity. \"Provider Brand Features\" means names, logos, trademarks, domain names, designs and trade names and other similar identifying material or brand features of Provider. \"Provider Channels\" means those YouTube channels which are owned or controlled by Provider, in whole or in part. \"Provider Content\" means singularly and collectively: (a) Provider Videos and Provider Channels; (b) all graphics, music, sounds, images, files, photos, animation, artwork, text, data, information, messages, hypertext, links, scripts, and other materials embodied within the Provider Videos; (c) all metadata embodied within the Provider Videos; and (d) Provider Brand Features. \"Provider Data\" means the information generated, collected and/or stored by or on behalf of RHEI, or accessible by RHEI, in connection with or derived from RHEI's provision of the Services and/or Provider's use and/or exploitation of the results of the Services. \"Provider Net Revenue\" has the meaning set forth in Section 5.1. \"Provider Videos\" means audio, video, and/or audiovisual content which Provider owns, licenses or to which Provider otherwise claims rights, whether in whole or in part, and which have been uploaded onto Provider Channels. \"RHEI IP\" means any Intellectual Property right, title, or interest in any service or deliverable provided by RHEI to Provider as part of the Services, which: (a) RHEI developed, licensed, acquired, owned, or possessed prior to the Effective Date; or (b) RHEI develops, licenses, or owns after the commencement of the Effective Date as part of its ordinary course of business and, for a purpose not strictly or solely for, or for the benefit of, Provider pursuant to the terms of this Agreement, and without use of any Provider Content and/or Provider Data. \"RHEI Net Revenue\" has the meaning set forth in Section 5.1. \"RHEI Optimization Methods\" means proprietary video optimization and analytical software, technology, methods, and processes developed by RHEI, including: (a) VISO Catalyst which is used in connection with audio, visual or audiovisual content posted on YouTube; and (b) other technology, methods, and processes developed or utilized by RHEI, or which may be developed or utilized by RHEI, that RHEI may use in the performance of its obligations hereunder. \"RHEI Owned and Operated Channels\" means those YouTube channels which are owned or controlled by RHEI, in whole or in part. \"RHEI Reports\" means, both individually and collectively, the reports provided by RHEI to Provider under this Agreement as set out in Section 2.4. \"Services\" means collectively the Channel Management Services and the Content Development Services. \"Territory\" means worldwide. \"Term\" means the initial term and all renewal terms of this Agreement as set forth in Section 8.1. \"Titles\" means Provider Videos appearing on Provider Channels from time to time during the Term. \"Work Materials\" has the meaning set forth in Section 4.2. For the avoidance of doubt, Work Materials excludes RHEI IP. \"YouTube\" means the internet video-sharing website known as YouTube on which users can upload, share and view videos, at www.youtube.com, and any and all other localized and/or app- based versions of such website, and includes any successor or replacement thereof.",
+      "negotiable": false,
+      "risk_level": "low",
+      "alternatives": [],
+      "keywords": ["definitions", "terms", "meanings"],
+      "compliance_notes": "Standard definitions clause - essential for contract clarity"
+    },
+    {
+      "id": "currency",
+      "category": "definitions",
+      "article": "1",
+      "clause": "1.2",
+      "title": "Currency",
+      "content": "All currencies in this Agreement are in US Dollars.",
+      "negotiable": false,
+      "risk_level": "low",
+      "alternatives": [],
+      "keywords": ["currency", "US Dollars"],
+      "compliance_notes": "Standard currency clause"
+    },
+    {
+      "id": "headings",
+      "category": "definitions",
+      "article": "1",
+      "clause": "1.3",
+      "title": "Headings",
+      "content": "The headings in this Agreement have been inserted for reference and as a matter of convenience only and in no way define, limit or enlarge the scope or meaning of this Agreement or any provision hereof.",
+      "negotiable": false,
+      "risk_level": "low",
+      "alternatives": [],
+      "keywords": ["headings", "reference", "convenience"],
+      "compliance_notes": "Standard headings clause"
+    },
+    {
+      "id": "interpretation",
+      "category": "definitions",
+      "article": "1",
+      "clause": "1.4",
+      "title": "Interpretation",
+      "content": "Wherever the singular, plural, masculine, feminine or neuter is used throughout this Agreement the same shall be construed as meaning the singular, plural, masculine, feminine, neuter, body politic or body corporate where the fact or context so requires and the provisions hereof and all covenants herein shall be construed to be joint and several when applicable to more than one party. The term \"including\" is not limiting, and means \"including without limitation\".",
+      "negotiable": false,
+      "risk_level": "low",
+      "alternatives": [],
+      "keywords": ["interpretation", "singular", "plural", "including"],
+      "compliance_notes": "Standard interpretation clause"
+    },
+    {
+      "id": "construction",
+      "category": "definitions",
+      "article": "1",
+      "clause": "1.5",
+      "title": "Construction",
+      "content": "The parties confirm that both parties participated in the negotiation and drafting of this Agreement, and that this Agreement shall be construed as having been jointly drafted by the parties.",
+      "negotiable": false,
+      "risk_level": "low",
+      "alternatives": [],
+      "keywords": ["construction", "negotiation", "drafting"],
+      "compliance_notes": "Standard construction clause"
+    },
+    {
+      "id": "channel_management_services",
+      "category": "services",
+      "article": "2",
+      "clause": "2.1",
+      "title": "Channel Management Services",
+      "content": "RHEI shall provide Provider with the \"Channel Management Services\" as set out in Schedule \"B\" attached hereto (the \"Channel Management Services\") in connection with the Provider Channels set out in Schedule \"A\" attached hereto or any other Provider Channels mutually agreed upon by the parties in writing (email to suffice) (collectively, the \"Managed Channels\").",
+      "negotiable": true,
+      "risk_level": "low",
+      "alternatives": [
+        {
+          "id": "channel_management_wmx",
+          "title": "WMX Channel Management Services",
+          "content": "RHEI shall provide Provider with the \"Channel Management Services\" as set out in Schedule \"B\" attached hereto (the \"Channel Management Services\") solely in connection with the Provider Channels set out in Schedule \"A\" attached hereto or any other Provider Channels mutually agreed upon by the parties in writing (email to suffice) (collectively, the \"Managed Channels\"). All services, including video uploads, are subject to Provider approval as per Schedules A and B.",
+          "risk_level": "low"
+        }
+      ],
+      "keywords": ["channel management", "managed channels", "schedule", "provider channels"],
+      "compliance_notes": "Core service definition for YouTube channel management"
+    },
+    {
+      "id": "content_development_services",
+      "category": "services",
+      "article": "2",
+      "clause": "2.2",
+      "title": "Content Development Services",
+      "content": "RHEI shall provide Provider with the \"Content Development Services\" as set out in Schedule \"C\" attached hereto (the \"Content Development Services\").",
+      "negotiable": true,
+      "risk_level": "low",
+      "alternatives": [
+        {
+          "id": "content_development_cbmg",
+          "title": "CBMG Content Development Services",
+          "content": "CBMG refers to Schedule \"D\" instead of Schedule \"C\" for Content Development Services.",
+          "risk_level": "low"
+        }
+      ],
+      "keywords": ["content development", "services", "schedule"],
+      "compliance_notes": "Optional service provision - may be excluded if not required"
+    },
+    {
+      "id": "rhei_reports",
+      "category": "reporting",
+      "article": "2",
+      "clause": "2.3",
+      "title": "RHEI Reports",
+      "content": "Subject to RHEI's receipt of the necessary reports from Google, RHEI shall provide to Provider the following reports in connection with the Services as follows: Channel Management Services: (a) (i) a monthly report showing the impressions and revenues on a per-Title basis; and (ii) a monthly report regarding such viewership data monthly on a per-Title basis with respect to Managed Channels as RHEI may obtain from time to time. (b) RHEI Owned and Operated Channels: (i) a monthly report showing the views and revenues for Provider Content on RHEI Owner and Operated Channels on a per-Title basis. RHEI may provide Provider with additional or other reports as mutually agreed to in writing by the parties (email to suffice).",
+      "negotiable": true,
+      "risk_level": "medium",
+      "alternatives": [
+        {
+          "id": "rhei_reports_mnrk",
+          "title": "MNRK RHEI Reports with Opt-out",
+          "content": "Subject to RHEI's receipt of the necessary reports from Google, RHEI shall provide to Provider the following reports in connection with the Services as follows: (a) Channel Management Services: (i) a monthly report showing the impressions and revenues on a per-Title basis; and (ii) a monthly report regarding such viewership data monthly on a per-Title basis with respect to Managed Channels as RHEI may obtain from time to time. (b) RHEI Owned and Operated Channels: (i) a monthly report showing the views and revenues for Provider Content on RHEI Owner and Operated Channels on a per-Title basis. RHEI may provide Provider with additional or other reports as mutually agreed to in writing by the parties (email to suffice). Notwithstanding anything to the contrary contained herein, Provider may opt out at any time during the Term of any particular services offered by RHEI, including without limitation services which are already performed on Provider's behalf by a third party.",
+          "risk_level": "low"
+        }
+      ],
+      "keywords": ["reports", "monthly", "impressions", "revenues", "viewership"],
+      "compliance_notes": "Essential reporting obligations for transparency"
+    },
+    {
+      "id": "advertising_approvals",
+      "category": "advertising",
+      "article": "2",
+      "clause": "2.4",
+      "title": "Advertising Approvals",
+      "content": "Unless the Parties mutually agree to a different approval process in writing, RHEI shall consult with and propose to Provider the types of advertising categories that may be placed on or in connection with Provider Content under this Agreement, and if no written objection from Provider is received by RHEI within forty-eight (48) hours of the delivery of such proposal, Provider's approval for such proposal shall be deemed granted.",
+      "negotiable": true,
+      "risk_level": "medium",
+      "alternatives": [],
+      "keywords": ["advertising", "approvals", "categories", "48 hours"],
+      "compliance_notes": "Provider approval required for advertising categories"
+    },
+    {
+      "id": "provider_obligations",
+      "category": "obligations",
+      "article": "3",
+      "clause": "3.1",
+      "title": "Provider Obligations",
+      "content": "Without limiting any other obligations of Provider set out in this Agreement, for the purposes of this Agreement, solely to the extent necessary for RHEI to provide the Services, Provider will take reasonable actions as may be necessary or desirable in order to: (a) Channel Management Services: (i) provide RHEI with administrative access to the Provider Channels; and (ii) provide RHEI with metadata for the Provider Channels and the Titles appearing thereon, as RHEI may reasonably request from time to time. (b) Provider's Content Owner System: (i) Include RHEI Owned and Operated Channels on Provider's Content Owner System permissions list (the \"Allowlist\") as RHEI may reasonably request from time to time.",
+      "negotiable": false,
+      "risk_level": "medium",
+      "alternatives": [
+        {
+          "id": "provider_obligations_mnrk",
+          "title": "MNRK Provider Obligations - Managed Channels",
+          "content": "Without limiting any other obligations of Provider set out in this Agreement, for the purposes of this Agreement, solely to the extent necessary for RHEI to provide the Services, Provider will take reasonable actions as may be necessary or desirable in order to: (a) Channel Management Services: (i) provide RHEI with administrative access to the Managed Channels; and (ii) provide RHEI with metadata for the Managed Channels and the Titles appearing thereon, as RHEI may reasonably request from time to time. (b) Provider's Content Owner System: (i) Include RHEI Owned and Operated Channels on Provider's Content Owner System permissions list (the \"Allowlist\") as RHEI may reasonably request from time to time",
+          "risk_level": "medium"
+        }
+      ],
+      "keywords": ["provider obligations", "administrative access", "metadata", "allowlist"],
+      "compliance_notes": "Defines Provider's responsibilities for service delivery"
+    },
+    {
+      "id": "provider_license",
+      "category": "licensing",
+      "article": "3",
+      "clause": "3.2",
+      "title": "Provider License",
+      "content": "Provider hereby grants to RHEI a non-exclusive (except with respect to Provider), royalty-free, and sublicensable (but only to RHEI's Affiliates and only for the purposes of this Agreement) right and license in the Territory to: (a) use, manage, adapt, edit, modify, compile, prepare derivative works based on, encode, copy, store, reformat, analyze, advertise, promote, publish, transmit, host, cache, analyze, and otherwise use and deal with the Provider Brand Features and Provider Content on the Managed Channels for the strict purpose of RHEI providing the Services to Provider in accordance with this Agreement, and (b) to use the rights set out in (a) above for the purposes of exploiting and/or monetizing Provider Content on or through the RHEI Owned and Operated Channels.",
+      "negotiable": false,
+      "risk_level": "high",
+      "alternatives": [
+        {
+          "id": "provider_license_mnrk",
+          "title": "MNRK Provider License - During Term",
+          "content": "Provider hereby grants to RHEI, during the Term, a non-exclusive (except with respect to Provider), royalty-free, and sublicensable (but only to RHEI's Affiliates and only for the purposes of this Agreement) right and license in the Territory to: (a) use, manage, adapt, edit, modify, compile, prepare derivative works based on, encode, copy, store, reformat, analyze, advertise, promote, publish, transmit, host, cache, analyze, and otherwise use and deal with the Provider Brand Features and Provider Content on the Managed Channels for the strict purpose of RHEI providing the Services to Provider in accordance with this Agreement, and (b) to use the rights set out in (a) above for the purposes of exploiting and/or monetizing Provider Content on or through the RHEI Owned and Operated Channels.",
+          "risk_level": "high"
+        }
+      ],
+      "keywords": ["license", "non-exclusive", "royalty-free", "sublicensable", "territory"],
+      "compliance_notes": "Critical licensing terms for content usage rights"
+    },
+    {
+      "id": "prohibitions",
+      "category": "compliance",
+      "article": "3",
+      "clause": "3.3",
+      "title": "Prohibitions",
+      "content": "Neither party shall (and shall not authorize or encourage any third party to), directly or indirectly generate queries, impressions of or clicks on any Ads or to obtain access to Provider Content through any automated, deceptive, fraudulent or other invalid means, including but not limited to through repeated manual clicks, the use of robots or other automated query tools and/or computer generated search requests, and/or the fraudulent use of other search engine optimization services and/or software. Each party reserves the right to investigate, at its own discretion, any activity that may violate this Agreement, including but not limited to any use of a software application to access Ads or any engagement in any activity prohibited by this Agreement.",
+      "negotiable": false,
+      "risk_level": "high",
+      "alternatives": [],
+      "keywords": ["prohibitions", "fraudulent", "automated", "invalid clicks", "investigation"],
+      "compliance_notes": "Essential anti-fraud and compliance provisions"
+    },
+    {
+      "id": "policies_applicable_law",
+      "category": "compliance",
+      "article": "3",
+      "clause": "3.4",
+      "title": "Policies and Applicable Law",
+      "content": "All obligations of the parties in this Agreement shall be subject to all applicable Google policies posted on YouTube or otherwise applicable to RHEI and/or Provider. Each party will comply with all such policies and guidelines insofar as applicable with respect to its rights and obligations under this Agreement; provided however, that a party shall not be required to comply with any policies or guidelines of the other which, in such party's reasonable opinion, would result in a violation of any applicable law, any applicable rule, regulation or policy of Google, or any agreement between such party and Google. Each party hereby agrees to comply with all applicable law in connection with its performance under this Agreement.",
+      "negotiable": false,
+      "risk_level": "medium",
+      "alternatives": [],
+      "keywords": ["policies", "applicable law", "Google", "compliance"],
+      "compliance_notes": "Ensures compliance with platform policies and applicable laws"
+    },
+    {
+      "id": "revenue_shares_baseline",
+      "category": "financial",
+      "article": "5",
+      "clause": "5.1",
+      "title": "Revenue Shares",
+      "content": "For any given month during the Term: (a) Provider shall pay RHEI an amount equal to: (i) fifty percent (50%) of the first $5,000.00 in Net Revenue from the Managed Channels from such month; and (ii) thirty percent (30%) of the Net Revenue from the Managed Channels in excess of $5,000.00 from such month (RHEI's share of revenue set out in subsections (i) and (ii) above collectively referred to as \"RHEI Net Revenue\"). (b) RHEI shall pay Provider an amount equal to thirty percent (30%) of Net Revenue from Provider Content on RHEI Owned and Operated Channels (\"Provider Net Revenue\"). With the exception of the amounts payable to the other Party as described above, each Party shall be entitled to retain all other amounts of Net Revenue received by such Party under this Agreement.",
+      "negotiable": true,
+      "risk_level": "high",
+      "alternatives": [
+        {
+          "id": "revenue_shares_mnrk",
+          "title": "MNRK Revenue Shares - Flat Rate",
+          "content": "For any given month during the Term: (a) Provider shall pay RHEI an amount equal to thirty percent (30%) of Net Revenue from such month from the Managed Channels (\"RHEI Net Revenue\") and (b) RHEI shall pay Provider an amount equal to seventy percent (70%) of Net Revenue from Provider Content on RHEI Owned and Operated Channels (\"Provider Net Revenue\") With the exception of the amounts payable to the other Party as described above, each Party shall be entitled to retain all other amounts of Net Revenue received by such Party under this Agreement.",
+          "risk_level": "medium"
+        }
+      ],
+      "keywords": ["revenue shares", "net revenue", "managed channels", "percentage", "payment"],
+      "compliance_notes": "Core financial terms defining revenue distribution"
+    },
+    {
+      "id": "rhei_payments_provider",
+      "category": "financial",
+      "article": "5",
+      "clause": "5.2",
+      "title": "RHEI Payments to Provider",
+      "content": "Each Party (\"Payor\") shall pay the other Party (\"Payee\") their share of Net Revenue as described in Section 5.1 above (i.e., with respect to Provider as the Payee, the Provider Net Revenue; with respect to RHEI as the Payee, the RHEI Net Revenue) in any month, within 30 days following of the end of the month in which such revenue was received, provided that the Payee's earned balance is Three Hundred Dollars ($300.00) or more. If Payee's earned balance is less than Three Hundred Dollars ($300.00) but greater than Ten Dollars ($10.00), the Payor will pay Payee's earned balance within 45 days following the end of the calendar year, or the end of the calendar month in which the Payee's earned balance exceeds Three Hundred Dollars ($300.00), whichever comes first. In the event that this Agreement is terminated, Payor shall pay Payee's earned balance to Payee within 90 days after the end of the calendar month in which the Agreement has been terminated. All amounts owing to a Payee under this Agreement shall constitute a debt owed by Payor to Payee and Payee shall have no ownership or other interest in any share of Net Revenue first received by Payor.",
+      "negotiable": true,
+      "risk_level": "medium",
+      "alternatives": [
+        {
+          "id": "rhei_payments_mnrk",
+          "title": "MNRK Payments - Or Credited",
+          "content": "Each Party (\"Payor\") shall pay the other Party (\"Payee\") their share of Net Revenue as described in Section 5.1 above (i.e., with respect to Provider as the Payee, the Provider Net Revenue; with respect to RHEI as the Payee, the RHEI Net Revenue) in any month, within 30 days following of the end of the month in which such revenue was received or credited, provided that the Payee's earned balance is Three Hundred Dollars ($300.00) or more. If Payee's earned balance is less than Three Hundred Dollars ($300.00) but greater than Ten Dollars ($10.00), the Payor will pay Payee's earned balance within 45 days following the end of the calendar year, or the end of the calendar month in which the Payee's earned balance exceeds Three Hundred Dollars ($300.00), whichever comes first. In the event that this Agreement is terminated, Payor shall pay Payee's earned balance to Payee within 90 days after the end of the calendar month in which the Agreement has been terminated. All amounts owing to a Payee under this Agreement shall constitute a debt owed by Payor to Payee and Payee shall have no ownership or other interest in any share of Net Revenue first received by Payor.",
+          "risk_level": "medium"
+        }
+      ],
+      "keywords": ["payments", "30 days", "earned balance", "$300", "termination"],
+      "compliance_notes": "Payment timing and threshold requirements"
+    }
+  ],
+  "clause_relationships": [
+    {
+      "primary_clause": "channel_management_services",
+      "related_clauses": ["provider_obligations", "rhei_reports"],
+      "relationship_type": "dependent"
+    },
+    {
+      "primary_clause": "provider_license",
+      "related_clauses": ["provider_obligations", "prohibitions"],
+      "relationship_type": "complementary"
+    },
+    {
+      "primary_clause": "revenue_shares_baseline",
+      "related_clauses": ["rhei_payments_provider"],
+      "relationship_type": "dependent"
+    },
+    {
+      "primary_clause": "advertising_approvals",
+      "related_clauses": ["provider_license", "policies_applicable_law"],
+      "relationship_type": "complementary"
+    }
+  ],
+  "compliance_requirements": {
+    "mandatory_clauses": [
+      "channel_management_services",
+      "provider_license",
+      "revenue_shares_baseline",
+      "rhei_payments_provider",
+      "prohibitions",
+      "policies_applicable_law"
+    ],
+    "recommended_clauses": [
+      "content_development_services",
+      "rhei_reports",
+      "advertising_approvals",
+      "provider_obligations"
+    ],
+    "conditional_clauses": {
+      "if_content_development_included": ["content_development_services"],
+      "if_advertising_enabled": ["advertising_approvals"],
+      "if_reporting_required": ["rhei_reports"]
+    },
+    "jurisdiction_specific": {
+      "US": ["policies_applicable_law", "prohibitions"],
+      "CA": ["policies_applicable_law", "prohibitions"],
+      "EU": ["policies_applicable_law", "prohibitions"]
+    },
+    "provider_alternatives": {
+      "ninja_tune": ["revenue_shares_baseline", "provider_license"],
+      "mnrk": ["revenue_shares_mnrk", "provider_license_mnrk", "rhei_payments_mnrk"],
+      "wmx": ["channel_management_wmx"],
+      "cbmg": ["content_development_cbmg"],
+      "lionsgate": ["rhei_reports"]
+    }
+  }
+}

@@ -1,0 +1,167 @@
+{
+  "metadata": {
+    "name": "RHEI Data License Agreement - Clause Library",
+    "version": "1.0.0",
+    "created": "2024-12-30",
+    "updated": "2024-12-30",
+    "author": "RHEI Legal Team",
+    "description": "Standard clauses for RHEI Data License agreements based on RHEI Legal Matrix",
+    "baseline": "RHEI Baseline Agreement",
+    "alternatives": ["Yoola", "CG Digital", "Indigo Entertainment", "The Soul Publishing", "Yap Films", "MetDaan", "Glymt", "Thunderbird", "The Asylum"]
+  },
+  "clauses": [
+    {
+      "id": "data_license_agreement_title",
+      "category": "title",
+      "title": "Data License Agreement",
+      "content": "This Data License Agreement (the \"Agreement\") is entered into between RHEI CREATIONS CORP., a company having an address at Suite 600 - 777 Hornby St., Vancouver, B.C., Canada V6Z 1S4 (\"RHEI\" or the \"Company\") and Licensor as set out under the heading \"Licensor Information\" below. This Agreement consists of this Cover Sheet and the Terms and Conditions attached hereto as Schedule A.",
+      "negotiable": false,
+      "risk_level": "low",
+      "alternatives": [
+        {
+          "id": "data_license_yoola",
+          "title": "Yoola Data License Agreement",
+          "content": "This Data License Agreement (the \"Agreement\") is entered into between RHEI CREATIONS CORP., a company having an address at Suite 600 - 777 Hornby St., Vancouver, B.C., Canada V6Z 1S4 (\"RHEI\" or the \"Company\") and Yoola Labs Ltd., Reg. No. 514674266, a company incorporated under the laws of Israel, represented by CEO Yury Smagarinskiy, and having its principal place at 2 Ha'Karmel St., Yokneam Illit, Israel (P.O.B 282 Yokneam Illit, Israel 2066720), hereinafter referred to as the \"Licensor\" or \"You\". This Agreement consists of this Cover Sheet and the Terms and Conditions attached hereto as Schedule A.",
+          "risk_level": "low"
+        },
+        {
+          "id": "data_license_indigo",
+          "title": "Indigo Data License Framework Agreement",
+          "content": "This Data License Framework Agreement (the \"Agreement\") is entered into between RHEI CREATIONS CORP., a company having an address at Suite 600 - 777 Hornby St., Vancouver, B.C., Canada V6Z 1S4 (\"RHEI\" or the \"Company\") and DEAP Indigo Limited, a company incorporated under the laws of England with Company Number 16395561 and with its registered office address at Lampard Brook Farm, Kettleburgh Road, Framlingham, Woodbridge, Suffolk IP13 6QB United Kingdom (\"You\"/\"Your\" or the \"Licensor\"). This Agreement consists of this Cover Sheet and the Terms and Conditions attached hereto as Schedule A.",
+          "risk_level": "low"
+        }
+      ],
+      "keywords": ["data license", "agreement", "RHEI", "licensor"],
+      "compliance_notes": "Standard agreement title and party identification"
+    },
+    {
+      "id": "licensor_information",
+      "category": "parties",
+      "title": "Licensor Information",
+      "content": "The following is to be completed by the provider of media content pursuant to this Agreement: Full Legal name: (\"Licensor\" or \"You\"), with an address at: Street: City: State/Province: Country: Postal/Zip Code: Email address: (\"Authorized Email\") Phone number: (include area code)",
+      "negotiable": false,
+      "risk_level": "low",
+      "alternatives": [
+        {
+          "id": "creator_information_soul",
+          "title": "Creator Information (The Soul)",
+          "content": "Creator Information The following is to be completed by the Owner of the YouTube channels listed below: Full Legal name: ADME (CY) Ltd (\"You\"), with an address at: Street: 62 Agiou Athanasiou Ave., 1st Floor, Office 101 City: Limassol State/Province: Agios Athanasios Country: Cyprus Postal/Zip Code: 4102 Email address: Patrik.wilkens@id.thesoul.io (cc'ing legalops@thesoul-publishing.com for notices) (\"Authorized Email\") Phone number: (include area code)",
+          "risk_level": "low"
+        },
+        {
+          "id": "provider_information_yap",
+          "title": "Provider Information (Yap Films)",
+          "content": "Provider Information The following is to be completed by the Provider of media content pursuant to this Agreement: Full Legal name: YAP FILMS INC. (\"Provider\" or \"You\"), with an address at: Street: City: State/Province: Country: Postal/Zip Code: Email address: (\"Authorized Email\") Phone number: (include area code)",
+          "risk_level": "low"
+        }
+      ],
+      "keywords": ["licensor", "information", "contact", "legal name"],
+      "compliance_notes": "Required party identification information"
+    },
+    {
+      "id": "confirmation_acceptance",
+      "category": "execution",
+      "title": "Confirmation of Acceptance of the Terms and Conditions",
+      "content": "By initialing in the box beside this sentence, You confirm that You have read and agree to the Terms and Conditions attached as Schedule A (the \"Terms and Conditions\").",
+      "negotiable": false,
+      "risk_level": "low",
+      "alternatives": [],
+      "keywords": ["confirmation", "acceptance", "terms", "conditions"],
+      "compliance_notes": "Required confirmation of agreement to terms"
+    },
+    {
+      "id": "execution_cover_sheet",
+      "category": "execution",
+      "title": "Execution of this Cover Sheet",
+      "content": "DO NOT SIGN THIS COVER SHEET UNLESS AND UNTIL YOU HAVE READ AND AGREED TO THE TERMS AND CONDITIONS. THE TERMS AND CONDITIONS SHALL BE BINDING ON YOU UNDER THIS AGREEMENT. Executed and delivered by the Parties as set out below. The date of the last party signing shall be the \"Effective Date\" of this Agreement.",
+      "negotiable": false,
+      "risk_level": "low",
+      "alternatives": [
+        {
+          "id": "execution_rhei_acceptance",
+          "title": "Execution with RHEI Acceptance Email",
+          "content": "Following Your completion of both (a) and (b) above, RHEI will send You an email communication to the Authorized Email confirming that this Agreement is complete (\"RHEI Acceptance Email\"). This email shall be deemed to constitute RHEI's acceptance, execution and delivery of this Agreement, and the date on which RHEI sends you this email shall be the \"Effective Date\" of this Agreement.",
+          "risk_level": "low"
+        }
+      ],
+      "keywords": ["execution", "cover sheet", "effective date", "binding"],
+      "compliance_notes": "Standard execution and effective date provisions"
+    },
+    {
+      "id": "your_content_definition",
+      "category": "definitions",
+      "title": "Your Content Definition",
+      "content": "\"Your Content\" means: (a) the audio, visual or audio-visual media content which You own or control, and includes all graphics, music (including sound recordings and compositions of such music), sounds, images, photos, animation, artwork, text, data, documentation, labels, tags, information, messages, hypertext, links, script, or other like material included therein or related thereto, and (b) any and all metadata attached or relating to (a) above, and includes hashtags, keywords, thumbnails, attributions, captions, labels, annotations, descriptions, tags, and any other information that is used to identify, label, sort, or present the matter described in all or part of (a) above.",
+      "negotiable": false,
+      "risk_level": "low",
+      "alternatives": [
+        {
+          "id": "your_content_expanded_soul",
+          "title": "Your Content Definition (Expanded - The Soul)",
+          "content": "\"Your Content\" means: (a) all visual or audio-visual media content which You own or control, and includes all graphics, music (including sound recordings and compositions of such music), sounds, images, photos, animation, artwork, text, data, documentation, labels, tags, information, messages, hypertext, links, script, or other like material included therein or related thereto, (b) Your name, likeness, trademarks, brands, logos, trade names and any other monikers, trade dress or the like, identifying You or any of the content described in (a) above, and, if You are a company or other entity, includes the name, likeness, trademarks, brands, logos, trade names and other monikers, trade dress or the like, identifying Your Authorized Signatory, and (c) any and all metadata attached or relating to (a) and (b) above, and includes hashtags, keywords, thumbnails, attributions, captions, labels, annotations, descriptions, tags, and any other information that is used to identify, label, sort, or present the matter described in all or part of (a) or (b) above.",
+          "risk_level": "low"
+        }
+      ],
+      "keywords": ["your content", "definition", "media content", "metadata"],
+      "compliance_notes": "Defines scope of content covered by the agreement"
+    },
+    {
+      "id": "non_exclusive_license",
+      "category": "licensing",
+      "title": "Non-exclusive License",
+      "content": "Without limiting the grant of rights and licenses under the Terms and Conditions, You hereby grant to RHEI the following non-exclusive, transferable, sublicensable (through multiple tiers), irrevocable, and worldwide rights and licenses: The right and license to (i) use, reproduce, modify, prepare derivative works based upon, and otherwise use and exploit Your Content for purposes relating to the development, training, operation, and use of machine learning and artificial intelligence activities and technologies, including, without limitation, building, training, testing, and tuning models; providing prompts, context, and other inputs when generating outputs (e.g., in connection with retrieval augmented generation, grounding, summarization, and similar techniques); and evaluating model performance and data and output quality; (ii) reproduce, modify, prepare derivative works based upon, and otherwise use and exploit Your Content for purposes relating to conducting, publishing, and presenting research relating to machine learning and artificial intelligence activities, and (iii) distribute and display limited portions of Your Content in connection with the publication and presentation of research relating to machine learning and artificial intelligence activities (collectively, together with the rights and licenses related to Your Content set out in the Terms and Conditions, the \"Licenses\"); and The right and license to: (i) negotiate and secure a sublicense of the Licenses (a \"Sublicense\") to an arm's length third party (a \"Sublicensee\") and (ii) receive any form of consideration payable to RHEI in respect of any Sublicense (\"Revenue\") (collectively, the \"Sublicense Right\"). Without limiting any of foregoing, the Sublicense Right provides RHEI the sole and absolute discretion to negotiate and secure a Sublicense, and its resulting Revenue, in any form, including Revenue consisting of a lump-sum payment, fixed fees, a percentage of revenue or net revenue received from the Sublicensee, or any other form or combination whatsoever. For clarity, the Licenses granted in this Agreement expressly exclude any right to display, show, play, or distribute any video (which for purposes of this Section 4 includes any video clip) that is part of Your Content (whether by itself or as embedded footage within a larger video work) to any third party for Ordinary Content Consumption. \"Ordinary Content Consumption\" means watching, listening to, or otherwise consuming the substantive content of a video by a human end-user for entertainment, advertising, marketing, or promotional purposes. For example, such grants do not include the right for RHEI to screen any video at film festivals or similar events, to display any video on digital billboards or as part of website ads, to upload any video for a general audience on YouTube or other social media, or to enable consumption of any video by a human end user by way of AVOD, SVOD, broadcast, cable, IPTV, podcast, streaming, or any similar technology. RHEI shall use commercially reasonable efforts to include Your Content in proposals for Sublicensing with Sublicensees, in a manner as RHEI deems appropriate. You acknowledge and agree that RHEI is entitled to use its reasonable discretion in selecting and presenting Your Content to select Sublicensees depending on the type of content and other requirements of such Sublicensees.",
+      "negotiable": true,
+      "risk_level": "high",
+      "alternatives": [
+        {
+          "id": "non_exclusive_license_yoola",
+          "title": "Yoola Non-exclusive License",
+          "content": "In addition to the rights and licenses granted under the Terms and Conditions below, You hereby grant to RHEI the following non-exclusive, transferable, sublicensable (through multiple tiers), irrevocable, and worldwide rights and licenses: The right and license to (i) use, reproduce, modify, prepare derivative works based upon, and otherwise use and exploit Your Content for purposes relating to the development, training, operation, and use of machine learning and artificial intelligence activities and technologies, including, without limitation, building, training, testing, and tuning models; providing prompts, context, and other inputs when generating outputs (e.g., in connection with retrieval augmented generation, grounding, summarization, and similar techniques); and evaluating model performance and data and output quality; (ii) reproduce, modify, prepare derivative works based upon, and otherwise use and exploit Your Content for purposes relating to conducting, publishing, and presenting research relating to machine learning and artificial intelligence activities, and (iii) distribute and display limited portions of Your Content in connection with the publication and presentation of research relating to machine learning and artificial intelligence activities (collectively, together with the rights and licenses related to Your Content set out in the Terms and Conditions, the \"Licenses\"); and The right and license to: (i) negotiate and secure a sublicense of the Licenses (a \"Sublicense\") to an arm's length third party (a \"Sublicensee\") and (ii) receive any form of consideration payable to RHEI in respect of any Sublicense (\"Revenue\") (collectively, the \"Sublicense Right\").",
+          "risk_level": "high"
+        },
+        {
+          "id": "non_exclusive_license_yap",
+          "title": "Yap Films Non-exclusive License (Simplified)",
+          "content": "Without limiting the grant of rights and licenses under the Terms and Conditions, You hereby grant to RHEI the following non-exclusive, sublicensable, irrevocable, and worldwide rights and licenses: The right and license to use Your Content in any manner and in or on any form, method, platform, or media now known or hereafter devised throughout the universe for the purpose of the development of computer software based on, or containing, artificial intelligence tools, including without limitation, the training of any such computer software (collectively, the \"Licenses\"). The Licenses include all rights, title, and interest necessary for RHEI to display, perform (publicly or otherwise), distribute, reproduce, publish, transmit, translate, stream, adapt, synchronize, modify, prepare derivative works based on, compile, encode, host, cache, store, copy, download, reformat, excerpt, analyze, create algorithms based on, and otherwise use, exploit, and/or deal with Your Content for the purpose describe above; and The right and license to: (i) negotiate and secure a sublicense of the Licenses (a \"Sublicense\") to an arm's length third party (a \"Sublicensee\"), and (ii) receive any form of consideration payable to RHEI in respect of any Sublicense (\"Revenue\") (collectively, the \"Sublicense Right\").",
+          "risk_level": "high"
+        }
+      ],
+      "keywords": ["non-exclusive", "license", "machine learning", "AI", "sublicense", "revenue"],
+      "compliance_notes": "Core licensing terms for AI/ML development - high risk due to broad rights granted"
+    }
+  ],
+  "clause_relationships": [
+    {
+      "primary_clause": "data_license_agreement_title",
+      "related_clauses": ["licensor_information", "execution_cover_sheet"],
+      "relationship_type": "dependent"
+    },
+    {
+      "primary_clause": "your_content_definition",
+      "related_clauses": ["non_exclusive_license"],
+      "relationship_type": "dependent"
+    }
+  ],
+  "compliance_requirements": {
+    "mandatory_clauses": [
+      "data_license_agreement_title",
+      "licensor_information",
+      "confirmation_acceptance",
+      "execution_cover_sheet",
+      "your_content_definition"
+    ],
+    "recommended_clauses": [],
+    "conditional_clauses": {},
+    "jurisdiction_specific": {
+      "US": ["execution_cover_sheet"],
+      "CA": ["execution_cover_sheet"],
+      "EU": ["execution_cover_sheet"]
+    },
+    "provider_alternatives": {
+      "yoola": ["data_license_yoola"],
+      "indigo": ["data_license_indigo"],
+      "soul": ["creator_information_soul", "your_content_expanded_soul"],
+      "yap": ["provider_information_yap"]
+    }
+  }
+}

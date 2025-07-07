@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Test Clause Replacement</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            margin: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            max-width: 600px;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #e1dfdd;
+            border-radius: 4px;
+        }
+        .test-button {
+            background: #0078d4;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .test-button:hover {
+            background: #106ebe;
+        }
+        .clause-item {
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #e1dfdd;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .clause-item:hover {
+            background: #f8f9fa;
+        }
+        .clause-item.selected {
+            background: #e3f2fd;
+            border-color: #0078d4;
+        }
+        .replace-button {
+            background: #8764b8;
+            color: white;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 11px;
+            margin-left: 10px;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+        }
+        .modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-content {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        .alternative-option {
+            border: 1px solid #e1dfdd;
+            border-radius: 4px;
+            margin: 10px 0;
+            cursor: pointer;
+            transition: border-color 0.2s;
+        }
+        .alternative-option:hover {
+            border-color: #0078d4;
+        }
+        .alternative-option.selected {
+            border-color: #0078d4;
+            background: #e3f2fd;
+        }
+        .alternative-header {
+            padding: 10px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e1dfdd;
+            font-weight: bold;
+        }
+        .alternative-content {
+            padding: 10px;
+            font-size: 13px;
+        }
+        .modal-actions {
+            margin-top: 20px;
+            text-align: right;
+        }
+        .modal-button {
+            padding: 8px 16px;
+            margin: 0 5px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .modal-button.cancel {
+            background: #f3f2f1;
+            color: #323130;
+        }
+        .modal-button.primary {
+            background: #0078d4;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Clause Replacement Test</h1>
+        
+        <div class="test-section">
+            <h3>Test Controls</h3>
+            <button class="test-button" onclick="loadTestClauses()">Load Test Clauses</button>
+            <button class="test-button" onclick="runFullTest()">Run Full Test</button>
+            <button class="test-button" onclick="clearTest()">Clear</button>
+        </div>
+
+        <div id="status" class="status">Ready to test clause replacement functionality</div>
+
+        <div class="test-section">
+            <h3>Test Clauses</h3>
+            <div id="clauses-container">
+                <p>Click "Load Test Clauses" to begin testing</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Replacement Modal -->
+    <div id="replacement-modal" class="modal">
+        <div class="modal-content">
+            <h3>Replace Clause</h3>
+            
+            <div style="margin: 15px 0;">
+                <strong>Current Clause:</strong>
+                <div id="current-clause-text" style="background: #fef7f1; padding: 10px; border-radius: 4px; margin-top: 5px;"></div>
+            </div>
+            
+            <div style="margin: 15px 0;">
+                <strong>Select Alternative:</strong>
+                <div id="alternatives-container"></div>
+            </div>
+            
+            <div class="modal-actions">
+                <button class="modal-button cancel" onclick="closeModal()">Cancel</button>
+                <button class="modal-button primary" onclick="applyReplacement()" id="apply-btn" disabled>Apply</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let selectedClause = null;
+        let selectedAlternative = null;
+
+        function updateStatus(message) {
+            document.getElementById('status').textContent = message;
+            console.log('Status:', message);
+        }
+
+        function loadTestClauses() {
+            updateStatus('Loading test clauses...');
+            
+            const container = document.getElementById('clauses-container');
+            container.innerHTML = '';
+            
+            const testClauses = [
+                { number: '1.1', text: 'This agreement shall commence on the effective date and continue for a period of one year.' },
+                { number: '2.1', text: 'Either party may terminate this agreement with thirty (30) days written notice.' },
+                { number: '3.1', text: 'The licensee shall pay royalties of 50% of net revenues to the licensor.' }
+            ];
+            
+            testClauses.forEach(clause => {
+                const clauseDiv = document.createElement('div');
+                clauseDiv.className = 'clause-item';
+                clauseDiv.dataset.clauseNumber = clause.number;
+                clauseDiv.onclick = () => selectClause(clause.number, clauseDiv);
+                
+                clauseDiv.innerHTML = `
+                    <strong>${clause.number}</strong> ${clause.text}
+                    <button class="replace-button" onclick="event.stopPropagation(); openReplacementModal('${clause.number}')">🔄 Replace</button>
+                `;
+                
+                container.appendChild(clauseDiv);
+            });
+            
+            updateStatus('Test clauses loaded. Click on a clause to select it, then click Replace.');
+        }
+
+        function selectClause(clauseNumber, element) {
+            // Clear previous selections
+            document.querySelectorAll('.clause-item.selected').forEach(item => {
+                item.classList.remove('selected');
+            });
+            
+            // Select current clause
+            element.classList.add('selected');
+            selectedClause = clauseNumber;
+            
+            updateStatus(`Selected clause ${clauseNumber}`);
+        }
+
+        function openReplacementModal(clauseNumber) {
+            updateStatus(`Opening replacement options for clause ${clauseNumber}`);
+            
+            const clauseElement = document.querySelector(`[data-clause-number="${clauseNumber}"]`);
+            const clauseText = clauseElement.textContent.replace('🔄 Replace', '').trim();
+            
+            document.getElementById('current-clause-text').textContent = clauseText;
+            
+            // Load mock alternatives
+            const alternatives = [
+                {
+                    id: 'baseline',
+                    title: 'BASELINE (Ninja Tune Ltd.)',
+                    content: `Improved version of clause ${clauseNumber} with standard industry terms and enhanced clarity.`,
+                    riskLevel: 'low'
+                },
+                {
+                    id: 'alternative1',
+                    title: 'Conservative Option',
+                    content: `Conservative alternative for clause ${clauseNumber} with additional protective language.`,
+                    riskLevel: 'low'
+                },
+                {
+                    id: 'alternative2',
+                    title: 'Balanced Option',
+                    content: `Balanced alternative for clause ${clauseNumber} that provides fair terms for both parties.`,
+                    riskLevel: 'medium'
+                }
+            ];
+            
+            const container = document.getElementById('alternatives-container');
+            container.innerHTML = '';
+            
+            alternatives.forEach(alt => {
+                const altDiv = document.createElement('div');
+                altDiv.className = 'alternative-option';
+                altDiv.onclick = () => selectAlternative(alt, altDiv);
+                
+                altDiv.innerHTML = `
+                    <div class="alternative-header">${alt.title} (${alt.riskLevel} risk)</div>
+                    <div class="alternative-content">${alt.content}</div>
+                `;
+                
+                container.appendChild(altDiv);
+            });
+            
+            document.getElementById('replacement-modal').classList.add('show');
+        }
+
+        function selectAlternative(alternative, element) {
+            // Clear previous selections
+            document.querySelectorAll('.alternative-option.selected').forEach(item => {
+                item.classList.remove('selected');
+            });
+            
+            // Select current alternative
+            element.classList.add('selected');
+            selectedAlternative = alternative;
+            
+            // Enable apply button
+            document.getElementById('apply-btn').disabled = false;
+            
+            updateStatus(`Selected alternative: ${alternative.title}`);
+        }
+
+        function closeModal() {
+            document.getElementById('replacement-modal').classList.remove('show');
+            selectedAlternative = null;
+            document.getElementById('apply-btn').disabled = true;
+        }
+
+        function applyReplacement() {
+            if (!selectedAlternative || !selectedClause) {
+                updateStatus('Error: No clause or alternative selected');
+                return;
+            }
+            
+            updateStatus(`✅ Applied ${selectedAlternative.title} to clause ${selectedClause}`);
+            
+            // Update the clause in the UI
+            const clauseElement = document.querySelector(`[data-clause-number="${selectedClause}"]`);
+            if (clauseElement) {
+                clauseElement.style.background = '#e3f2fd';
+                clauseElement.style.borderColor = '#0078d4';
+                
+                // Add replacement indicator
+                const indicator = document.createElement('span');
+                indicator.textContent = ' ✅ REPLACED';
+                indicator.style.color = '#0078d4';
+                indicator.style.fontWeight = 'bold';
+                indicator.style.fontSize = '11px';
+                clauseElement.appendChild(indicator);
+            }
+            
+            closeModal();
+        }
+
+        function runFullTest() {
+            updateStatus('Running full test sequence...');
+            
+            // Step 1: Load clauses
+            loadTestClauses();
+            
+            setTimeout(() => {
+                // Step 2: Select first clause
+                const firstClause = document.querySelector('.clause-item');
+                if (firstClause) {
+                    firstClause.click();
+                    
+                    setTimeout(() => {
+                        // Step 3: Open replacement modal
+                        const replaceBtn = firstClause.querySelector('.replace-button');
+                        if (replaceBtn) {
+                            replaceBtn.click();
+                            
+                            setTimeout(() => {
+                                // Step 4: Select first alternative
+                                const firstAlt = document.querySelector('.alternative-option');
+                                if (firstAlt) {
+                                    firstAlt.click();
+                                    
+                                    setTimeout(() => {
+                                        // Step 5: Apply replacement
+                                        document.getElementById('apply-btn').click();
+                                        updateStatus('✅ Full test completed successfully!');
+                                    }, 500);
+                                }
+                            }, 500);
+                        }
+                    }, 500);
+                }
+            }, 1000);
+        }
+
+        function clearTest() {
+            document.getElementById('clauses-container').innerHTML = '<p>Click "Load Test Clauses" to begin testing</p>';
+            closeModal();
+            updateStatus('Test cleared. Ready to start over.');
+        }
+
+        // Initialize
+        updateStatus('Clause replacement test page loaded. Click "Load Test Clauses" to begin.');
+    </script>
+</body>
+</html>

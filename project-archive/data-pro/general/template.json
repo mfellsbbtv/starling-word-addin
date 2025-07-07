@@ -1,0 +1,201 @@
+{
+  "metadata": {
+    "name": "RHEI Data License Agreement Template",
+    "version": "1.0.0",
+    "created": "2024-12-30",
+    "updated": "2024-12-30",
+    "author": "RHEI Legal Team",
+    "description": "Template for RHEI Data License agreements for AI/ML content licensing"
+  },
+  "template": {
+    "title": "DATA LICENSE AGREEMENT",
+    "parties": {
+      "party1": {
+        "role": "RHEI",
+        "placeholder": "RHEI CREATIONS CORP.",
+        "address": "Suite 600 - 777 Hornby St., Vancouver, B.C., Canada V6Z 1S4",
+        "entity_type": "British Columbia company"
+      },
+      "party2": {
+        "role": "Licensor",
+        "placeholder": "[LICENSOR_NAME]",
+        "address": "[LICENSOR_ADDRESS]",
+        "entity_type": "[LICENSOR_ENTITY_TYPE]"
+      }
+    },
+    "sections": [
+      {
+        "id": "cover_sheet",
+        "title": "COVER SHEET",
+        "order": 0,
+        "required": true,
+        "content": "This Data License Agreement (the \"Agreement\") is entered into between RHEI CREATIONS CORP., a company having an address at Suite 600 - 777 Hornby St., Vancouver, B.C., Canada V6Z 1S4 (\"RHEI\" or the \"Company\") and [LICENSOR_NAME] as set out under the heading \"Licensor Information\" below. This Agreement consists of this Cover Sheet and the Terms and Conditions attached hereto as Schedule A."
+      },
+      {
+        "id": "licensor_information",
+        "title": "LICENSOR INFORMATION",
+        "order": 1,
+        "required": true,
+        "content": "The following is to be completed by the provider of media content pursuant to this Agreement:\n\nFull Legal name: [LICENSOR_LEGAL_NAME] (\"Licensor\" or \"You\")\nAddress:\nStreet: [LICENSOR_STREET]\nCity: [LICENSOR_CITY]\nState/Province: [LICENSOR_STATE]\nCountry: [LICENSOR_COUNTRY]\nPostal/Zip Code: [LICENSOR_POSTAL]\nEmail address: [LICENSOR_EMAIL] (\"Authorized Email\")\nPhone number: [LICENSOR_PHONE] (include area code)"
+      },
+      {
+        "id": "confirmation_acceptance",
+        "title": "CONFIRMATION OF ACCEPTANCE",
+        "order": 2,
+        "required": true,
+        "content": "By initialing in the box beside this sentence, You confirm that You have read and agree to the Terms and Conditions attached as Schedule A (the \"Terms and Conditions\").\n\n[ ] Initial here"
+      },
+      {
+        "id": "execution",
+        "title": "EXECUTION",
+        "order": 3,
+        "required": true,
+        "content": "DO NOT SIGN THIS COVER SHEET UNLESS AND UNTIL YOU HAVE READ AND AGREED TO THE TERMS AND CONDITIONS. THE TERMS AND CONDITIONS SHALL BE BINDING ON YOU UNDER THIS AGREEMENT.\n\nExecuted and delivered by the Parties as set out below. The date of the last party signing shall be the \"Effective Date\" of this Agreement.\n\nLICENSOR:\n\n_________________________________\nSignature\n\n_________________________________\nName: [LICENSOR_SIGNATORY_NAME]\n\n_________________________________\nTitle: [LICENSOR_SIGNATORY_TITLE]\n\n_________________________________\nDate\n\n\nRHEI:\n\n_________________________________\nSignature\n\n_________________________________\nName: [RHEI_SIGNATORY_NAME]\n\n_________________________________\nTitle: [RHEI_SIGNATORY_TITLE]\n\n_________________________________\nDate"
+      },
+      {
+        "id": "definitions",
+        "title": "DEFINITIONS",
+        "order": 4,
+        "required": true,
+        "content": "\"Your Content\" means: (a) the audio, visual or audio-visual media content which You own or control, and includes all graphics, music (including sound recordings and compositions of such music), sounds, images, photos, animation, artwork, text, data, documentation, labels, tags, information, messages, hypertext, links, script, or other like material included therein or related thereto, and (b) any and all metadata attached or relating to (a) above, and includes hashtags, keywords, thumbnails, attributions, captions, labels, annotations, descriptions, tags, and any other information that is used to identify, label, sort, or present the matter described in all or part of (a) above."
+      },
+      {
+        "id": "license_grant",
+        "title": "NON-EXCLUSIVE LICENSE",
+        "order": 5,
+        "required": true,
+        "content": "Without limiting the grant of rights and licenses under the Terms and Conditions, You hereby grant to RHEI the following non-exclusive, transferable, sublicensable (through multiple tiers), irrevocable, and worldwide rights and licenses:\n\nThe right and license to (i) use, reproduce, modify, prepare derivative works based upon, and otherwise use and exploit Your Content for purposes relating to the development, training, operation, and use of machine learning and artificial intelligence activities and technologies, including, without limitation, building, training, testing, and tuning models; providing prompts, context, and other inputs when generating outputs (e.g., in connection with retrieval augmented generation, grounding, summarization, and similar techniques); and evaluating model performance and data and output quality; (ii) reproduce, modify, prepare derivative works based upon, and otherwise use and exploit Your Content for purposes relating to conducting, publishing, and presenting research relating to machine learning and artificial intelligence activities, and (iii) distribute and display limited portions of Your Content in connection with the publication and presentation of research relating to machine learning and artificial intelligence activities (collectively, together with the rights and licenses related to Your Content set out in the Terms and Conditions, the \"Licenses\"); and\n\nThe right and license to: (i) negotiate and secure a sublicense of the Licenses (a \"Sublicense\") to an arm's length third party (a \"Sublicensee\") and (ii) receive any form of consideration payable to RHEI in respect of any Sublicense (\"Revenue\") (collectively, the \"Sublicense Right\").\n\nFor clarity, the Licenses granted in this Agreement expressly exclude any right to display, show, play, or distribute any video (which for purposes of this Section includes any video clip) that is part of Your Content (whether by itself or as embedded footage within a larger video work) to any third party for Ordinary Content Consumption. \"Ordinary Content Consumption\" means watching, listening to, or otherwise consuming the substantive content of a video by a human end-user for entertainment, advertising, marketing, or promotional purposes."
+      },
+      {
+        "id": "schedule_a",
+        "title": "SCHEDULE A - TERMS AND CONDITIONS",
+        "order": 6,
+        "required": true,
+        "content": "[DETAILED TERMS AND CONDITIONS TO BE ATTACHED]"
+      }
+    ],
+    "variables": [
+      {
+        "name": "LICENSOR_NAME",
+        "description": "Legal name of the Licensor",
+        "type": "text",
+        "required": true
+      },
+      {
+        "name": "LICENSOR_LEGAL_NAME",
+        "description": "Full legal name of the Licensor entity",
+        "type": "text",
+        "required": true
+      },
+      {
+        "name": "LICENSOR_ADDRESS",
+        "description": "Complete address of the Licensor",
+        "type": "text",
+        "required": true
+      },
+      {
+        "name": "LICENSOR_STREET",
+        "description": "Street address of the Licensor",
+        "type": "text",
+        "required": true
+      },
+      {
+        "name": "LICENSOR_CITY",
+        "description": "City of the Licensor",
+        "type": "text",
+        "required": true
+      },
+      {
+        "name": "LICENSOR_STATE",
+        "description": "State/Province of the Licensor",
+        "type": "text",
+        "required": true
+      },
+      {
+        "name": "LICENSOR_COUNTRY",
+        "description": "Country of the Licensor",
+        "type": "text",
+        "required": true
+      },
+      {
+        "name": "LICENSOR_POSTAL",
+        "description": "Postal/Zip code of the Licensor",
+        "type": "text",
+        "required": true
+      },
+      {
+        "name": "LICENSOR_EMAIL",
+        "description": "Email address of the Licensor",
+        "type": "email",
+        "required": true
+      },
+      {
+        "name": "LICENSOR_PHONE",
+        "description": "Phone number of the Licensor",
+        "type": "text",
+        "required": true
+      },
+      {
+        "name": "LICENSOR_SIGNATORY_NAME",
+        "description": "Name of the authorized signatory for Licensor",
+        "type": "text",
+        "required": true
+      },
+      {
+        "name": "LICENSOR_SIGNATORY_TITLE",
+        "description": "Title of the authorized signatory for Licensor",
+        "type": "text",
+        "required": true
+      },
+      {
+        "name": "RHEI_SIGNATORY_NAME",
+        "description": "Name of the authorized signatory for RHEI",
+        "type": "text",
+        "required": true
+      },
+      {
+        "name": "RHEI_SIGNATORY_TITLE",
+        "description": "Title of the authorized signatory for RHEI",
+        "type": "text",
+        "required": true
+      },
+      {
+        "name": "EFFECTIVE_DATE",
+        "description": "Effective date of the agreement",
+        "type": "date",
+        "required": true
+      }
+    ]
+  },
+  "generation_rules": {
+    "conditional_sections": [
+      {
+        "condition": "licensor_type == 'individual'",
+        "section_id": "licensor_information",
+        "action": "modify",
+        "modification": "Remove entity-specific fields"
+      }
+    ],
+    "variable_transformations": [
+      {
+        "variable": "LICENSOR_NAME",
+        "transformation": "uppercase"
+      }
+    ]
+  },
+  "validation": {
+    "required_fields": [
+      "LICENSOR_NAME",
+      "LICENSOR_EMAIL",
+      "LICENSOR_SIGNATORY_NAME",
+      "EFFECTIVE_DATE"
+    ],
+    "field_validations": [
+      {
+        "field": "LICENSOR_EMAIL",
+        "type": "email",
+        "pattern": "^[^@]+@[^@]+\\.[^@]+$"
+      }
+    ]
+  }
+}

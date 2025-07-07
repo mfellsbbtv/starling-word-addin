@@ -8,9 +8,12 @@
     "build:dev": "webpack --mode development",
     "dev-server": "webpack serve --mode development",
     "start": "office-addin-dev-certs install && npm run dev-server",
+    "local-server": "npm run build:dev && node local-server.js",
     "stop": "office-addin-dev-certs uninstall",
     "validate": "office-addin-manifest validate manifest.xml",
-    "sideload": "office-addin-debugging start manifest.xml"
+    "validate-local": "office-addin-manifest validate manifest-localhost.xml",
+    "sideload": "office-addin-debugging start manifest.xml",
+    "sideload-local": "office-addin-debugging start manifest-localhost.xml"
   },
   "keywords": [
     "Office Add-in",

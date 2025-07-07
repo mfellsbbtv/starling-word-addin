@@ -1,0 +1,460 @@
+Unchecked runtime.lastError: Cannot create item with duplicate id LastPass <URL>
+Unchecked runtime.lastError: Cannot create item with duplicate id LastPass <URL>
+Unchecked runtime.lastError: Cannot create item with duplicate id LastPass <URL>
+Unchecked runtime.lastError: Cannot create item with duplicate id LastPass <URL>
+Unchecked runtime.lastError: Cannot create item with duplicate id LastPass <URL>
+Unchecked runtime.lastError: Cannot create item with duplicate id separator <URL>
+Unchecked runtime.lastError: Cannot create item with duplicate id separator <URL>
+Unchecked runtime.lastError: Cannot create item with duplicate id separator <URL>
+Unchecked runtime.lastError: Cannot create item with duplicate id separator <URL>
+Unchecked runtime.lastError: Cannot create item with duplicate id separator <URL>
+Unchecked runtime.lastError: Cannot create item with duplicate id Add Item <URL>
+Unchecked runtime.lastError: Cannot create item with duplicate id Add Item <URL>
+Unchecked runtime.lastError: Cannot create item with duplicate id Add Item <URL>
+Unchecked runtime.lastError: Cannot create item with duplicate id Add Item <URL>
+Unchecked runtime.lastError: Cannot create item with duplicate id Add Item <URL>
+Unchecked runtime.lastError: Cannot create item with duplicate id Add Password <URL>
+Unchecked runtime.lastError: Cannot create item with duplicate id Add Password <URL>
+Unchecked runtime.lastError: Cannot create item with duplicate id Add Password <URL>
+Unchecked runtime.lastError: Cannot create item with duplicate id Add Password <URL>
+Unchecked runtime.lastError: Cannot create item with duplicate id Add Password <URL>
+Unchecked runtime.lastError: Cannot create item with duplicate id Add Address <URL>
+Unchecked runtime.lastError: Cannot create item with duplicate id Add Address <URL>
+Unchecked runtime.lastError: Cannot create item with duplicate id Add Address <URL>
+Unchecked runtime.lastError: Cannot create item with duplicate id Add Address <URL>
+Unchecked runtime.lastError: Cannot create item with duplicate id Add Address <URL>
+Unchecked runtime.lastError: Cannot create item with duplicate id Add Payment Card <URL>
+Unchecked runtime.lastError: Cannot create item with duplicate id Add Payment Card <URL>
+Unchecked runtime.lastError: Cannot create item with duplicate id Add Payment Card <URL>
+Unchecked runtime.lastError: Cannot create item with duplicate id Add Payment Card <URL>
+Unchecked runtime.lastError: Cannot create item with duplicate id Add Payment Card <URL>
+Unchecked runtime.lastError: Cannot create item with duplicate id Add other item <URL>
+Unchecked runtime.lastError: Cannot create item with duplicate id Add other item <URL>
+Unchecked runtime.lastError: Cannot create item with duplicate id Add other item <URL>
+Unchecked runtime.lastError: Cannot create item with duplicate id Add other item <URL>
+Unchecked runtime.lastError: Cannot create item with duplicate id Add other item <URL>
+Unchecked runtime.lastError: Cannot create item with duplicate id Save all entered data <URL>
+Unchecked runtime.lastError: Cannot create item with duplicate id Save all entered data <URL>
+Unchecked runtime.lastError: Cannot create item with duplicate id Save all entered data <URL>
+Unchecked runtime.lastError: Cannot create item with duplicate id Save all entered data <URL>
+Unchecked runtime.lastError: Cannot create item with duplicate id Save all entered data <URL>
+Unchecked runtime.lastError: Cannot create item with duplicate id Generate Secure Password <URL>
+Unchecked runtime.lastError: Cannot create item with duplicate id Generate Secure Password <URL>
+Unchecked runtime.lastError: Cannot create item with duplicate id Generate Secure Password <URL>
+Unchecked runtime.lastError: Cannot create item with duplicate id Generate Secure Password <URL>
+Unchecked runtime.lastError: Cannot create item with duplicate id Generate Secure Password <URL>
+background-redux-new.js:1 Uncaught (in promise) Error: No tab with id: 2096291692.
+background-redux-new.js:2 Error: Invalid frameId for foreground frameId: 0
+    at $ (background-redux-new.js:2:3643411)
+    at m (background-redux-new.js:2:3650374)
+    at background-redux-new.js:2:3651373
+$ @ background-redux-new.js:2
+m @ background-redux-new.js:2
+(anonymous) @ background-redux-new.js:2
+background-redux-new.js:2 Error: Invalid frameId for foreground frameId: 0
+    at $ (background-redux-new.js:2:3643411)
+    at m (background-redux-new.js:2:3650374)
+    at background-redux-new.js:2:3651373
+$ @ background-redux-new.js:2
+m @ background-redux-new.js:2
+(anonymous) @ background-redux-new.js:2
+background-redux-new.js:1 Uncaught (in promise) Error: No tab with id: 2096291683.
+Unchecked runtime.lastError: The page keeping the extension port is moved into back/forward cache, so the message channel is closed.
+Unchecked runtime.lastError: The page keeping the extension port is moved into back/forward cache, so the message channel is closed.
+Unchecked runtime.lastError: The page keeping the extension port is moved into back/forward cache, so the message channel is closed.
+Unchecked runtime.lastError: The page keeping the extension port is moved into back/forward cache, so the message channel is closed.
+Unchecked runtime.lastError: The page keeping the extension port is moved into back/forward cache, so the message channel is closed.
+Unchecked runtime.lastError: The page keeping the extension port is moved into back/forward cache, so the message channel is closed.
+Unchecked runtime.lastError: The page keeping the extension port is moved into back/forward cache, so the message channel is closed.
+Unchecked runtime.lastError: The page keeping the extension port is moved into back/forward cache, so the message channel is closed.
+Unchecked runtime.lastError: The page keeping the extension port is moved into back/forward cache, so the message channel is closed.
+Unchecked runtime.lastError: The page keeping the extension port is moved into back/forward cache, so the message channel is closed.
+Unchecked runtime.lastError: The page keeping the extension port is moved into back/forward cache, so the message channel is closed.
+Unchecked runtime.lastError: The page keeping the extension port is moved into back/forward cache, so the message channel is closed.
+Unchecked runtime.lastError: The page keeping the extension port is moved into back/forward cache, so the message channel is closed.
+Unchecked runtime.lastError: The page keeping the extension port is moved into back/forward cache, so the message channel is closed.
+Unchecked runtime.lastError: The page keeping the extension port is moved into back/forward cache, so the message channel is closed.
+Unchecked runtime.lastError: The page keeping the extension port is moved into back/forward cache, so the message channel is closed.
+Unchecked runtime.lastError: The page keeping the extension port is moved into back/forward cache, so the message channel is closed.
+background-redux-new.js:1 Uncaught (in promise) Error: No tab with id: 2096291698.
+background-redux-new.js:1 Uncaught (in promise) Error: No tab with id: 2096291700.
+background-redux-new.js:1 Uncaught (in promise) Error: No tab with id: 2096291709.
+background-redux-new.js:1 Uncaught (in promise) Error: No tab with id: 2096291709.
+background-redux-new.js:1 Uncaught (in promise) Error: No tab with id: 2096291707.
+background-redux-new.js:2 Error: Invalid frameId for foreground frameId: 0
+    at $ (background-redux-new.js:2:3643411)
+    at m (background-redux-new.js:2:3650374)
+    at background-redux-new.js:2:3651373
+$ @ background-redux-new.js:2
+m @ background-redux-new.js:2
+(anonymous) @ background-redux-new.js:2
+background-redux-new.js:2 Error: Invalid frameId for foreground frameId: 0
+    at $ (background-redux-new.js:2:3643411)
+    at m (background-redux-new.js:2:3650374)
+    at background-redux-new.js:2:3651373
+$ @ background-redux-new.js:2
+m @ background-redux-new.js:2
+(anonymous) @ background-redux-new.js:2
+background-redux-new.js:2 Error: Invalid frameId for foreground frameId: 0
+    at $ (background-redux-new.js:2:3643411)
+    at m (background-redux-new.js:2:3650374)
+    at background-redux-new.js:2:3651373
+$ @ background-redux-new.js:2
+m @ background-redux-new.js:2
+(anonymous) @ background-redux-new.js:2
+background-redux-new.js:1 Uncaught (in promise) Error: No tab with id: 2096291733.
+background-redux-new.js:1 Uncaught (in promise) Error: No tab with id: 2096291742.
+background-redux-new.js:2 Error: Invalid frameId for foreground frameId: 0
+    at $ (background-redux-new.js:2:3643411)
+    at m (background-redux-new.js:2:3650374)
+    at background-redux-new.js:2:3651373
+$ @ background-redux-new.js:2
+m @ background-redux-new.js:2
+(anonymous) @ background-redux-new.js:2
+background-redux-new.js:2 Error: Invalid frameId for foreground frameId: 0
+    at $ (background-redux-new.js:2:3643411)
+    at m (background-redux-new.js:2:3650374)
+    at background-redux-new.js:2:3651373
+$ @ background-redux-new.js:2
+m @ background-redux-new.js:2
+(anonymous) @ background-redux-new.js:2
+background-redux-new.js:1 Uncaught (in promise) Error: No tab with id: 2096291768.
+spserviceworker.js:42 [Router] Installing odsp-web-prod_2025-06-27.009...
+spserviceworker.js:220 Event handler of 'message' event must be added on the initial evaluation of worker script.
+_listenToSync @ spserviceworker.js:220
+ja @ spserviceworker.js:220
+Wa @ spserviceworker.js:220
+createApplicationController @ spserviceworker.js:220
+getApplication @ spserviceworker.js:42
+(anonymous) @ spserviceworker.js:42
+getApplications @ spserviceworker.js:42
+_installRoutes @ spserviceworker.js:42
+(anonymous) @ spserviceworker.js:42
+spserviceworker.js:42 [Router] Installed controller: STS (10.43s)
+spserviceworker.js:42 [Router] Installed controller: SPHome (0.42s)
+spserviceworker.js:42 [Router] Installed controller: SitePages (0.74s)
+spserviceworker.js:42 [Router] Installed controller: Embed (0.04s)
+spserviceworker.js:42 [Router] Installed controller: CreateGroup (0.00s)
+spserviceworker.js:42 [Router] Installed controller: SingleWebPart (0.00s)
+spserviceworker.js:42 [Router] Installed controller: VivaHome (0.41s)
+spserviceworker.js:42 [Router] Installed controller: BrokerLogon (0.08s)
+spserviceworker.js:42 [Router] Installed controller: Clipchamp (0.00s)
+spserviceworker.js:42 [Router] Installed controller: MeeBridge (0.10s)
+spserviceworker.js:42 [Router] Installed controller: SPStart (0.36s)
+spserviceworker.js:42 [Router] Installed controller: Agreements (0.39s)
+spserviceworker.js:42 [Router] Installed controller: Nucleus (0.00s)
+spserviceworker.js:42 [Router] Idle.
+spserviceworker.js:42 [Router] Syncing (tag: PrerenderOffline)
+spserviceworker.js:42 [Router] Syncing controller: STS...
+spserviceworker.js:42 [Router] Sync completed successfully.
+background-redux-new.js:2 Error: Invalid frameId for foreground frameId: 0
+    at $ (background-redux-new.js:2:3643411)
+    at m (background-redux-new.js:2:3650374)
+    at background-redux-new.js:2:3651373
+$ @ background-redux-new.js:2
+m @ background-redux-new.js:2
+(anonymous) @ background-redux-new.js:2
+wacowlhostwebpack.js:96 Session ID: d85e3a0c-9fc7-4b0c-baec-3ef98afd6247
+wacowlhostwebpack.js:96 Time in UTC:  Mon, 07 Jul 2025 17:19:39 GMT
+web-client-content-script.js:2 Uncaught TypeError: Failed to execute 'observe' on 'MutationObserver': parameter 1 is not of type 'Node'.
+    at HTMLIFrameElement.<anonymous> (web-client-content-script.js:2:381031)
+(anonymous) @ web-client-content-script.js:2
+common.min.js:2 The icon "resizegrippercolumn_16" was used but not registered. See https://github.com/microsoft/fluentui/wiki/Using-icons for more information.
+p @ common.min.js:2
+common.min.js:2 The icon "resizegrippercolumn_16" was used but not registered. See https://github.com/microsoft/fluentui/wiki/Using-icons for more information.
+p @ common.min.js:2
+common50.min.js:2 [Deprecation] The keyword 'slider-vertical' specified to an 'appearance' property is not standardized. It will be removed in the future. Use <input type=range style="writing-mode: vertical-lr; direction: rtl"> instead.
+insertRule @ common50.min.js:2
+microsoftajaxds.js:1 OSF_Outil_getQueryStringParamValue: The parameter is not found.
+microsoftajaxds.js:1 OSF_Outil_getQueryStringParamValue: The parameter is not found.
+microsoftajaxds.js:1 Cannot register WOPICatalog allowExternalMarketplace is:  Exception details: true
+microsoftajaxds.js:1 Cannot register WOPICatalog osfOmexBaseUrl is:  Exception details: "https://store.office.com"
+microsoftajaxds.js:1 Cannot register WOPICatalog enableWopiCatalog is:  Exception details: false
+common.min.js:2 Some icons were re-registered. Applications should only call registerIcons for any given icon once. Redefining what an icon is may have unintended consequences. Duplicates include: 
+LineSpacing_20, UxGalWordQuickFormats_20, SelectAll_20, ChangeCase_20, AllBorders_20, BoxBorder_20, BottomBorder_20, InsideBorder_20, InsideHorizontalBorder_20, InsideVerticalBorder_20 (+ 1857 more)
+o @ common.min.js:2
+common.min.js:2 Some icons were re-registered. Applications should only call registerIcons for any given icon once. Redefining what an icon is may have unintended consequences. Duplicates include: 
+HintBarEllipses_20, CancelGlyph_16, CommonControlChevronDown_8, CommonControlChevronDownGlyph_8, CommonControlChevronDownGlyph_12, CommonControlChevronUp_8, CommonControlChevronRight_12, CommonControlChevronRight_16, CommonControlChevronLeft_16, CommonControlCheckboxCheck_16 (+ 42 more)
+(anonymous) @ common.min.js:2
+cac-word-edit.officeapps.live.com/we/people.ashx?oid=3&bdqs=WOPIsrc%3Dhttps%253A%252F%252Fbbtv%252Dmy%252Esharepoint%252Ecom%252Fpersonal%252Fmfells%255Fbbtv%255Fcom1%252F%255Fvti%255Fbin%252Fwopi%252Eashx%252Ffiles%252F2ea223f5b5c3485abff70ba22c001e71%26access_token%3DeyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6Ind4amV3OUhQZkYzSjQySFBJck9KRHMyc0dkWSJ9%252EeyJhdWQiOiJ3b3BpL2JidHYtbXkuc2hhcmVwb2ludC5jb21AZjFjYzNhZWItMTUzNS00MGQzLTliNjYtOGZmNjM4NjBkZmFjIiwiaXNzIjoiMDAwMDAwMDMtMDAwMC0wZmYxLWNlMDAtMDAwMDAwMDAwMDAwQDkwMTQwMTIyLTg1MTYtMTFlMS04ZWZmLTQ5MzA0OTI0MDE5YiIsIm5iZiI6IjE3NTE5MDg3NzkiLCJleHAiOiIxNzUxOTQ0Nzc5IiwibmFtZWlkIjoiMCMuZnxtZW1iZXJzaGlwfG1mZWxsc0BiYnR2LmNvbSIsIm5paSI6Im1pY3Jvc29mdC5zaGFyZXBvaW50IiwiaXN1c2VyIjoidHJ1ZSIsImNhY2hla2V5IjoiMGguZnxtZW1iZXJzaGlwfDEwMDMyMDAwYTMzOGYxMGFAbGl2ZS5jb20iLCJzaWQiOiIwMDZiMjVjOS0wZDBiLTc2YTctMDUyMi1mNTg0OTlkMjhjYWUiLCJzaWduaW5fc3RhdGUiOiJbXCJrbXNpXCJdIiwidXRpIjoiNTlLSXR3SXgwVWFFaFBEeGlRRVlBQSIsInhtc19jYyI6IltcIkNQMVwiXSIsInhtc19zc20iOiIxIiwib2lkIjoiM2NlOGY0YjItNTFkZC00YjM3LWI0ZDgtODNlMTRiNGM1OWEwIiwiaXNsb29wYmFjayI6IlRydWUiLCJhcHBjdHgiOiIyZWEyMjNmNWI1YzM0ODVhYmZmNzBiYTIyYzAwMWU3MTtnRlBWV0dyWWRuZTdya05iWlAyaFVWL1llMkE9O0RlZmF1bHQ7OzdGRkZGRkZGRkZGQkZGRkY7VHJ1ZTs7OzUxMjszNTgxYWZhMS02MGJlLTkwMDAtMzFiMi0xNGIzMWExZDQ2NjgiLCJmaWQiOiIxOTE5ODMifQ%252ERjrEMCln72HxE6SGz%252DhgXh4EN29WQR0xc4oyzOx8EmgsWSyOuKGDc5DTu%255FgcvlTGUHW9gMWOMtreVsYIZamggSCagWVvnqmgKt3%255FV3Orpqtvfx4bjSlzjYwAkVXtvVKbyTyNdt6rBpNb5MpDvMYaiblxAbZPGDebBhvpTjIDEnQltPvh9y2BpCkvKESI4KxeBnTnPYeQ0Jd5Lz5fYaOW27gTH2DibI30jzatLZDk7593ZVpn5v4lNLTVSw7s9ToaOJzM01LtPmIFdmSt1oiqN1pbH8O%255FEKX8OX5OpGvf63jUaesGN8JvKQqo9Pc5eUSAY6OqzitTYaW0kEWXGqOk%252Dg%26access_token_ttl%3D1751944779029&uid=mfells%40bbtv.com&p=O365&usid=19e9bc41-68f5-7d1f-9967-886f5c71a6b9&WacUserType=WOPI:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+cac-word-edit.officeapps.live.com/we/people.ashx?oid=3&bdqs=WOPIsrc%3Dhttps%253A%252F%252Fbbtv%252Dmy%252Esharepoint%252Ecom%252Fpersonal%252Fmfells%255Fbbtv%255Fcom1%252F%255Fvti%255Fbin%252Fwopi%252Eashx%252Ffiles%252F2ea223f5b5c3485abff70ba22c001e71%26access_token%3DeyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6Ind4amV3OUhQZkYzSjQySFBJck9KRHMyc0dkWSJ9%252EeyJhdWQiOiJ3b3BpL2JidHYtbXkuc2hhcmVwb2ludC5jb21AZjFjYzNhZWItMTUzNS00MGQzLTliNjYtOGZmNjM4NjBkZmFjIiwiaXNzIjoiMDAwMDAwMDMtMDAwMC0wZmYxLWNlMDAtMDAwMDAwMDAwMDAwQDkwMTQwMTIyLTg1MTYtMTFlMS04ZWZmLTQ5MzA0OTI0MDE5YiIsIm5iZiI6IjE3NTE5MDg3NzkiLCJleHAiOiIxNzUxOTQ0Nzc5IiwibmFtZWlkIjoiMCMuZnxtZW1iZXJzaGlwfG1mZWxsc0BiYnR2LmNvbSIsIm5paSI6Im1pY3Jvc29mdC5zaGFyZXBvaW50IiwiaXN1c2VyIjoidHJ1ZSIsImNhY2hla2V5IjoiMGguZnxtZW1iZXJzaGlwfDEwMDMyMDAwYTMzOGYxMGFAbGl2ZS5jb20iLCJzaWQiOiIwMDZiMjVjOS0wZDBiLTc2YTctMDUyMi1mNTg0OTlkMjhjYWUiLCJzaWduaW5fc3RhdGUiOiJbXCJrbXNpXCJdIiwidXRpIjoiNTlLSXR3SXgwVWFFaFBEeGlRRVlBQSIsInhtc19jYyI6IltcIkNQMVwiXSIsInhtc19zc20iOiIxIiwib2lkIjoiM2NlOGY0YjItNTFkZC00YjM3LWI0ZDgtODNlMTRiNGM1OWEwIiwiaXNsb29wYmFjayI6IlRydWUiLCJhcHBjdHgiOiIyZWEyMjNmNWI1YzM0ODVhYmZmNzBiYTIyYzAwMWU3MTtnRlBWV0dyWWRuZTdya05iWlAyaFVWL1llMkE9O0RlZmF1bHQ7OzdGRkZGRkZGRkZGQkZGRkY7VHJ1ZTs7OzUxMjszNTgxYWZhMS02MGJlLTkwMDAtMzFiMi0xNGIzMWExZDQ2NjgiLCJmaWQiOiIxOTE5ODMifQ%252ERjrEMCln72HxE6SGz%252DhgXh4EN29WQR0xc4oyzOx8EmgsWSyOuKGDc5DTu%255FgcvlTGUHW9gMWOMtreVsYIZamggSCagWVvnqmgKt3%255FV3Orpqtvfx4bjSlzjYwAkVXtvVKbyTyNdt6rBpNb5MpDvMYaiblxAbZPGDebBhvpTjIDEnQltPvh9y2BpCkvKESI4KxeBnTnPYeQ0Jd5Lz5fYaOW27gTH2DibI30jzatLZDk7593ZVpn5v4lNLTVSw7s9ToaOJzM01LtPmIFdmSt1oiqN1pbH8O%255FEKX8OX5OpGvf63jUaesGN8JvKQqo9Pc5eUSAY6OqzitTYaW0kEWXGqOk%252Dg%26access_token_ttl%3D1751944779029&uid=mfells%40bbtv.com&p=O365&usid=19e9bc41-68f5-7d1f-9967-886f5c71a6b9&WacUserType=WOPI:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+graph.microsoft.com/v1.0/users/mfells@bbtv.com/photo/$value:1 
+            
+            
+           Failed to load resource: the server responded with a status of 404 ()
+Grammarly.js:2 grm ERROR [lib.tracking.telemetry] ░░ cs.unhandled Error: Promise timed out.
+    at S.csUnhandled (Grammarly.js:2:1540863)
+    at Object.next (Grammarly.js:2:496946)
+    at e.next (Grammarly.js:2:1907078)
+    at t._next (Grammarly.js:2:1906682)
+    at t.next (Grammarly.js:2:1906301)
+    at Grammarly.js:2:1949358
+    at a._next (Grammarly.js:2:1920625)
+    at t.next (Grammarly.js:2:1906301)
+    at Grammarly.js:2:1946819
+    at a._next (Grammarly.js:2:1920625)
+write @ Grammarly.js:2
+Grammarly.js:2 Uncaught (in promise) a: Promise timed out.
+    at chrome-extension://kbfnbcaeplbcioakkpcpgfkobkghlhen/src/js/Grammarly.js:2:1521725
+(anonymous) @ Grammarly.js:2
+livepersonacard_with-react_87fb7049bfa63de73494.js:2 Theming value not provided for "success". Falling back to "#107c10".
+(anonymous) @ livepersonacard_with-react_87fb7049bfa63de73494.js:2
+livepersonacard_with-react_87fb7049bfa63de73494.js:2 Theming value not provided for "error". Falling back to "#a80000".
+(anonymous) @ livepersonacard_with-react_87fb7049bfa63de73494.js:2
+osfruntimewordwac.js:18 Error while parsing the 'sandbox' attribute: 'ms-allow-popups' is an invalid sandbox flag.
+(anonymous) @ osfruntimewordwac.js:18
+livepersonacard_with-react_87fb7049bfa63de73494.js:2 Some icons were re-registered. Applications should only call registerIcons for any given icon once. Redefining what an icon is may have unintended consequences. Duplicates include: 
+GlobalNavButton, ChevronDown, ChevronUp, Edit, Add, Cancel, More, Settings, Mail, Filter (+ 6271 more)
+r @ livepersonacard_with-react_87fb7049bfa63de73494.js:2
+wordeditords.common.js:1165 preloadCopilotFPA called
+OfficeExtensionManager.aspx?22e94701_78a49b_1751908791120:128 Uncaught ReferenceError: _spBodyOnLoadFunctions is not defined
+    at OfficeExtensionManager.aspx?22e94701_78a49b_1751908791120:128:5
+(anonymous) @ OfficeExtensionManager.aspx?22e94701_78a49b_1751908791120:128
+microsoftajaxds.js:1 onClickInstallOsfControl!
+osfruntimewordwac.js:18 Unrecognized feature: 'focus-without-user-activation'.
+(anonymous) @ osfruntimewordwac.js:18
+Configuration.ts:208 WARNING: OfficeBrowserFeedback is no longer supporting the host application setting the styles for the surveys. 
+			Please use the default styling.
+e.setCommonInitOptions @ Configuration.ts:208
+wordeditorframe.aspx:1 [Deprecation] The keyword 'slider-vertical' specified to an 'appearance' property is not standardized. It will be removed in the future. Use <input type=range style="writing-mode: vertical-lr; direction: rtl"> instead.
+floodgate.en.bundle.js:283 Some icons were re-registered. Applications should only call registerIcons for any given icon once. Redefining what an icon is may have unintended consequences. Duplicates include: 
+GlobalNavButton, ChevronDown, ChevronUp, Edit, Add, Cancel, More, Settings, Mail, Filter (+ 1791 more)
+n @ floodgate.en.bundle.js:283
+(anonymous) @ floodgate.en.bundle.js:63
+common.min.js:2 Some icons were re-registered. Applications should only call registerIcons for any given icon once. Redefining what an icon is may have unintended consequences. Duplicates include: 
+Sync_16, search_32, Replace_16, RenameColumn_32, ReuseSlide_32, MathZone_20, Info_16, Columns_32, Gear_16, TrackChanges_20 (+ 9 more)
+o @ common.min.js:2
+osfruntimewordwac.js:18 Error while parsing the 'sandbox' attribute: 'ms-allow-popups' is an invalid sandbox flag.
+(anonymous) @ osfruntimewordwac.js:18
+microsoftajaxds.js:1 onClickInstallOsfControl!
+wordeditorframe.aspx:1 [Deprecation] The keyword 'slider-vertical' specified to an 'appearance' property is not standardized. It will be removed in the future. Use <input type=range style="writing-mode: vertical-lr; direction: rtl"> instead.
+osfruntimewordwac.js:18 Error while parsing the 'sandbox' attribute: 'ms-allow-popups' is an invalid sandbox flag.
+(anonymous) @ osfruntimewordwac.js:18
+childList
+zs @ common.min.js:2
+zs @ common.min.js:2
+zs @ common.min.js:2
+zs @ common.min.js:2
+zs @ common.min.js:2
+zs @ common.min.js:2
+zs @ common.min.js:2
+$s @ common.min.js:2
+Vs @ common.min.js:2
+Us @ common.min.js:2
+Vs @ common.min.js:2
+Us @ common.min.js:2
+Vs @ common.min.js:2
+Us @ common.min.js:2
+Vs @ common.min.js:2
+Us @ common.min.js:2
+Vs @ common.min.js:2
+Us @ common.min.js:2
+Vs @ common.min.js:2
+Us @ common.min.js:2
+Vs @ common.min.js:2
+Us @ common.min.js:2
+Vs @ common.min.js:2
+Us @ common.min.js:2
+Vs @ common.min.js:2
+Us @ common.min.js:2
+Vs @ common.min.js:2
+Us @ common.min.js:2
+Vs @ common.min.js:2
+Us @ common.min.js:2
+Vs @ common.min.js:2
+Us @ common.min.js:2
+Vs @ common.min.js:2
+Us @ common.min.js:2
+Vs @ common.min.js:2
+Us @ common.min.js:2
+Vs @ common.min.js:2
+Us @ common.min.js:2
+Vs @ common.min.js:2
+Us @ common.min.js:2
+Vs @ common.min.js:2
+Us @ common.min.js:2
+Vs @ common.min.js:2
+Us @ common.min.js:2
+Vs @ common.min.js:2
+Us @ common.min.js:2
+Vs @ common.min.js:2
+Us @ common.min.js:2
+Vs @ common.min.js:2
+Us @ common.min.js:2
+Vs @ common.min.js:2
+Us @ common.min.js:2
+Vs @ common.min.js:2
+Us @ common.min.js:2
+Vs @ common.min.js:2
+Us @ common.min.js:2
+Vs @ common.min.js:2
+Us @ common.min.js:2
+Vs @ common.min.js:2
+Us @ common.min.js:2
+Vs @ common.min.js:2
+Us @ common.min.js:2
+Vs @ common.min.js:2
+Us @ common.min.js:2
+Vs @ common.min.js:2
+Us @ common.min.js:2
+Vs @ common.min.js:2
+Us @ common.min.js:2
+Vs @ common.min.js:2
+Us @ common.min.js:2
+Vs @ common.min.js:2
+Us @ common.min.js:2
+Vs @ common.min.js:2
+Us @ common.min.js:2
+Vs @ common.min.js:2
+Us @ common.min.js:2
+Vs @ common.min.js:2
+Us @ common.min.js:2
+Vs @ common.min.js:2
+Us @ common.min.js:2
+Vs @ common.min.js:2
+Us @ common.min.js:2
+Vs @ common.min.js:2
+Us @ common.min.js:2
+Vs @ common.min.js:2
+Us @ common.min.js:2
+Vs @ common.min.js:2
+Us @ common.min.js:2
+Vs @ common.min.js:2
+(anonymous) @ common.min.js:2
+(anonymous) @ common.min.js:2
+Yc @ common.min.js:2
+Lc @ common.min.js:2
+ri @ common.min.js:2
+Wc @ common.min.js:2
+(anonymous) @ common.min.js:2
+Fu @ common.min.js:2
+t.render @ common.min.js:2
+apply @ common.min.js:2
+v @ commonux-27-104-105.min.js:1
+p @ commonux-27-104-105.min.js:1
+(anonymous) @ wordeditords.common.js:3623
+Promise.then
+LYo @ wordeditords.common.js:3623
+show @ wordeditords.common.js:3621
+DYo @ wordeditords.common.js:3578
+Jh @ wordeditords.common.js:3578
+Jh @ wordeditords.common.js:1026
+Pn @ wordeditords.common.js:1025
+eHc @ wordeditords.common.js:1113
+x3b @ wordeditords.common.js:1092
+run @ wordeditords.js:1362
+nFb @ wordeditords.js:1352
+run @ wordeditords.js:1362
+nFb @ wordeditords.js:1352
+run @ wordeditords.js:1332
+run @ wordeditords.js:1329
+Lvg @ wordeditords.js:1339
+Ya @ wordeditords.js:1341
+nGa @ wordeditords.box4.dll1.js:669
+nGa @ wordeditords.box4.dll1.js:3489
+executeCommand @ wordeditords.box4.dll1.js:3074
+$pm @ wordeditords.box4.dll1.js:3423
+executeCommand @ wordeditords.box4.dll1.js:3405
+(anonymous) @ wordeditords.box4.dll1.js:3461
+(anonymous) @ common.min.js:2
+C @ common.min.js:2
+(anonymous) @ common.min.js:2
+onClick @ common50.min.js:2
+b @ common.min.js:2
+m @ common.min.js:2
+n._onItemClick @ common.min.js:2
+Ae @ common.min.js:2
+We @ common.min.js:2
+(anonymous) @ common.min.js:2
+Qo @ common.min.js:2
+er @ common.min.js:2
+(anonymous) @ common.min.js:2
+Hc @ common.min.js:2
+Ie @ common.min.js:2
+ar @ common.min.js:2
+cn @ common.min.js:2
+ln @ common.min.js:2
+microsoftajaxds.js:1 onClickInstallOsfControl!
+taskpane-fixed.html:1615 Uncaught SyntaxError: Unexpected token ','
+
+                
+          
+          
+          
+         Chrome is moving towards a new experience that allows users to choose to browse without third-party cookies.
+wordeditorframe.aspx:1 [Deprecation] The keyword 'slider-vertical' specified to an 'appearance' property is not standardized. It will be removed in the future. Use <input type=range style="writing-mode: vertical-lr; direction: rtl"> instead.
+office.js:76 Uncaught Error: Office.js has not fully loaded. Your app must call "Office.onReady()" as part of it's loading sequence (or set the "Office.initialize" function). If your app has this functionality, try reloading this page.
+    at office.js:76:32730
+    at c (office.js:76:4752)
+(anonymous) @ office.js:76
+c @ office.js:76
+setTimeout
+c @ office.js:76
+setTimeout
+c @ office.js:76
+setTimeout
+c @ office.js:76
+setTimeout
+c @ office.js:76
+setTimeout
+c @ office.js:76
+setTimeout
+c @ office.js:76
+setTimeout
+c @ office.js:76
+setTimeout
+c @ office.js:76
+setTimeout
+c @ office.js:76
+setTimeout
+c @ office.js:76
+setTimeout
+c @ office.js:76
+setTimeout
+c @ office.js:76
+setTimeout
+c @ office.js:76
+setTimeout
+c @ office.js:76
+setTimeout
+c @ office.js:76
+setTimeout
+c @ office.js:76
+setTimeout
+c @ office.js:76
+setTimeout
+c @ office.js:76
+setTimeout
+c @ office.js:76
+setTimeout
+c @ office.js:76
+setTimeout
+c @ office.js:76
+setTimeout
+c @ office.js:76
+setTimeout
+c @ office.js:76
+setTimeout
+c @ office.js:76
+setTimeout
+c @ office.js:76
+setTimeout
+c @ office.js:76
+setTimeout
+c @ office.js:76
+setTimeout
+c @ office.js:76
+setTimeout
+c @ office.js:76
+setTimeout
+c @ office.js:76
+setTimeout
+c @ office.js:76
+setTimeout
+c @ office.js:76

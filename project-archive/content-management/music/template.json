@@ -1,0 +1,247 @@
+{
+  "metadata": {
+    "name": "RHEI Digital Video Services Agreement",
+    "version": "1.0.0",
+    "created": "2024-12-30",
+    "updated": "2024-12-30",
+    "author": "RHEI Legal Team",
+    "description": "Digital Video Services Agreement template based on RHEI Legal Matrix data",
+    "baseline": "Ninja Tune Ltd.",
+    "alternatives": ["MNRK Music Group LP", "WMX", "Sony", "Create Music Group", "Lionsgate"]
+  },
+  "template": {
+    "title": "DIGITAL VIDEO SERVICES AGREEMENT",
+    "parties": {
+      "party1": {
+        "role": "RHEI",
+        "placeholder": "RHEI CREATIONS CORP.",
+        "address": "600-700 Hornby Street Vancouver, British Columbia, Canada V6Z 1S4",
+        "entity_type": "British Columbia company"
+      },
+      "party2": {
+        "role": "Provider",
+        "placeholder": "[PROVIDER_NAME]",
+        "address": "[PROVIDER_ADDRESS]",
+        "entity_type": "[PROVIDER_ENTITY_TYPE]"
+      }
+    },
+    "sections": [
+      {
+        "id": "title_page",
+        "title": "TITLE PAGE",
+        "order": 0,
+        "required": true,
+        "content": "DIGITAL VIDEO SERVICES AGREEMENT BETWEEN RHEI CREATIONS CORP. AND [PROVIDER_NAME]. [EFFECTIVE_DATE]"
+      },
+      {
+        "id": "table_of_contents",
+        "title": "TABLE OF CONTENTS",
+        "order": 1,
+        "required": true,
+        "content": "ARTICLE 1 INTERPRETATION 4\n1.1 Definitions 4\n1.2 Currency 7\n1.3 Headings 7\n1.4 Interpretation 7\n1.5 Construction 7\nARTICLE 2 RHEI SERVICES 8\n2.1 Channel Management Services 8\n2.2 Content Development Services 8\n2.3 RHEI Reports 8\n2.4 Advertising Approvals 8\nARTICLE 3 PROVIDER'S OBLIGATIONS 8\n3.1 Provider Obligations 8\n3.2 Provider License 9\n3.3 Prohibitions 9\n3.4 Policies and Applicable Law 9\nARTICLE 4 INTELLECTUAL PROPERTY 9\n4.1 Ownership 9\n4.2 Work for Hire 10\n4.3 Feedback 10\n4.4 Stock Audiovisual Content 11\nARTICLE 5 FINANCIAL TERMS 11\n5.1 Revenue Shares 11\n5.2 RHEI Payments to Provider 11\n5.3 Payment Methods 12\n5.4 Expenses; Payments to Rights Holders 12\n5.5 Taxes 12\n5.6 Non-Qualifying Ads 13\nARTICLE 6 WARRANTIES, LIABILITY AND INDEMNITIES 13\n6.1 Excluded Warranties 13\n6.2 Provider Warranties and Indemnity 13\n6.3 RHEI Warranties and Indemnity 14\n6.4 Indemnity Procedure 14\n6.5 RHEI's Limitation of Liability 15\n6.6 Provider's Limitation of Liability 15\n6.7 Provider Content 16\nARTICLE 7 CONFIDENTIALITY 16\n7.1 Confidential Information 16\n7.2 Use/Safeguarding Confidential Information 16\n7.3 Exceptions 17\n7.4 Publicity 17\nARTICLE 8 TERM AND TERMINATION 18\n8.1 Term 18\n8.2 Termination by Either Party 18\n8.3 Survival of Termination 18\nARTICLE 9 MISCELLANEOUS 18\n9.1 Entire Agreement 18\n9.2 Severability, Conflict 19\n9.3 Notices 19\n9.4 Personal Jurisdiction, Venue and Choice of Law 19\n9.5 Equitable Remedies 19\n9.6 Non-Assignment / Binding Agreement 20\n9.7 Independent Contractors 20\n9.8 Force Majeure 20\n9.9 Failure 20\n9.10 Further Acts 21\n9.11 Execution 21\nSCHEDULE \"A\" – LIST OF MANAGED CHANNELS AND RHEI OWNED AND OPERATED CHANNELS\nSCHEDULE \"B\" – CHANNEL MANAGEMENT SERVICES\nSCHEDULE \"C\" – CONTENT DEVELOPMENT SERVICES"
+      },
+      {
+        "id": "schedules",
+        "title": "SCHEDULES",
+        "order": 2,
+        "required": true,
+        "content": "SCHEDULE \"A\" – LIST OF MANAGED CHANNELS AND RHEI OWNED AND OPERATED CHANNELS\nSCHEDULE \"B\" – CHANNEL MANAGEMENT SERVICES\nSCHEDULE \"C\" – CONTENT DEVELOPMENT SERVICES"
+      },
+      {
+        "id": "agreement_header",
+        "title": "DIGITAL VIDEO SERVICES AGREEMENT",
+        "order": 3,
+        "required": true,
+        "content": "This Digital Video Services Agreement (the \"Agreement\") is made as of [EFFECTIVE_DATE] (the \"Effective Date\").\n\nBETWEEN:\nRHEI CREATIONS CORP., a British Columbia company having an address at 600-700 Hornby Street Vancouver, British Columbia, Canada V6Z 1S4 (\"RHEI\")\n\nAND:\n[PROVIDER_NAME], [PROVIDER_ENTITY_TYPE] having a principal place of business at [PROVIDER_ADDRESS] (\"Provider\")"
+      },
+      {
+        "id": "recitals",
+        "title": "RECITALS",
+        "order": 4,
+        "required": true,
+        "content": "WHEREAS:\nA. RHEI is a media and technology company that specializes in the optimization, monetization, claiming of video content and the management of online video channels;\nB. Provider is an independent record label and music management company;\nC. Provider operates a network of channels on YouTube and wishes to engage RHEI to assist in the management of such channels, and provide content production services with respect to such channels; and\nD. RHEI has agreed to accept such engagement on the terms and conditions herein provided.\n\nNOW THEREFORE THIS AGREEMENT WITNESSES that in consideration of the premises, the mutual covenants and agreements set forth in this Agreement and other good and valuable consideration (the receipt and sufficiency of which is hereby acknowledged by each of the parties), the parties hereby agree as follows:"
+      },
+      {
+        "id": "article_1_definitions",
+        "title": "ARTICLE 1 - INTERPRETATION",
+        "order": 5,
+        "required": true,
+        "content": "1.1 Definitions\n\nIn this Agreement, the following terms shall have the following meanings:\n\n\"Ads\" means advertisements, including without limitation, pre-roll and banner ads, provided, obtained or placed on or in connection with Provider Content on the Managed Channels or RHEI Owner and Operated Channels.\n\nAn \"Affiliate\" of a Person means, any other Person that directly or indirectly controls, is controlled by, or is under common control with such Person.\n\n\"Channel Management Services\" has the meaning set out in Section 2.1.\n\n\"Confidential Information\" has the meaning set forth in Section 7.1.\n\n\"Content Development Services\" has the meaning set out in Section 2.3.\n\n\"End User\" means the person(s) accessing all or any part of the Provider Content.\n\n\"Google\" means Google LLC or any of its Affiliates, including YouTube LLC, and their successors and assigns.\n\n\"Managed Channels\" has the meaning set out in Section 2.1.\n\n\"Net Ad Revenue\" means, for any given month during the Term, gross revenue actually received by RHEI or Provider in such period from Ads placed on or in connection with Provider Content on the Managed Channels and/or RHEI Owner and Operated Channels, less amounts due to Google to the extent not previously deducted from revenue paid to Provider or RHEI.\n\n\"Net Revenue\" means, for any given month during the Term, the Net Ad Revenue and the Net Subscription Revenue actually received by RHEI or Provider in such periods.\n\n\"Provider Content\" means singularly and collectively: (a) Provider Videos and Provider Channels; (b) all graphics, music, sounds, images, files, photos, animation, artwork, text, data, information, messages, hypertext, links, scripts, and other materials embodied within the Provider Videos; (c) all metadata embodied within the Provider Videos; and (d) Provider Brand Features.\n\n\"RHEI\" means RHEI CREATIONS CORP.\n\n\"Services\" means collectively the Channel Management Services and the Content Development Services.\n\n\"Territory\" means worldwide.\n\n\"Term\" means the initial term and all renewal terms of this Agreement as set forth in Section 8.1.\n\n\"YouTube\" means the internet video-sharing website known as YouTube on which users can upload, share and view videos, at www.youtube.com, and any and all other localized and/or app-based versions of such website, and includes any successor or replacement thereof."
+      },
+      {
+        "id": "article_1_currency",
+        "title": "1.2 Currency",
+        "order": 6,
+        "required": true,
+        "content": "All currencies in this Agreement are in US Dollars."
+      },
+      {
+        "id": "article_1_headings",
+        "title": "1.3 Headings",
+        "order": 7,
+        "required": true,
+        "content": "The headings in this Agreement have been inserted for reference and as a matter of convenience only and in no way define, limit or enlarge the scope or meaning of this Agreement or any provision hereof."
+      },
+      {
+        "id": "article_1_interpretation",
+        "title": "1.4 Interpretation",
+        "order": 8,
+        "required": true,
+        "content": "Wherever the singular, plural, masculine, feminine or neuter is used throughout this Agreement the same shall be construed as meaning the singular, plural, masculine, feminine, neuter, body politic or body corporate where the fact or context so requires and the provisions hereof and all covenants herein shall be construed to be joint and several when applicable to more than one party. The term \"including\" is not limiting, and means \"including without limitation\"."
+      },
+      {
+        "id": "article_1_construction",
+        "title": "1.5 Construction",
+        "order": 9,
+        "required": true,
+        "content": "The parties confirm that both parties participated in the negotiation and drafting of this Agreement, and that this Agreement shall be construed as having been jointly drafted by the parties."
+      },
+      {
+        "id": "article_2_channel_management",
+        "title": "ARTICLE 2 - RHEI SERVICES",
+        "order": 10,
+        "required": true,
+        "content": "2.1 Channel Management Services\n\nRHEI shall provide Provider with the \"Channel Management Services\" as set out in Schedule \"B\" attached hereto (the \"Channel Management Services\") in connection with the Provider Channels set out in Schedule \"A\" attached hereto or any other Provider Channels mutually agreed upon by the parties in writing (email to suffice) (collectively, the \"Managed Channels\")."
+      },
+      {
+        "id": "article_2_content_development",
+        "title": "2.2 Content Development Services",
+        "order": 11,
+        "required": true,
+        "content": "RHEI shall provide Provider with the \"Content Development Services\" as set out in Schedule \"C\" attached hereto (the \"Content Development Services\")."
+      },
+      {
+        "id": "article_2_rhei_reports",
+        "title": "2.3 RHEI Reports",
+        "order": 12,
+        "required": true,
+        "content": "Subject to RHEI's receipt of the necessary reports from Google, RHEI shall provide to Provider the following reports in connection with the Services as follows:\n\n(a) Channel Management Services: (i) a monthly report showing the impressions and revenues on a per-Title basis; and (ii) a monthly report regarding such viewership data monthly on a per-Title basis with respect to Managed Channels as RHEI may obtain from time to time.\n\n(b) RHEI Owned and Operated Channels: (i) a monthly report showing the views and revenues for Provider Content on RHEI Owner and Operated Channels on a per-Title basis.\n\nRHEI may provide Provider with additional or other reports as mutually agreed to in writing by the parties (email to suffice)."
+      },
+      {
+        "id": "article_2_advertising_approvals",
+        "title": "2.4 Advertising Approvals",
+        "order": 13,
+        "required": true,
+        "content": "Unless the Parties mutually agree to a different approval process in writing, RHEI shall consult with and propose to Provider the types of advertising categories that may be placed on or in connection with Provider Content under this Agreement, and if no written objection from Provider is received by RHEI within forty-eight (48) hours of the delivery of such proposal, Provider's approval for such proposal shall be deemed granted."
+      },
+      {
+        "id": "article_3_provider_obligations",
+        "title": "ARTICLE 3 - PROVIDER'S OBLIGATIONS",
+        "order": 14,
+        "required": true,
+        "content": "3.1 Provider Obligations\n\nWithout limiting any other obligations of Provider set out in this Agreement, for the purposes of this Agreement, solely to the extent necessary for RHEI to provide the Services, Provider will take reasonable actions as may be necessary or desirable in order to:\n\n(a) Channel Management Services: (i) provide RHEI with administrative access to the Provider Channels; and (ii) provide RHEI with metadata for the Provider Channels and the Titles appearing thereon, as RHEI may reasonably request from time to time.\n\n(b) Provider's Content Owner System: (i) Include RHEI Owned and Operated Channels on Provider's Content Owner System permissions list (the \"Allowlist\") as RHEI may reasonably request from time to time."
+      },
+      {
+        "id": "article_3_provider_license",
+        "title": "3.2 Provider License",
+        "order": 15,
+        "required": true,
+        "content": "Provider hereby grants to RHEI a non-exclusive (except with respect to Provider), royalty-free, and sublicensable (but only to RHEI's Affiliates and only for the purposes of this Agreement) right and license in the Territory to:\n\n(a) use, manage, adapt, edit, modify, compile, prepare derivative works based on, encode, copy, store, reformat, analyze, advertise, promote, publish, transmit, host, cache, analyze, and otherwise use and deal with the Provider Brand Features and Provider Content on the Managed Channels for the strict purpose of RHEI providing the Services to Provider in accordance with this Agreement, and\n\n(b) to use the rights set out in (a) above for the purposes of exploiting and/or monetizing Provider Content on or through the RHEI Owned and Operated Channels."
+      },
+      {
+        "id": "article_3_prohibitions",
+        "title": "3.3 Prohibitions",
+        "order": 16,
+        "required": true,
+        "content": "Neither party shall (and shall not authorize or encourage any third party to), directly or indirectly generate queries, impressions of or clicks on any Ads or to obtain access to Provider Content through any automated, deceptive, fraudulent or other invalid means, including but not limited to through repeated manual clicks, the use of robots or other automated query tools and/or computer generated search requests, and/or the fraudulent use of other search engine optimization services and/or software. Each party reserves the right to investigate, at its own discretion, any activity that may violate this Agreement, including but not limited to any use of a software application to access Ads or any engagement in any activity prohibited by this Agreement."
+      },
+      {
+        "id": "article_3_policies",
+        "title": "3.4 Policies and Applicable Law",
+        "order": 17,
+        "required": true,
+        "content": "All obligations of the parties in this Agreement shall be subject to all applicable Google policies posted on YouTube or otherwise applicable to RHEI and/or Provider. Each party will comply with all such policies and guidelines insofar as applicable with respect to its rights and obligations under this Agreement; provided however, that a party shall not be required to comply with any policies or guidelines of the other which, in such party's reasonable opinion, would result in a violation of any applicable law, any applicable rule, regulation or policy of Google, or any agreement between such party and Google. Each party hereby agrees to comply with all applicable law in connection with its performance under this Agreement."
+      },
+      {
+        "id": "article_5_revenue_shares",
+        "title": "ARTICLE 5 - FINANCIAL TERMS",
+        "order": 18,
+        "required": true,
+        "content": "5.1 Revenue Shares\n\nFor any given month during the Term:\n\n(a) Provider shall pay RHEI an amount equal to: (i) fifty percent (50%) of the first $5,000.00 in Net Revenue from the Managed Channels from such month; and (ii) thirty percent (30%) of the Net Revenue from the Managed Channels in excess of $5,000.00 from such month (RHEI's share of revenue set out in subsections (i) and (ii) above collectively referred to as \"RHEI Net Revenue\").\n\n(b) RHEI shall pay Provider an amount equal to thirty percent (30%) of Net Revenue from Provider Content on RHEI Owned and Operated Channels (\"Provider Net Revenue\").\n\nWith the exception of the amounts payable to the other Party as described above, each Party shall be entitled to retain all other amounts of Net Revenue received by such Party under this Agreement."
+      },
+      {
+        "id": "article_5_payments",
+        "title": "5.2 RHEI Payments to Provider",
+        "order": 19,
+        "required": true,
+        "content": "Each Party (\"Payor\") shall pay the other Party (\"Payee\") their share of Net Revenue as described in Section 5.1 above in any month, within 30 days following of the end of the month in which such revenue was received, provided that the Payee's earned balance is Three Hundred Dollars ($300.00) or more. If Payee's earned balance is less than Three Hundred Dollars ($300.00) but greater than Ten Dollars ($10.00), the Payor will pay Payee's earned balance within 45 days following the end of the calendar year, or the end of the calendar month in which the Payee's earned balance exceeds Three Hundred Dollars ($300.00), whichever comes first. In the event that this Agreement is terminated, Payor shall pay Payee's earned balance to Payee within 90 days after the end of the calendar month in which the Agreement has been terminated."
+      }
+    ],
+    "variables": {
+      "provider_name": "[PROVIDER_NAME]",
+      "provider_address": "[PROVIDER_ADDRESS]",
+      "provider_entity_type": "[PROVIDER_ENTITY_TYPE]",
+      "effective_date": "[EFFECTIVE_DATE]",
+      "term_length": "[TERM_LENGTH]",
+      "territory": "[TERRITORY]",
+      "governing_law": "[GOVERNING_LAW]"
+    }
+  },
+  "generation_rules": {
+    "conditional_sections": [
+      {
+        "condition": "provider_entity_type != ''",
+        "section_id": "agreement_header",
+        "action": "modify",
+        "modification": "include_entity_type"
+      }
+    ],
+    "variable_transformations": [
+      {
+        "variable": "effective_date",
+        "transformation": "format_date"
+      }
+    ]
+  },
+  "validation": {
+    "required_fields": [
+      "provider_name",
+      "provider_address",
+      "provider_entity_type",
+      "effective_date",
+      "term_length",
+      "territory",
+      "governing_law"
+    ],
+    "field_validations": [
+      {
+        "field": "provider_name",
+        "type": "string",
+        "min_length": 2,
+        "max_length": 100
+      },
+      {
+        "field": "effective_date",
+        "type": "date",
+        "format": "YYYY-MM-DD"
+      }
+    ]
+  },
+  "alternatives": {
+    "mnrk": {
+      "article_5_revenue_shares": {
+        "content": "5.1 Revenue Shares\n\nFor any given month during the Term:\n\n(a) Provider shall pay RHEI an amount equal to thirty percent (30%) of Net Revenue from such month from the Managed Channels (\"RHEI Net Revenue\") and\n\n(b) RHEI shall pay Provider an amount equal to seventy percent (70%) of Net Revenue from Provider Content on RHEI Owned and Operated Channels (\"Provider Net Revenue\")\n\nWith the exception of the amounts payable to the other Party as described above, each Party shall be entitled to retain all other amounts of Net Revenue received by such Party under this Agreement."
+      }
+    },
+    "wmx": {
+      "article_2_channel_management": {
+        "content": "2.1 Channel Management Services\n\nRHEI shall provide Provider with the \"Channel Management Services\" as set out in Schedule \"B\" attached hereto (the \"Channel Management Services\") solely in connection with the Provider Channels set out in Schedule \"A\" attached hereto or any other Provider Channels mutually agreed upon by the parties in writing (email to suffice) (collectively, the \"Managed Channels\"). All services, including video uploads, are subject to Provider approval as per Schedules A and B."
+      }
+    },
+    "sony": {
+      "article_5_revenue_shares": {
+        "content": "5.1 Revenue Shares\n\nRevenue share is 80/20 in favour of Provider, as detailed in Section 6.3."
+      }
+    },
+    "create_music_group": {
+      "article_2_content_development": {
+        "content": "2.2 Content Development Services\n\nRHEI shall provide Provider with the \"Content Development Services\" as set out in Schedule \"D\" attached hereto (the \"Content Development Services\")."
+      }
+    },
+    "lionsgate": {
+      "article_2_rhei_reports": {
+        "content": "2.3 BBTV Reports\n\nSubject to BBTV's receipt of the necessary reports from Google, BBTV shall provide to Provider the following reports in connection with the Services as follows:\n\n(a) Channel Management Services: (i) a monthly report showing the impressions and revenues on a per-Title basis; and (ii) a monthly report regarding such viewership data monthly on a per-Title basis with respect to Managed Channels as BBTV may obtain from time to time.\n\n(b) BBTV Owned and Operated Channels: (i) a monthly report showing the views and revenues for Provider Content on BBTV Owner and Operated Channels on a per-Title basis.\n\nBBTV may provide Provider with additional or other reports as mutually agreed to in writing by the parties (email to suffice)."
+      }
+    }
+  }
+}

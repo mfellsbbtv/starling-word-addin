@@ -1,0 +1,255 @@
+{
+  "metadata": {
+    "name": "RHEI Data License Agreement - Risk Assessment Rules",
+    "version": "1.0.0",
+    "created": "2024-12-30",
+    "updated": "2024-12-30",
+    "author": "RHEI Legal Team",
+    "description": "Risk assessment rules for RHEI Data License agreements"
+  },
+  "risk_categories": [
+    {
+      "id": "licensing_scope",
+      "name": "Licensing Scope Risk",
+      "description": "Risks related to the scope and breadth of licensing rights",
+      "weight": 0.4
+    },
+    {
+      "id": "content_ownership",
+      "name": "Content Ownership Risk",
+      "description": "Risks related to content ownership and rights clearance",
+      "weight": 0.3
+    },
+    {
+      "id": "sublicensing",
+      "name": "Sublicensing Risk",
+      "description": "Risks related to sublicensing rights and revenue sharing",
+      "weight": 0.2
+    },
+    {
+      "id": "compliance",
+      "name": "Compliance Risk",
+      "description": "Risks related to regulatory and legal compliance",
+      "weight": 0.1
+    }
+  ],
+  "risk_rules": [
+    {
+      "id": "broad_ai_license",
+      "name": "Broad AI/ML License Grant",
+      "category": "licensing_scope",
+      "risk_level": "high",
+      "description": "License grants broad rights for AI/ML development and training",
+      "triggers": [
+        {
+          "clause_id": "non_exclusive_license",
+          "condition": "contains",
+          "value": "machine learning and artificial intelligence"
+        }
+      ],
+      "mitigation": "Ensure clear limitations on use and strong sublicensing controls",
+      "impact": "High - Broad rights may limit future licensing opportunities"
+    },
+    {
+      "id": "irrevocable_license",
+      "name": "Irrevocable License Terms",
+      "category": "licensing_scope",
+      "risk_level": "high",
+      "description": "License is granted on an irrevocable basis",
+      "triggers": [
+        {
+          "clause_id": "non_exclusive_license",
+          "condition": "contains",
+          "value": "irrevocable"
+        }
+      ],
+      "mitigation": "Consider term limitations or termination rights",
+      "impact": "High - Cannot revoke rights once granted"
+    },
+    {
+      "id": "unlimited_sublicensing",
+      "name": "Unlimited Sublicensing Rights",
+      "category": "sublicensing",
+      "risk_level": "high",
+      "description": "RHEI has broad sublicensing rights with revenue discretion",
+      "triggers": [
+        {
+          "clause_id": "non_exclusive_license",
+          "condition": "contains",
+          "value": "sublicensable (through multiple tiers)"
+        }
+      ],
+      "mitigation": "Require approval for major sublicenses or revenue sharing minimums",
+      "impact": "High - Limited control over downstream licensing"
+    },
+    {
+      "id": "content_modification_rights",
+      "name": "Content Modification Rights",
+      "category": "content_ownership",
+      "risk_level": "medium",
+      "description": "License allows modification and derivative works",
+      "triggers": [
+        {
+          "clause_id": "non_exclusive_license",
+          "condition": "contains",
+          "value": "modify, prepare derivative works"
+        }
+      ],
+      "mitigation": "Ensure quality standards and attribution requirements",
+      "impact": "Medium - Original content may be altered"
+    },
+    {
+      "id": "worldwide_territory",
+      "name": "Worldwide Territory",
+      "category": "licensing_scope",
+      "risk_level": "medium",
+      "description": "License grants worldwide rights",
+      "triggers": [
+        {
+          "clause_id": "non_exclusive_license",
+          "condition": "contains",
+          "value": "worldwide"
+        }
+      ],
+      "mitigation": "Consider territorial restrictions for sensitive content",
+      "impact": "Medium - Global rights may conflict with local restrictions"
+    },
+    {
+      "id": "ordinary_consumption_exclusion",
+      "name": "Ordinary Content Consumption Exclusion",
+      "category": "licensing_scope",
+      "risk_level": "low",
+      "description": "License excludes ordinary content consumption rights",
+      "triggers": [
+        {
+          "clause_id": "non_exclusive_license",
+          "condition": "contains",
+          "value": "Ordinary Content Consumption"
+        }
+      ],
+      "mitigation": "Positive - Limits traditional distribution rights",
+      "impact": "Low - Protects traditional distribution channels"
+    }
+  ],
+  "clause_risk_assessments": [
+    {
+      "clause_id": "non_exclusive_license",
+      "base_risk_level": "high",
+      "risk_factors": [
+        {
+          "factor": "irrevocable_grant",
+          "weight": 0.3,
+          "description": "License cannot be revoked"
+        },
+        {
+          "factor": "broad_ai_rights",
+          "weight": 0.3,
+          "description": "Extensive AI/ML development rights"
+        },
+        {
+          "factor": "sublicensing_rights",
+          "weight": 0.2,
+          "description": "Multi-tier sublicensing allowed"
+        },
+        {
+          "factor": "modification_rights",
+          "weight": 0.2,
+          "description": "Content modification permitted"
+        }
+      ]
+    },
+    {
+      "clause_id": "your_content_definition",
+      "base_risk_level": "medium",
+      "risk_factors": [
+        {
+          "factor": "broad_content_scope",
+          "weight": 0.5,
+          "description": "Includes all media and metadata"
+        },
+        {
+          "factor": "metadata_inclusion",
+          "weight": 0.5,
+          "description": "Metadata rights included"
+        }
+      ]
+    },
+    {
+      "clause_id": "execution_cover_sheet",
+      "base_risk_level": "low",
+      "risk_factors": [
+        {
+          "factor": "binding_terms",
+          "weight": 1.0,
+          "description": "Standard execution terms"
+        }
+      ]
+    }
+  ],
+  "compliance_checks": [
+    {
+      "id": "ai_ethics_compliance",
+      "name": "AI Ethics and Responsible Use",
+      "rules": [
+        {
+          "jurisdiction": "EU",
+          "required_clauses": ["ai_ethics_clause"],
+          "prohibited_clauses": [],
+          "special_requirements": ["ai_act_compliance", "gdpr_compliance"]
+        },
+        {
+          "jurisdiction": "US",
+          "required_clauses": [],
+          "prohibited_clauses": [],
+          "special_requirements": ["fair_use_considerations"]
+        },
+        {
+          "jurisdiction": "CA",
+          "required_clauses": [],
+          "prohibited_clauses": [],
+          "special_requirements": ["privacy_laws", "ai_governance"]
+        }
+      ]
+    },
+    {
+      "id": "content_rights_clearance",
+      "name": "Content Rights and Clearance",
+      "rules": [
+        {
+          "jurisdiction": "global",
+          "required_clauses": ["your_content_definition"],
+          "prohibited_clauses": [],
+          "special_requirements": ["rights_ownership_verification", "third_party_clearance"]
+        }
+      ]
+    }
+  ],
+  "risk_mitigation_strategies": [
+    {
+      "risk_level": "high",
+      "strategies": [
+        "Require legal review before execution",
+        "Consider term limitations",
+        "Implement revenue sharing minimums",
+        "Add termination rights for material breach",
+        "Require approval for major sublicenses"
+      ]
+    },
+    {
+      "risk_level": "medium",
+      "strategies": [
+        "Review content scope carefully",
+        "Consider territorial limitations",
+        "Implement quality standards",
+        "Add attribution requirements"
+      ]
+    },
+    {
+      "risk_level": "low",
+      "strategies": [
+        "Standard review process",
+        "Ensure proper execution"
+      ]
+    }
+  ]
+}

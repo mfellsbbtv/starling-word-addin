@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Playbook Integration Test</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            border-bottom: 2px solid #0078d4;
+            padding-bottom: 10px;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #fafafa;
+        }
+        .success {
+            color: #107c10;
+            font-weight: bold;
+        }
+        .error {
+            color: #d13438;
+            font-weight: bold;
+        }
+        .info {
+            color: #0078d4;
+            margin: 5px 0;
+        }
+        button {
+            background-color: #0078d4;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 5px;
+        }
+        button:hover {
+            background-color: #106ebe;
+        }
+        #results {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            background-color: #f8f9fa;
+            border-left: 4px solid #0078d4;
+        }
+        .playbook-info {
+            background: #e8f4fd;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            border-left: 3px solid #0078d4;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Playbook Integration Test</h1>
+        
+        <div class="test-section">
+            <h2>Test Playbook Loading</h2>
+            <p>This test verifies that the new TSV-converted playbooks can be loaded correctly by the PlaybookService.</p>
+            
+            <button onclick="testContentManagementPlaybook()">Test Content Management Playbook</button>
+            <button onclick="testDataProPlaybook()">Test Data Pro Playbook</button>
+            <button onclick="testAllPlaybooks()">Test All Available Playbooks</button>
+            <button onclick="clearResults()">Clear Results</button>
+        </div>
+        
+        <div id="results"></div>
+    </div>
+
+    <script type="module">
+        // Mock PlaybookService for testing
+        class MockPlaybookService {
+            constructor() {
+                this.playbooks = new Map();
+            }
+
+            async loadPlaybook(agreementType, contentType) {
+                const playbookKey = `${agreementType}-${contentType}`;
+                
+                if (this.playbooks.has(playbookKey)) {
+                    return this.playbooks.get(playbookKey);
+                }
+
+                try {
+                    const playbook = await this.fetchPlaybookFiles(agreementType, contentType);
+                    this.playbooks.set(playbookKey, playbook);
+                    return playbook;
+                } catch (error) {
+                    console.error(`Failed to load playbook ${playbookKey}:`, error);
+                    throw error;
+                }
+            }
+
+            async fetchPlaybookFiles(agreementType, contentType) {
+                const baseUrl = './playbooks';
+                const playbookPath = `${agreementType}/${contentType}`;
+                
+                const [template, clauses, riskRules, formFields] = await Promise.all([
+                    this.fetchJsonFile(`${baseUrl}/${playbookPath}/template.json`),
+                    this.fetchJsonFile(`${baseUrl}/${playbookPath}/clauses.json`),
+                    this.fetchJsonFile(`${baseUrl}/${playbookPath}/risk-rules.json`).catch(() => null),
+                    this.fetchJsonFile(`${baseUrl}/${playbookPath}/form-fields.json`).catch(() => null)
+                ]);
+
+                return {
+                    metadata: {
+                        agreementType,
+                        contentType,
+                        loadedAt: new Date().toISOString()
+                    },
+                    template,
+                    clauses,
+                    riskRules,
+                    formFields
+                };
+            }
+
+            async fetchJsonFile(url) {
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error(`Failed to fetch ${url}: ${response.status} ${response.statusText}`);
+                }
+                return await response.json();
+            }
+
+            getAvailablePlaybooks() {
+                return [
+                    { agreementType: 'content-management', contentType: 'music' },
+                    { agreementType: 'data-pro', contentType: 'general' }
+                ];
+            }
+        }
+
+        const playbookService = new MockPlaybookService();
+
+        // Test functions
+        window.testContentManagementPlaybook = async function() {
+            appendResult('<h3>Testing Content Management Playbook</h3>');
+            try {
+                const playbook = await playbookService.loadPlaybook('content-management', 'music');
+                appendResult('<div class="success">✅ Content Management playbook loaded successfully</div>');
+                appendResult(`<div class="info">Template sections: ${playbook.template?.template?.sections?.length || 0}</div>`);
+                appendResult(`<div class="info">Clauses: ${playbook.clauses?.clauses?.length || 0}</div>`);
+                appendResult(`<div class="info">Form sections: ${playbook.formFields?.form_sections?.length || 0}</div>`);
+                appendResult(`<div class="info">Risk rules: ${playbook.riskRules?.risk_rules?.length || 0}</div>`);
+                
+                if (playbook.clauses?.clauses?.length > 0) {
+                    appendResult('<div class="playbook-info"><strong>Sample clauses:</strong><br>');
+                    playbook.clauses.clauses.slice(0, 3).forEach(clause => {
+                        appendResult(`• ${clause.title} (${clause.article || 'N/A'}.${clause.clause || 'N/A'})<br>`);
+                    });
+                    appendResult('</div>');
+                }
+            } catch (error) {
+                appendResult(`<div class="error">❌ Failed to load Content Management playbook: ${error.message}</div>`);
+            }
+        };
+
+        window.testDataProPlaybook = async function() {
+            appendResult('<h3>Testing Data Pro Playbook</h3>');
+            try {
+                const playbook = await playbookService.loadPlaybook('data-pro', 'general');
+                appendResult('<div class="success">✅ Data Pro playbook loaded successfully</div>');
+                appendResult(`<div class="info">Template sections: ${playbook.template?.template?.sections?.length || 0}</div>`);
+                appendResult(`<div class="info">Clauses: ${playbook.clauses?.clauses?.length || 0}</div>`);
+                appendResult(`<div class="info">Form sections: ${playbook.formFields?.form_sections?.length || 0}</div>`);
+                appendResult(`<div class="info">Risk rules: ${playbook.riskRules?.risk_rules?.length || 0}</div>`);
+                
+                if (playbook.clauses?.clauses?.length > 0) {
+                    appendResult('<div class="playbook-info"><strong>Sample clauses:</strong><br>');
+                    playbook.clauses.clauses.slice(0, 3).forEach(clause => {
+                        appendResult(`• ${clause.title}<br>`);
+                    });
+                    appendResult('</div>');
+                }
+            } catch (error) {
+                appendResult(`<div class="error">❌ Failed to load Data Pro playbook: ${error.message}</div>`);
+            }
+        };
+
+        window.testAllPlaybooks = async function() {
+            appendResult('<h3>Testing All Available Playbooks</h3>');
+            const availablePlaybooks = playbookService.getAvailablePlaybooks();
+            appendResult(`<div class="info">Found ${availablePlaybooks.length} available playbooks:</div>`);
+            
+            for (const pb of availablePlaybooks) {
+                try {
+                    const playbook = await playbookService.loadPlaybook(pb.agreementType, pb.contentType);
+                    appendResult(`<div class="success">✅ ${pb.agreementType}/${pb.contentType} - Loaded successfully</div>`);
+                } catch (error) {
+                    appendResult(`<div class="error">❌ ${pb.agreementType}/${pb.contentType} - Failed: ${error.message}</div>`);
+                }
+            }
+        };
+
+        window.clearResults = function() {
+            document.getElementById('results').innerHTML = '';
+        };
+
+        function appendResult(html) {
+            const results = document.getElementById('results');
+            results.innerHTML += html;
+            results.scrollTop = results.scrollHeight;
+        }
+
+        // Auto-run basic test on page load
+        window.addEventListener('load', () => {
+            appendResult('<div class="info">🚀 Playbook test page loaded. Click buttons above to run tests.</div>');
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,329 @@
+{
+  "metadata": {
+    "name": "RHEI Digital Video Services Agreement - Form Fields",
+    "version": "1.0.0",
+    "created": "2024-12-30",
+    "updated": "2024-12-30",
+    "author": "RHEI Legal Team",
+    "description": "Dynamic form field configuration for RHEI Digital Video Services agreements based on RHEI Legal Matrix",
+    "baseline": "Ninja Tune Ltd.",
+    "alternatives": ["MNRK Music Group LP", "WMX", "Sony", "Create Music Group", "Lionsgate"]
+  },
+  "form_sections": [
+    {
+      "id": "parties",
+      "title": "Provider Information",
+      "order": 1,
+      "description": "Information about the Provider party to the Digital Video Services Agreement",
+      "fields": [
+        {
+          "name": "provider_name",
+          "label": "Provider Name",
+          "type": "text",
+          "required": true,
+          "placeholder": "Enter the Provider company name",
+          "description": "Legal name of the Provider entity",
+          "validation": {
+            "min_length": 2,
+            "max_length": 100,
+            "pattern": "^[a-zA-Z0-9\\s\\.,&-]+$"
+          },
+          "help_text": "Legal name of the Provider entity as it should appear in the contract"
+        },
+        {
+          "name": "provider_address",
+          "label": "Provider Address",
+          "type": "textarea",
+          "required": true,
+          "placeholder": "Enter the Provider's principal place of business address",
+          "description": "Principal place of business address for the Provider",
+          "validation": {
+            "min_length": 10,
+            "max_length": 200
+          },
+          "help_text": "Complete business address including street, city, state/province, country"
+        },
+        {
+          "name": "provider_entity_type",
+          "label": "Provider Entity Type",
+          "type": "select",
+          "required": true,
+          "options": [
+            { "value": "an incorporated company", "label": "Incorporated Company" },
+            { "value": "a limited liability company", "label": "Limited Liability Company (LLC)" },
+            { "value": "a corporation", "label": "Corporation" },
+            { "value": "a partnership", "label": "Partnership" },
+            { "value": "an individual", "label": "Individual/Sole Proprietor" },
+            { "value": "other", "label": "Other (specify)" }
+          ],
+          "description": "Legal structure of the Provider entity",
+          "help_text": "Choose the legal entity type for the Provider"
+        }
+      ]
+    },
+    {
+      "id": "contract_details",
+      "title": "Contract Details",
+      "order": 2,
+      "description": "Basic contract information and effective date",
+      "fields": [
+        {
+          "name": "effective_date",
+          "label": "Effective Date",
+          "type": "date",
+          "required": true,
+          "description": "The date when this agreement becomes effective",
+          "help_text": "Select the date when the Digital Video Services Agreement will commence"
+        },
+        {
+          "name": "term_length",
+          "label": "Contract Term",
+          "type": "select",
+          "required": true,
+          "options": [
+            { "value": "1 year", "label": "1 Year" },
+            { "value": "2 years", "label": "2 Years" },
+            { "value": "3 years", "label": "3 Years" },
+            { "value": "5 years", "label": "5 Years" },
+            { "value": "custom", "label": "Custom Duration" }
+          ],
+          "description": "Duration of the Digital Video Services Agreement",
+          "help_text": "How long the agreement will remain in effect"
+        }
+      ]
+    },
+    {
+      "id": "services",
+      "title": "Services Configuration",
+      "order": 3,
+      "description": "Configure which RHEI services will be provided",
+      "fields": [
+        {
+          "name": "channel_management_enabled",
+          "label": "Channel Management Services",
+          "type": "checkbox",
+          "required": false,
+          "description": "Enable Channel Management Services as per Schedule B",
+          "help_text": "RHEI will provide channel management services for Provider's YouTube channels"
+        },
+        {
+          "name": "content_development_enabled",
+          "label": "Content Development Services",
+          "type": "checkbox",
+          "required": false,
+          "description": "Enable Content Development Services as per Schedule C",
+          "help_text": "RHEI will provide content creation and development services"
+        },
+        {
+          "name": "reporting_enabled",
+          "label": "RHEI Reports",
+          "type": "checkbox",
+          "required": false,
+          "description": "Enable monthly reporting services",
+          "help_text": "RHEI will provide monthly reports on impressions, revenues, and viewership data"
+        },
+        {
+          "name": "advertising_approvals_enabled",
+          "label": "Advertising Approvals",
+          "type": "checkbox",
+          "required": false,
+          "description": "Enable advertising category approval process",
+          "help_text": "RHEI will consult with Provider on advertising categories (48-hour approval process)"
+        }
+      ]
+    },
+    {
+      "id": "revenue_model",
+      "title": "Revenue Model Selection",
+      "order": 4,
+      "description": "Choose the revenue sharing model",
+      "fields": [
+        {
+          "name": "revenue_model",
+          "label": "Revenue Sharing Model",
+          "type": "select",
+          "required": true,
+          "options": [
+            { "value": "baseline", "label": "Baseline (Ninja Tune) - Tiered: 50% first $5K, then 30%" },
+            { "value": "mnrk", "label": "MNRK Model - Flat 30% to RHEI, 70% to Provider" },
+            { "value": "custom", "label": "Custom Revenue Share" }
+          ],
+          "description": "Select the revenue sharing structure for this agreement",
+          "help_text": "Choose from standard models or specify custom terms"
+        }
+      ]
+    },
+    {
+      "id": "legal",
+      "title": "Legal Terms",
+      "order": 5,
+      "description": "Territory and governing law",
+      "fields": [
+        {
+          "name": "territory",
+          "label": "Territory",
+          "type": "select",
+          "required": true,
+          "options": [
+            { "value": "worldwide", "label": "Worldwide" },
+            { "value": "North America", "label": "North America" },
+            { "value": "United States", "label": "United States" },
+            { "value": "Canada", "label": "Canada" },
+            { "value": "Europe", "label": "Europe" },
+            { "value": "Other", "label": "Other (specify in notes)" }
+          ],
+          "description": "Geographic scope of the agreement",
+          "help_text": "Territory where RHEI's rights and services will be effective"
+        },
+        {
+          "name": "governing_law",
+          "label": "Governing Law",
+          "type": "select",
+          "required": true,
+          "options": [
+            { "value": "British Columbia, Canada", "label": "British Columbia, Canada" },
+            { "value": "California, USA", "label": "California, USA" },
+            { "value": "New York, USA", "label": "New York, USA" },
+            { "value": "Ontario, Canada", "label": "Ontario, Canada" },
+            { "value": "Other", "label": "Other (specify)" }
+          ],
+          "description": "Jurisdiction that will govern this agreement",
+          "help_text": "Legal jurisdiction for contract interpretation and disputes"
+        }
+      ]
+    }
+  ],
+  "conditional_fields": [
+    {
+      "condition": {
+        "field": "provider_entity_type",
+        "operator": "equals",
+        "value": "other"
+      },
+      "show_fields": [
+        {
+          "name": "provider_entity_type_custom",
+          "label": "Specify Entity Type",
+          "type": "text",
+          "required": true,
+          "placeholder": "Enter specific entity type",
+          "description": "Specify the Provider's legal entity type"
+        }
+      ]
+    },
+    {
+      "condition": {
+        "field": "term_length",
+        "operator": "equals",
+        "value": "custom"
+      },
+      "show_fields": [
+        {
+          "name": "custom_term",
+          "label": "Custom Term Duration",
+          "type": "text",
+          "required": true,
+          "placeholder": "e.g., 18 months, 4 years",
+          "description": "Specify the custom contract duration"
+        }
+      ]
+    },
+    {
+      "condition": {
+        "field": "revenue_model",
+        "operator": "equals",
+        "value": "custom"
+      },
+      "show_fields": [
+        {
+          "name": "custom_revenue_terms",
+          "label": "Custom Revenue Terms",
+          "type": "textarea",
+          "required": true,
+          "placeholder": "Describe the custom revenue sharing arrangement...",
+          "description": "Specify the custom revenue sharing terms",
+          "validation": {
+            "min_length": 20,
+            "max_length": 500
+          }
+        }
+      ]
+    },
+    {
+      "condition": {
+        "field": "territory",
+        "operator": "equals",
+        "value": "Other"
+      },
+      "show_fields": [
+        {
+          "name": "territory_custom",
+          "label": "Specify Territory",
+          "type": "text",
+          "required": true,
+          "placeholder": "Enter specific territory or regions",
+          "description": "Specify the geographic territory for the agreement"
+        }
+      ]
+    },
+    {
+      "condition": {
+        "field": "governing_law",
+        "operator": "equals",
+        "value": "Other"
+      },
+      "show_fields": [
+        {
+          "name": "governing_law_custom",
+          "label": "Specify Governing Law",
+          "type": "text",
+          "required": true,
+          "placeholder": "Enter jurisdiction (e.g., Delaware, USA)",
+          "description": "Specify the governing law jurisdiction"
+        }
+      ]
+    }
+  ],
+  "validation_rules": [
+    {
+      "type": "field",
+      "rule": "provider_name_required",
+      "field": "provider_name",
+      "validation": {
+        "message": "Provider name is required for contract generation",
+        "severity": "error",
+        "condition": "value.length < 2"
+      }
+    },
+    {
+      "type": "field",
+      "rule": "effective_date_future",
+      "field": "effective_date",
+      "validation": {
+        "message": "Effective date should not be more than 1 year in the future",
+        "severity": "warning",
+        "condition": "new Date(value) > new Date(Date.now() + 365*24*60*60*1000)"
+      }
+    },
+    {
+      "type": "cross_field",
+      "rule": "services_selection",
+      "fields": ["channel_management_enabled", "content_development_enabled", "reporting_enabled"],
+      "validation": {
+        "message": "At least one service should be enabled for a meaningful agreement",
+        "severity": "warning",
+        "condition": "!channel_management_enabled && !content_development_enabled && !reporting_enabled"
+      }
+    }
+  ],
+  "ui_configuration": {
+    "layout": "vertical",
+    "show_progress": true,
+    "allow_save_draft": true,
+    "required_field_indicator": "*",
+    "help_text_position": "below",
+    "validation_display": "inline",
+    "section_collapsible": true,
+    "auto_save": true
+  }
+}

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Simple Contract Generation Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        button { padding: 10px 15px; margin: 10px; background: #0078d4; color: white; border: none; border-radius: 4px; cursor: pointer; }
+        .result { margin: 20px 0; padding: 15px; border: 1px solid #ccc; background: #f9f9f9; }
+        .error { color: red; }
+        .success { color: green; }
+        pre { background: #f5f5f5; padding: 10px; overflow-x: auto; max-height: 400px; }
+    </style>
+</head>
+<body>
+    <h1>Simple Contract Generation Test</h1>
+    
+    <button onclick="testSimpleGeneration()">Test Contract Generation</button>
+    <button onclick="clearResults()">Clear Results</button>
+    
+    <div id="result" class="result" style="display: none;"></div>
+
+    <script>
+        async function testSimpleGeneration() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = '<p>Testing contract generation...</p>';
+            
+            try {
+                console.log('Starting simple contract generation test...');
+                
+                // Step 1: Load TSV file
+                console.log('Loading ContentManagement.tsv...');
+                const response = await fetch('./playbooks/ContentManagement.tsv');
+                if (!response.ok) {
+                    throw new Error(`Failed to load TSV: ${response.status}`);
+                }
+                const tsvData = await response.text();
+                console.log('TSV loaded, length:', tsvData.length);
+                
+                // Step 2: Parse TSV
+                const lines = tsvData.split('\n');
+                const headers = lines[1].split('\t');
+                console.log('Headers:', headers.length);
+                
+                // Step 3: Find baseline column
+                let clauseTextColumn = -1;
+                for (let i = 0; i < headers.length; i++) {
+                    const header = headers[i].trim();
+                    if (header.includes('Full Clause Text BASELINE') ||
+                        header.includes('Full Clause Text (Original)') ||
+                        header.includes('Clause Summary BASELINE') ||
+                        (header.toLowerCase().includes('baseline') && header.toLowerCase().includes('clause'))) {
+                        clauseTextColumn = i;
+                        break;
+                    }
+                }
+                
+                if (clauseTextColumn === -1 && headers.length > 6 && headers[6] && headers[6].includes('BASELINE')) {
+                    clauseTextColumn = 6;
+                }
+                
+                if (clauseTextColumn === -1) {
+                    throw new Error('Could not find baseline clause text column');
+                }
+                
+                console.log('Found clause column:', clauseTextColumn);
+                
+                // Step 4: Build simple contract
+                let contract = `DIGITAL VIDEO SERVICES AGREEMENT
+
+BETWEEN: RHEI Creations Inc.
+AND: Test Provider, Inc.
+
+EFFECTIVE DATE: ${new Date().toLocaleDateString()}
+
+`;
+                
+                // Add clauses
+                let clauseCount = 0;
+                for (let i = 2; i < lines.length && clauseCount < 5; i++) {
+                    const columns = lines[i].split('\t');
+                    if (columns.length > clauseTextColumn && columns[clauseTextColumn] && columns[clauseTextColumn].trim()) {
+                        const clauseText = columns[clauseTextColumn].trim();
+                        if (!clauseText.includes('DIGITAL VIDEO SERVICES AGREEMENT BETWEEN')) {
+                            contract += clauseText + '\n\n';
+                            clauseCount++;
+                        }
+                    }
+                }
+                
+                console.log('Contract generated, length:', contract.length);
+                
+                resultDiv.innerHTML = `
+                    <div class="success">✅ Contract generation successful!</div>
+                    <p><strong>TSV File:</strong> Loaded (${tsvData.length} chars)</p>
+                    <p><strong>Lines:</strong> ${lines.length}</p>
+                    <p><strong>Clause Column:</strong> ${clauseTextColumn}</p>
+                    <p><strong>Clauses Added:</strong> ${clauseCount}</p>
+                    <p><strong>Contract Length:</strong> ${contract.length} chars</p>
+                    <h3>Generated Contract:</h3>
+                    <pre>${contract}</pre>
+                `;
+                
+            } catch (error) {
+                console.error('Test error:', error);
+                resultDiv.innerHTML = `
+                    <div class="error">❌ Test failed: ${error.message}</div>
+                    <pre>${error.stack}</pre>
+                `;
+            }
+        }
+        
+        function clearResults() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.style.display = 'none';
+            resultDiv.innerHTML = '';
+        }
+    </script>
+</body>
+</html>

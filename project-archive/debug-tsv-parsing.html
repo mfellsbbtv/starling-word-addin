@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Debug TSV Parsing</title>
+</head>
+<body>
+    <h1>TSV Parsing Debug</h1>
+    <button onclick="debugTSV()">Debug TSV Headers</button>
+    <div id="output"></div>
+
+    <script>
+        async function debugTSV() {
+            try {
+                const response = await fetch('./playbooks/ContentManagement.tsv');
+                const tsvData = await response.text();
+                
+                const lines = tsvData.split('\n');
+                const output = document.getElementById('output');
+                
+                output.innerHTML = `
+                    <h3>TSV Debug Results:</h3>
+                    <p><strong>Total lines:</strong> ${lines.length}</p>
+                    <p><strong>Line 0 (first line):</strong> "${lines[0]}"</p>
+                    <p><strong>Line 1 (second line):</strong> "${lines[1]}"</p>
+                    <h4>Headers from line 1 (split by tab):</h4>
+                    <ul>
+                `;
+                
+                const headers = lines[1].split('\t');
+                headers.forEach((header, index) => {
+                    const hasBaseline = header.includes('Full Clause Text BASELINE') || 
+                                      header.includes('Clause Summary BASELINE');
+                    output.innerHTML += `<li><strong>Index ${index}:</strong> "${header}" ${hasBaseline ? '<span style="color: green;">✓ MATCHES</span>' : ''}</li>`;
+                });
+                
+                output.innerHTML += '</ul>';
+                
+            } catch (error) {
+                document.getElementById('output').innerHTML = `<p style="color: red;">Error: ${error.message}</p>`;
+            }
+        }
+    </script>
+</body>
+</html>

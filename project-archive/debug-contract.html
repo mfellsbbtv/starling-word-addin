@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contract Generation Debug</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            border-bottom: 2px solid #0078d4;
+            padding-bottom: 10px;
+        }
+        .debug-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #fafafa;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .warning { background-color: #fff3cd; color: #856404; border: 1px solid #ffeaa7; }
+        .info { background-color: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+        
+        button {
+            background-color: #0078d4;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 5px;
+        }
+        button:hover {
+            background-color: #106ebe;
+        }
+        button.danger {
+            background-color: #dc3545;
+        }
+        button.danger:hover {
+            background-color: #c82333;
+        }
+        
+        #console-output {
+            background: #000;
+            color: #0f0;
+            padding: 15px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+        }
+        
+        .step {
+            margin: 10px 0;
+            padding: 10px;
+            border-left: 4px solid #0078d4;
+            background: #f8f9fa;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Contract Generation Debug Tool</h1>
+        
+        <div class="debug-section">
+            <h2>Current Status</h2>
+            <div id="status-display">
+                <div class="status info">Checking Word API status...</div>
+            </div>
+        </div>
+        
+        <div class="debug-section">
+            <h2>Debug Actions</h2>
+            <button onclick="checkWordAPIStatus()">Check Word API Status</button>
+            <button onclick="testSimpleContract()" class="danger">Test Simple Contract</button>
+            <button onclick="testFullContract()">Test Full Contract Generation</button>
+            <button onclick="testRealContractGeneration()" class="test-button">Test Real Contract Generation</button>
+            <button onclick="testClassListFixes()" class="test-button">Test ClassList Fixes</button>
+            <button onclick="clearConsole()">Clear Console</button>
+        </div>
+        
+        <div class="debug-section">
+            <h2>Step-by-Step Debugging</h2>
+            <div class="step">
+                <strong>Step 1:</strong> Check if you're in Word Online
+                <button onclick="checkWordEnvironment()">Check Environment</button>
+            </div>
+            <div class="step">
+                <strong>Step 2:</strong> Verify Office.js is loaded
+                <button onclick="checkOfficeJS()">Check Office.js</button>
+            </div>
+            <div class="step">
+                <strong>Step 3:</strong> Test Word API availability
+                <button onclick="testWordAPI()">Test Word API</button>
+            </div>
+            <div class="step">
+                <strong>Step 4:</strong> Try contract insertion
+                <button onclick="testContractInsertion()">Test Insertion</button>
+            </div>
+        </div>
+        
+        <div class="debug-section">
+            <h2>Console Output</h2>
+            <div id="console-output"></div>
+        </div>
+        
+        <div class="debug-section">
+            <h2>Instructions</h2>
+            <ol>
+                <li><strong>Make sure you're in Word Online</strong> - This debug tool only works in Word Online or Word Desktop</li>
+                <li><strong>Check each step</strong> - Use the step-by-step buttons to identify where the issue occurs</li>
+                <li><strong>Try Simple Contract</strong> - This bypasses all complex logic and tries direct insertion</li>
+                <li><strong>Check Console</strong> - Look at the console output for detailed error messages</li>
+            </ol>
+        </div>
+    </div>
+
+    <script>
+        let consoleOutput = document.getElementById('console-output');
+        let statusDisplay = document.getElementById('status-display');
+        
+        function log(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            consoleOutput.textContent += `[${timestamp}] ${message}\n`;
+            consoleOutput.scrollTop = consoleOutput.scrollHeight;
+            
+            // Also log to browser console
+            console.log(message);
+        }
+        
+        function updateStatus(message, type = 'info') {
+            statusDisplay.innerHTML = `<div class="status ${type}">${message}</div>`;
+        }
+        
+        function clearConsole() {
+            consoleOutput.textContent = '';
+        }
+        
+        async function checkWordAPIStatus() {
+            log('🔍 Checking Word API status...');
+            
+            // Check global variables
+            log(`Global variables:`);
+            log(`- WORD_API_AVAILABLE: ${window.WORD_API_AVAILABLE}`);
+            log(`- OFFICE_READY: ${window.OFFICE_READY}`);
+            log(`- WORD_API_READY: ${window.WORD_API_READY}`);
+            
+            // Check Office.js
+            log(`Office.js status:`);
+            log(`- typeof Office: ${typeof Office}`);
+            log(`- typeof Word: ${typeof Word}`);
+            log(`- typeof Word.run: ${typeof Word.run}`);
+            
+            if (typeof Office !== 'undefined' && Office.context) {
+                log(`- Office.context.host: ${Office.context.host}`);
+                log(`- Office.HostApplication.Word: ${Office.HostApplication?.Word}`);
+            }
+            
+            updateStatus('Word API status checked - see console output', 'info');
+        }
+        
+        async function checkWordEnvironment() {
+            log('🌍 Checking Word environment...');
+            
+            if (typeof Office === 'undefined') {
+                log('❌ Office.js not loaded');
+                updateStatus('Office.js not loaded - not in Word environment', 'error');
+                return;
+            }
+            
+            if (!Office.context) {
+                log('❌ Office.context not available');
+                updateStatus('Office.context not available', 'error');
+                return;
+            }
+            
+            log(`✅ Office.context.host: ${Office.context.host}`);
+            
+            // Handle undefined Office.HostApplication
+            if (!Office.HostApplication) {
+                log('⚠️ Office.HostApplication is undefined, assuming Word environment');
+                updateStatus('⚠️ Office.HostApplication undefined, assuming Word', 'info');
+            } else if (Office.context.host === Office.HostApplication.Word) {
+                log('✅ Running in Word environment');
+                updateStatus('✅ Running in Word environment', 'success');
+            } else {
+                log('❌ Not running in Word environment');
+                updateStatus('❌ Not running in Word environment', 'error');
+            }
+        }
+        
+        async function checkOfficeJS() {
+            log('📚 Checking Office.js...');
+            
+            if (typeof Office === 'undefined') {
+                log('❌ Office object not found');
+                updateStatus('Office.js not loaded', 'error');
+                return;
+            }
+            
+            log('✅ Office object found');
+            
+            if (typeof Office.onReady === 'function') {
+                log('✅ Office.onReady available');
+            } else {
+                log('❌ Office.onReady not available');
+            }
+            
+            updateStatus('Office.js checked - see console', 'info');
+        }
+        
+        async function testWordAPI() {
+            log('🧪 Testing Word API...');
+            
+            if (typeof Word === 'undefined') {
+                log('❌ Word object not found');
+                updateStatus('Word API not available', 'error');
+                return;
+            }
+            
+            if (typeof Word.run !== 'function') {
+                log('❌ Word.run not available');
+                updateStatus('Word.run not available', 'error');
+                return;
+            }
+            
+            log('✅ Word.run available, testing...');
+            
+            try {
+                await Word.run(async (context) => {
+                    log('✅ Word.run context created successfully');
+                    const doc = context.document;
+                    doc.load('saved');
+                    await context.sync();
+                    log('✅ Word API test completed successfully');
+                });
+                updateStatus('✅ Word API test successful', 'success');
+            } catch (error) {
+                log(`❌ Word API test failed: ${error.message}`);
+                updateStatus('❌ Word API test failed', 'error');
+            }
+        }
+        
+        async function testContractInsertion() {
+            log('📝 Testing contract insertion...');
+            
+            if (typeof Word === 'undefined' || typeof Word.run !== 'function') {
+                log('❌ Word API not available for insertion test');
+                updateStatus('Word API not available', 'error');
+                return;
+            }
+            
+            const testText = 'TEST CONTRACT\n\nThis is a test contract generated by the debug tool.\n\n1. Test Clause\nThis is a test clause.\n\n2. Another Clause\nThis is another test clause.';
+            
+            try {
+                await Word.run(async (context) => {
+                    log('📄 Accessing document body...');
+                    const body = context.document.body;
+                    
+                    log('🗑️ Clearing existing content...');
+                    body.clear();
+                    
+                    log('📝 Inserting test contract...');
+                    body.insertText(testText, Word.InsertLocation.start);
+                    
+                    log('💾 Syncing changes...');
+                    await context.sync();
+                    
+                    log('✅ Contract insertion successful!');
+                });
+                updateStatus('✅ Contract insertion successful!', 'success');
+            } catch (error) {
+                log(`❌ Contract insertion failed: ${error.message}`);
+                updateStatus('❌ Contract insertion failed', 'error');
+            }
+        }
+        
+        async function testSimpleContract() {
+            log('🚀 Testing simple contract generation...');
+            
+            const contractText = `RHEI DIGITAL VIDEO SERVICES AGREEMENT
+
+This Agreement is entered into between RHEI CREATIONS CORP. and the Provider.
+
+1. DEFINITIONS
+"Services" means the digital video services provided by RHEI.
+
+2. SERVICES  
+RHEI shall provide digital video management services.
+
+3. TERM
+This agreement shall remain in effect for two (2) years.
+
+4. REVENUE SHARING
+Revenue shall be shared 70% Provider, 30% RHEI.
+
+_________________________         _________________________
+RHEI CREATIONS CORP.              PROVIDER`;
+
+            try {
+                await Word.run(async (context) => {
+                    const body = context.document.body;
+                    body.clear();
+                    body.insertText(contractText, Word.InsertLocation.start);
+                    
+                    // Apply basic formatting
+                    const range = body.getRange();
+                    range.font.name = "Calibri";
+                    range.font.size = 11;
+                    
+                    await context.sync();
+                    log('✅ Simple contract generated successfully!');
+                });
+                updateStatus('✅ Simple contract generated!', 'success');
+            } catch (error) {
+                log(`❌ Simple contract generation failed: ${error.message}`);
+                updateStatus('❌ Simple contract failed', 'error');
+            }
+        }
+
+        async function testRealContractGeneration() {
+            log('🚀 Testing REAL contract generation from main app...');
+
+            try {
+                // Test if we can access the main app's contract generation
+                log('📋 Checking if main app functions are available...');
+
+                // Try to call the actual generateContract function
+                log('📞 Trying to import and call generateContract directly...');
+
+                // Try to import the function directly
+                const { generateContract } = await import('./src/taskpane/modules/event-handlers.js');
+
+                log('📝 Calling generateContract function...');
+                await generateContract();
+
+                log('✅ Real contract generation successful!');
+                updateStatus('✅ Real contract generation successful!', 'success');
+            } catch (error) {
+                log(`❌ Real contract generation failed: ${error.message}`);
+                log(`❌ Error stack: ${error.stack}`);
+                updateStatus('❌ Real contract generation failed', 'error');
+            }
+        }
+
+        async function testClassListFixes() {
+            log('🔧 Testing ClassList fixes...');
+
+            try {
+                // Test 1: Button loading with null checks
+                log('🔘 Testing button loading...');
+                const { setButtonLoading } = await import('./src/shared/utils.js');
+
+                // Test with existing button
+                setButtonLoading('test-word-api', true);
+                log('✅ Button loading set to true');
+
+                setTimeout(() => {
+                    setButtonLoading('test-word-api', false);
+                    log('✅ Button loading set to false');
+                }, 1000);
+
+                // Test with non-existent button (should not error)
+                setButtonLoading('non-existent-button', true);
+                log('✅ Non-existent button handled gracefully');
+
+                // Test 2: Status updates
+                log('📢 Testing status updates...');
+                const { updateStatus } = await import('./src/shared/utils.js');
+                updateStatus('Testing status update...', 'info');
+                log('✅ Status update successful');
+
+                // Test 3: Progress section
+                log('📊 Testing progress section...');
+                const { showProgressSection, hideProgressSection } = await import('./src/shared/utils.js');
+                showProgressSection('Testing progress...');
+                log('✅ Progress section shown');
+
+                setTimeout(() => {
+                    hideProgressSection();
+                    log('✅ Progress section hidden');
+                }, 2000);
+
+                log('✅ All ClassList fixes working correctly!');
+                updateStatus('ClassList fixes test completed successfully!', 'success');
+
+            } catch (error) {
+                log(`❌ ClassList test failed: ${error.message}`);
+                log(`❌ Error stack: ${error.stack}`);
+                updateStatus('ClassList fixes test failed', 'error');
+            }
+        }
+
+        async function testFullContract() {
+            log('🔧 Testing full contract generation...');
+            updateStatus('Testing full contract generation...', 'info');
+            
+            // This would call the actual contract generation function
+            log('⚠️ Full contract test not implemented yet');
+            updateStatus('Full contract test not implemented', 'warning');
+        }
+        
+        // Auto-run initial checks
+        window.addEventListener('load', () => {
+            log('🚀 Debug tool loaded');
+            setTimeout(checkWordAPIStatus, 1000);
+        });
+    </script>
+</body>
+</html>

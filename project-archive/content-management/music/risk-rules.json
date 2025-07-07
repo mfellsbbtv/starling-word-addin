@@ -1,0 +1,306 @@
+{
+  "metadata": {
+    "name": "RHEI Digital Video Services Agreement - Risk Assessment Rules",
+    "version": "1.0.0",
+    "created": "2024-12-23",
+    "updated": "2024-12-23",
+    "author": "RHEI Legal Team",
+    "description": "Risk assessment rules for RHEI Digital Video Services agreements",
+    "baseline": "Ninja Tune Ltd.",
+    "alternatives": ["MNRK Music Group LP", "WMX", "Sony", "Create Music Group", "Lionsgate"]
+  },
+  "risk_categories": [
+    {
+      "id": "missing_clauses",
+      "name": "Missing Essential Clauses",
+      "severity": "high",
+      "description": "Contract lacks essential clauses required for Digital Video Services agreements"
+    },
+    {
+      "id": "unfavorable_terms",
+      "name": "Unfavorable Terms",
+      "severity": "medium",
+      "description": "Contract contains terms that may be unfavorable for video content management"
+    },
+    {
+      "id": "compliance_issues",
+      "name": "Platform Compliance",
+      "severity": "high",
+      "description": "Contract may not comply with YouTube/Google policies or applicable laws"
+    },
+    {
+      "id": "licensing_issues",
+      "name": "Licensing and Rights Issues",
+      "severity": "high",
+      "description": "Unclear or problematic licensing terms for video content"
+    },
+    {
+      "id": "revenue_issues",
+      "name": "Revenue and Payment Issues",
+      "severity": "medium",
+      "description": "Problematic revenue sharing or payment terms"
+    }
+  ],
+  "risk_rules": [
+    {
+      "id": "missing_provider_license",
+      "category": "licensing_issues",
+      "severity": "high",
+      "title": "Missing Provider License",
+      "description": "Contract lacks essential Provider licensing terms for content usage",
+      "detection": {
+        "type": "keyword_absence",
+        "keywords": ["provider license", "non-exclusive", "royalty-free", "sublicensable"],
+        "threshold": 2
+      },
+      "recommendation": {
+        "action": "add_clause",
+        "clause_id": "provider_license",
+        "priority": "immediate",
+        "explanation": "Add comprehensive Provider licensing clause defining RHEI's rights to use Provider Content"
+      },
+      "impact_assessment": {
+        "financial_risk": "high",
+        "legal_risk": "high",
+        "operational_risk": "high"
+      }
+    },
+    {
+      "id": "missing_prohibitions",
+      "category": "compliance_issues",
+      "severity": "high",
+      "title": "Missing Anti-Fraud Prohibitions",
+      "description": "Contract lacks prohibitions against invalid clicks, automated traffic, and fraudulent activities",
+      "detection": {
+        "type": "keyword_absence",
+        "keywords": ["prohibitions", "fraudulent", "automated", "invalid clicks", "robots"],
+        "threshold": 2
+      },
+      "recommendation": {
+        "action": "add_clause",
+        "clause_id": "prohibitions",
+        "priority": "immediate",
+        "explanation": "Add anti-fraud prohibitions to comply with Google/YouTube policies"
+      },
+      "impact_assessment": {
+        "financial_risk": "high",
+        "legal_risk": "high",
+        "operational_risk": "high"
+      }
+    },
+    {
+      "id": "missing_google_policies",
+      "category": "compliance_issues",
+      "severity": "high",
+      "title": "Missing Google Policy Compliance",
+      "description": "Contract does not reference compliance with Google/YouTube policies",
+      "detection": {
+        "type": "keyword_absence",
+        "keywords": ["google policies", "youtube", "applicable law", "platform policies"],
+        "threshold": 1
+      },
+      "recommendation": {
+        "action": "add_clause",
+        "clause_id": "policies_applicable_law",
+        "priority": "immediate",
+        "explanation": "Add clause requiring compliance with Google/YouTube policies and applicable laws"
+      },
+      "impact_assessment": {
+        "financial_risk": "high",
+        "legal_risk": "high",
+        "operational_risk": "high"
+      }
+    },
+    {
+      "id": "missing_revenue_terms",
+      "category": "revenue_issues",
+      "severity": "high",
+      "title": "Missing Revenue Sharing Terms",
+      "description": "Contract lacks clear revenue sharing and payment terms",
+      "detection": {
+        "type": "keyword_absence",
+        "keywords": ["revenue shares", "net revenue", "payment", "rhei net revenue"],
+        "threshold": 2
+      },
+      "recommendation": {
+        "action": "add_clause",
+        "clause_id": "revenue_shares_baseline",
+        "priority": "immediate",
+        "explanation": "Add comprehensive revenue sharing terms defining payment obligations"
+      },
+      "impact_assessment": {
+        "financial_risk": "high",
+        "legal_risk": "medium",
+        "operational_risk": "high"
+      }
+    },
+    {
+      "id": "unfavorable_revenue_split",
+      "category": "unfavorable_terms",
+      "severity": "medium",
+      "title": "High RHEI Revenue Share",
+      "description": "RHEI's revenue share may be higher than industry standard",
+      "detection": {
+        "type": "numerical_analysis",
+        "field": "rhei_revenue_percentage",
+        "operator": "greater_than",
+        "threshold": 35,
+        "context": "video_services"
+      },
+      "recommendation": {
+        "action": "review_terms",
+        "priority": "high",
+        "explanation": "Consider negotiating more favorable revenue split terms for Provider"
+      },
+      "impact_assessment": {
+        "financial_risk": "high",
+        "legal_risk": "low",
+        "operational_risk": "low"
+      }
+    },
+    {
+      "id": "missing_payment_thresholds",
+      "category": "revenue_issues",
+      "severity": "medium",
+      "title": "Missing Payment Thresholds",
+      "description": "Contract lacks payment threshold and timing requirements",
+      "detection": {
+        "type": "keyword_absence",
+        "keywords": ["$300", "payment threshold", "30 days", "earned balance"],
+        "threshold": 2
+      },
+      "recommendation": {
+        "action": "add_clause",
+        "clause_id": "rhei_payments_provider",
+        "priority": "high",
+        "explanation": "Add clear payment timing and threshold requirements"
+      },
+      "impact_assessment": {
+        "financial_risk": "medium",
+        "legal_risk": "medium",
+        "operational_risk": "medium"
+      }
+    },
+    {
+      "id": "missing_service_definitions",
+      "category": "missing_clauses",
+      "severity": "medium",
+      "title": "Missing Service Definitions",
+      "description": "Contract lacks clear definition of Channel Management or Content Development Services",
+      "detection": {
+        "type": "keyword_absence",
+        "keywords": ["channel management services", "content development services", "schedule"],
+        "threshold": 1
+      },
+      "recommendation": {
+        "action": "add_clause",
+        "clause_id": "channel_management_services",
+        "priority": "high",
+        "explanation": "Add clear service definitions referencing appropriate schedules"
+      },
+      "impact_assessment": {
+        "financial_risk": "medium",
+        "legal_risk": "medium",
+        "operational_risk": "high"
+      }
+    },
+    {
+      "id": "missing_provider_obligations",
+      "category": "missing_clauses",
+      "severity": "medium",
+      "title": "Missing Provider Obligations",
+      "description": "Contract lacks clear Provider obligations for service delivery",
+      "detection": {
+        "type": "keyword_absence",
+        "keywords": ["provider obligations", "administrative access", "metadata", "allowlist"],
+        "threshold": 2
+      },
+      "recommendation": {
+        "action": "add_clause",
+        "clause_id": "provider_obligations",
+        "priority": "medium",
+        "explanation": "Add Provider obligations clause defining required cooperation for service delivery"
+      },
+      "impact_assessment": {
+        "financial_risk": "low",
+        "legal_risk": "medium",
+        "operational_risk": "high"
+      }
+    }
+  ],
+  "compliance_checks": [
+    {
+      "id": "digital_video_services_standards",
+      "name": "Digital Video Services Standard Compliance",
+      "rules": [
+        {
+          "requirement": "Provider licensing terms present",
+          "check": "contains_keywords(['provider license', 'non-exclusive', 'royalty-free'])",
+          "severity": "high"
+        },
+        {
+          "requirement": "Anti-fraud prohibitions included",
+          "check": "contains_keywords(['prohibitions', 'fraudulent', 'automated'])",
+          "severity": "high"
+        },
+        {
+          "requirement": "Google policy compliance",
+          "check": "contains_keywords(['google policies', 'youtube', 'applicable law'])",
+          "severity": "high"
+        },
+        {
+          "requirement": "Revenue sharing terms defined",
+          "check": "contains_keywords(['revenue shares', 'net revenue', 'payment'])",
+          "severity": "high"
+        }
+      ]
+    },
+    {
+      "id": "jurisdiction_compliance",
+      "name": "Jurisdiction-Specific Compliance",
+      "rules": [
+        {
+          "jurisdiction": "US",
+          "required_clauses": ["policies_applicable_law", "prohibitions"],
+          "prohibited_clauses": [],
+          "special_requirements": ["youtube_compliance", "dmca_compliance"]
+        },
+        {
+          "jurisdiction": "CA",
+          "required_clauses": ["policies_applicable_law", "prohibitions"],
+          "prohibited_clauses": [],
+          "special_requirements": ["privacy_laws", "youtube_compliance"]
+        },
+        {
+          "jurisdiction": "EU",
+          "required_clauses": ["policies_applicable_law", "prohibitions"],
+          "prohibited_clauses": ["unlimited_liability"],
+          "special_requirements": ["gdpr_compliance", "youtube_compliance"]
+        }
+      ]
+    }
+  ],
+  "scoring_algorithm": {
+    "base_score": 100,
+    "deductions": {
+      "high": 25,
+      "medium": 15,
+      "low": 5
+    },
+    "bonuses": {
+      "comprehensive_licensing_terms": 10,
+      "platform_policy_compliance": 10,
+      "clear_revenue_terms": 10,
+      "anti_fraud_protections": 10,
+      "service_definitions": 5
+    },
+    "minimum_score": 0,
+    "maximum_score": 100
+  },
+  "recommendations_priority": {
+    "immediate": ["missing_provider_license", "missing_prohibitions", "missing_google_policies", "missing_revenue_terms"],
+    "high": ["missing_payment_thresholds", "missing_service_definitions", "unfavorable_revenue_split"],
+    "medium": ["missing_provider_obligations"],
+    "low": ["formatting_issues", "minor_clarifications"]
+  }
+}

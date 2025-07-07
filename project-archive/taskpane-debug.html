@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>RHEI AI Legal Assistant - Debug</title>
+    <script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            margin: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            max-width: 400px;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            background: #d1ecf1;
+            color: #0c5460;
+            font-size: 14px;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+        }
+        .debug-info {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 4px;
+            padding: 10px;
+            margin: 10px 0;
+            font-family: monospace;
+            font-size: 12px;
+            white-space: pre-wrap;
+        }
+        .button {
+            background: #0078d4;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px 0;
+            width: 100%;
+        }
+        .button:hover {
+            background: #106ebe;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 RHEI Debug Mode</h1>
+        
+        <div id="status" class="status">Starting initialization...</div>
+        
+        <div class="debug-info" id="debug-log">
+Initialization Log:
+==================
+</div>
+        
+        <button class="button" onclick="testWordAPI()">Test Word API</button>
+        <button class="button" onclick="testClauseReplacement()">Test Clause Replacement</button>
+        <button class="button" onclick="clearLog()">Clear Log</button>
+    </div>
+
+    <script>
+        let debugLog = [];
+        
+        function log(message) {
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = `[${timestamp}] ${message}`;
+            debugLog.push(logEntry);
+            console.log(logEntry);
+            
+            const debugElement = document.getElementById('debug-log');
+            if (debugElement) {
+                debugElement.textContent = 'Initialization Log:\n==================\n' + debugLog.join('\n');
+            }
+        }
+        
+        function updateStatus(message, type = 'info') {
+            const statusElement = document.getElementById('status');
+            if (statusElement) {
+                statusElement.textContent = message;
+                statusElement.className = `status ${type}`;
+            }
+            log(`STATUS: ${message}`);
+        }
+        
+        function clearLog() {
+            debugLog = [];
+            document.getElementById('debug-log').textContent = 'Initialization Log:\n==================\n';
+            updateStatus('Log cleared');
+        }
+        
+        // Start logging immediately
+        log('Script loaded');
+        log('User Agent: ' + navigator.userAgent);
+        log('URL: ' + window.location.href);
+        
+        // Check if Office is available
+        if (typeof Office !== 'undefined') {
+            log('✓ Office object is available');
+            log('Office version: ' + (Office.context ? 'Context available' : 'Context not available'));
+        } else {
+            log('❌ Office object is NOT available');
+        }
+        
+        // Office initialization
+        Office.onReady((info) => {
+            log('✓ Office.onReady called');
+            log('Host: ' + (info.host || 'Unknown'));
+            log('Platform: ' + (info.platform || 'Unknown'));
+            
+            if (info.host === Office.HostType.Word) {
+                log('✓ Running in Word');
+                updateStatus('✅ Office initialized successfully in Word', 'success');
+            } else {
+                log('⚠️ Not running in Word, host: ' + info.host);
+                updateStatus('⚠️ Not running in Word (testing mode)', 'info');
+            }
+            
+            // Test Word API availability
+            if (typeof Word !== 'undefined') {
+                log('✓ Word API is available');
+            } else {
+                log('❌ Word API is NOT available');
+            }
+            
+            // Test basic functionality
+            testBasicFunctionality();
+        }).catch((error) => {
+            log('❌ Office.onReady failed: ' + error.message);
+            updateStatus('❌ Office initialization failed', 'error');
+        });
+        
+        function testBasicFunctionality() {
+            log('Testing basic functionality...');
+            
+            try {
+                // Test DOM manipulation
+                const container = document.querySelector('.container');
+                if (container) {
+                    log('✓ DOM manipulation works');
+                } else {
+                    log('❌ DOM manipulation failed');
+                }
+                
+                // Test console logging
+                console.log('Test console log');
+                log('✓ Console logging works');
+                
+                // Test setTimeout
+                setTimeout(() => {
+                    log('✓ setTimeout works');
+                    updateStatus('✅ All basic tests passed', 'success');
+                }, 100);
+                
+            } catch (error) {
+                log('❌ Basic functionality test failed: ' + error.message);
+                updateStatus('❌ Basic functionality test failed', 'error');
+            }
+        }
+        
+        function testWordAPI() {
+            log('Testing Word API...');
+            updateStatus('Testing Word API...');
+            
+            if (typeof Word === 'undefined') {
+                log('❌ Word API not available');
+                updateStatus('❌ Word API not available', 'error');
+                return;
+            }
+            
+            Word.run(async (context) => {
+                log('✓ Word.run started');
+                
+                try {
+                    const body = context.document.body;
+                    body.load('text');
+                    
+                    await context.sync();
+                    log('✓ Context sync successful');
+                    
+                    const bodyText = body.text.substring(0, 100);
+                    log('Document text preview: ' + bodyText);
+                    
+                    updateStatus('✅ Word API test successful', 'success');
+                    
+                } catch (error) {
+                    log('❌ Word API test failed: ' + error.message);
+                    updateStatus('❌ Word API test failed', 'error');
+                }
+            }).catch((error) => {
+                log('❌ Word.run failed: ' + error.message);
+                updateStatus('❌ Word.run failed', 'error');
+            });
+        }
+        
+        function testClauseReplacement() {
+            log('Testing clause replacement functionality...');
+            updateStatus('Testing clause replacement...');
+            
+            try {
+                // Test if our functions exist
+                const functions = ['selectClause', 'openReplacementModal', 'applyReplacement'];
+                let missingFunctions = [];
+                
+                functions.forEach(funcName => {
+                    if (typeof window[funcName] === 'function') {
+                        log(`✓ Function ${funcName} exists`);
+                    } else {
+                        log(`❌ Function ${funcName} missing`);
+                        missingFunctions.push(funcName);
+                    }
+                });
+                
+                if (missingFunctions.length === 0) {
+                    log('✓ All clause replacement functions available');
+                    updateStatus('✅ Clause replacement functions available', 'success');
+                } else {
+                    log('❌ Missing functions: ' + missingFunctions.join(', '));
+                    updateStatus('❌ Some clause replacement functions missing', 'error');
+                }
+                
+            } catch (error) {
+                log('❌ Clause replacement test failed: ' + error.message);
+                updateStatus('❌ Clause replacement test failed', 'error');
+            }
+        }
+        
+        // Global error handler
+        window.addEventListener('error', (event) => {
+            log('❌ Global error: ' + event.error.message);
+            log('Error stack: ' + event.error.stack);
+            updateStatus('❌ JavaScript error occurred', 'error');
+        });
+        
+        // Log when DOM is ready
+        document.addEventListener('DOMContentLoaded', () => {
+            log('✓ DOM Content Loaded');
+        });
+        
+        // Log when page is fully loaded
+        window.addEventListener('load', () => {
+            log('✓ Page fully loaded');
+        });
+        
+        log('Debug script setup complete');
+    </script>
+</body>
+</html>

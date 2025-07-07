@@ -1,0 +1,355 @@
+{
+  "metadata": {
+    "name": "RHEI Data License Agreement - Form Fields",
+    "version": "1.0.0",
+    "created": "2024-12-30",
+    "updated": "2024-12-30",
+    "author": "RHEI Legal Team",
+    "description": "Dynamic form field configuration for RHEI Data License agreements",
+    "baseline": "RHEI Baseline Agreement",
+    "alternatives": ["Yoola", "CG Digital", "Indigo Entertainment", "The Soul Publishing", "Yap Films", "MetDaan", "Glymt", "Thunderbird", "The Asylum"]
+  },
+  "form_sections": [
+    {
+      "id": "licensor_info",
+      "title": "Licensor Information",
+      "order": 1,
+      "description": "Information about the Licensor party to the Data License Agreement",
+      "fields": [
+        {
+          "name": "licensor_name",
+          "label": "Licensor Legal Name",
+          "type": "text",
+          "required": true,
+          "placeholder": "Enter the Licensor company name",
+          "description": "Legal name of the Licensor entity",
+          "validation": {
+            "min_length": 2,
+            "max_length": 100,
+            "pattern": "^[a-zA-Z0-9\\s\\.,&-]+$"
+          },
+          "help_text": "Legal name of the Licensor entity as it should appear in the contract"
+        },
+        {
+          "name": "licensor_entity_type",
+          "label": "Entity Type",
+          "type": "select",
+          "required": true,
+          "options": [
+            {"value": "corporation", "label": "Corporation"},
+            {"value": "llc", "label": "Limited Liability Company (LLC)"},
+            {"value": "partnership", "label": "Partnership"},
+            {"value": "individual", "label": "Individual"},
+            {"value": "other", "label": "Other"}
+          ],
+          "description": "Type of legal entity for the Licensor",
+          "help_text": "Select the appropriate legal entity type"
+        },
+        {
+          "name": "licensor_street",
+          "label": "Street Address",
+          "type": "text",
+          "required": true,
+          "placeholder": "Enter street address",
+          "description": "Street address of the Licensor",
+          "validation": {
+            "min_length": 5,
+            "max_length": 200
+          },
+          "help_text": "Complete street address including number and street name"
+        },
+        {
+          "name": "licensor_city",
+          "label": "City",
+          "type": "text",
+          "required": true,
+          "placeholder": "Enter city",
+          "description": "City where the Licensor is located",
+          "validation": {
+            "min_length": 2,
+            "max_length": 50
+          },
+          "help_text": "City name"
+        },
+        {
+          "name": "licensor_state",
+          "label": "State/Province",
+          "type": "text",
+          "required": true,
+          "placeholder": "Enter state or province",
+          "description": "State or province where the Licensor is located",
+          "validation": {
+            "min_length": 2,
+            "max_length": 50
+          },
+          "help_text": "State, province, or region"
+        },
+        {
+          "name": "licensor_country",
+          "label": "Country",
+          "type": "select",
+          "required": true,
+          "options": [
+            {"value": "US", "label": "United States"},
+            {"value": "CA", "label": "Canada"},
+            {"value": "UK", "label": "United Kingdom"},
+            {"value": "AU", "label": "Australia"},
+            {"value": "DE", "label": "Germany"},
+            {"value": "FR", "label": "France"},
+            {"value": "IL", "label": "Israel"},
+            {"value": "CY", "label": "Cyprus"},
+            {"value": "other", "label": "Other"}
+          ],
+          "description": "Country where the Licensor is located",
+          "help_text": "Select the country"
+        },
+        {
+          "name": "licensor_postal",
+          "label": "Postal/Zip Code",
+          "type": "text",
+          "required": true,
+          "placeholder": "Enter postal or zip code",
+          "description": "Postal or zip code",
+          "validation": {
+            "min_length": 3,
+            "max_length": 20
+          },
+          "help_text": "Postal code or zip code"
+        },
+        {
+          "name": "licensor_email",
+          "label": "Email Address",
+          "type": "email",
+          "required": true,
+          "placeholder": "Enter email address",
+          "description": "Primary email address for the Licensor",
+          "validation": {
+            "pattern": "^[^@]+@[^@]+\\.[^@]+$"
+          },
+          "help_text": "This will be the authorized email for communications"
+        },
+        {
+          "name": "licensor_phone",
+          "label": "Phone Number",
+          "type": "text",
+          "required": true,
+          "placeholder": "Enter phone number with area code",
+          "description": "Phone number including area code",
+          "validation": {
+            "min_length": 10,
+            "max_length": 20
+          },
+          "help_text": "Include area code and country code if international"
+        }
+      ]
+    },
+    {
+      "id": "signatory_info",
+      "title": "Authorized Signatory Information",
+      "order": 2,
+      "description": "Information about the person authorized to sign on behalf of the Licensor",
+      "fields": [
+        {
+          "name": "licensor_signatory_name",
+          "label": "Signatory Name",
+          "type": "text",
+          "required": true,
+          "placeholder": "Enter full name of authorized signatory",
+          "description": "Full name of the person authorized to sign",
+          "validation": {
+            "min_length": 2,
+            "max_length": 100
+          },
+          "help_text": "Full legal name of the person who will sign the agreement"
+        },
+        {
+          "name": "licensor_signatory_title",
+          "label": "Signatory Title",
+          "type": "text",
+          "required": true,
+          "placeholder": "Enter title (e.g., CEO, President, etc.)",
+          "description": "Title or position of the authorized signatory",
+          "validation": {
+            "min_length": 2,
+            "max_length": 50
+          },
+          "help_text": "Official title or position within the organization"
+        }
+      ]
+    },
+    {
+      "id": "content_info",
+      "title": "Content Information",
+      "order": 3,
+      "description": "Information about the content being licensed",
+      "fields": [
+        {
+          "name": "content_type",
+          "label": "Content Type",
+          "type": "select",
+          "required": true,
+          "options": [
+            {"value": "video", "label": "Video Content"},
+            {"value": "audio", "label": "Audio Content"},
+            {"value": "mixed", "label": "Mixed Audio/Video Content"},
+            {"value": "other", "label": "Other Media Content"}
+          ],
+          "description": "Type of content being licensed",
+          "help_text": "Select the primary type of content you are licensing"
+        },
+        {
+          "name": "content_description",
+          "label": "Content Description",
+          "type": "textarea",
+          "required": true,
+          "placeholder": "Describe the content being licensed...",
+          "description": "Brief description of the content being licensed",
+          "validation": {
+            "min_length": 20,
+            "max_length": 500
+          },
+          "help_text": "Provide a brief description of the content, including genre, style, or subject matter"
+        },
+        {
+          "name": "content_volume",
+          "label": "Estimated Content Volume",
+          "type": "select",
+          "required": true,
+          "options": [
+            {"value": "small", "label": "Small (< 100 hours)"},
+            {"value": "medium", "label": "Medium (100-1000 hours)"},
+            {"value": "large", "label": "Large (1000+ hours)"},
+            {"value": "ongoing", "label": "Ongoing/Continuous"}
+          ],
+          "description": "Estimated volume of content to be licensed",
+          "help_text": "Select the approximate volume of content"
+        }
+      ]
+    },
+    {
+      "id": "agreement_terms",
+      "title": "Agreement Terms",
+      "order": 4,
+      "description": "Key terms and conditions for the agreement",
+      "fields": [
+        {
+          "name": "effective_date",
+          "label": "Effective Date",
+          "type": "date",
+          "required": true,
+          "description": "Date when the agreement becomes effective",
+          "help_text": "Select the date when this agreement should take effect"
+        },
+        {
+          "name": "license_scope",
+          "label": "License Scope",
+          "type": "select",
+          "required": true,
+          "options": [
+            {"value": "ai_training", "label": "AI/ML Training Only"},
+            {"value": "research", "label": "Research and Development"},
+            {"value": "full", "label": "Full AI Development and Sublicensing"},
+            {"value": "custom", "label": "Custom Scope"}
+          ],
+          "description": "Scope of the license being granted",
+          "help_text": "Select the intended use scope for your content"
+        }
+      ]
+    }
+  ],
+  "conditional_fields": [
+    {
+      "condition": {
+        "field": "licensor_entity_type",
+        "operator": "equals",
+        "value": "other"
+      },
+      "show_fields": [
+        {
+          "name": "licensor_entity_type_custom",
+          "label": "Specify Entity Type",
+          "type": "text",
+          "required": true,
+          "placeholder": "Enter specific entity type",
+          "description": "Specify the Licensor's legal entity type"
+        }
+      ]
+    },
+    {
+      "condition": {
+        "field": "licensor_country",
+        "operator": "equals",
+        "value": "other"
+      },
+      "show_fields": [
+        {
+          "name": "licensor_country_custom",
+          "label": "Specify Country",
+          "type": "text",
+          "required": true,
+          "placeholder": "Enter country name",
+          "description": "Specify the country"
+        }
+      ]
+    },
+    {
+      "condition": {
+        "field": "license_scope",
+        "operator": "equals",
+        "value": "custom"
+      },
+      "show_fields": [
+        {
+          "name": "license_scope_custom",
+          "label": "Custom License Scope",
+          "type": "textarea",
+          "required": true,
+          "placeholder": "Describe the custom license scope...",
+          "description": "Describe the specific license scope requirements"
+        }
+      ]
+    }
+  ],
+  "validation_rules": [
+    {
+      "type": "field",
+      "rule": "licensor_name_required",
+      "field": "licensor_name",
+      "validation": {
+        "message": "Licensor name is required for contract generation",
+        "severity": "error",
+        "condition": "value.length < 2"
+      }
+    },
+    {
+      "type": "field",
+      "rule": "email_format",
+      "field": "licensor_email",
+      "validation": {
+        "message": "Please enter a valid email address",
+        "severity": "error",
+        "condition": "!/^[^@]+@[^@]+\\.[^@]+$/.test(value)"
+      }
+    },
+    {
+      "type": "field",
+      "rule": "effective_date_future",
+      "field": "effective_date",
+      "validation": {
+        "message": "Effective date should not be more than 1 year in the future",
+        "severity": "warning",
+        "condition": "new Date(value) > new Date(Date.now() + 365*24*60*60*1000)"
+      }
+    }
+  ],
+  "ui_configuration": {
+    "layout": "vertical",
+    "show_progress": true,
+    "allow_save_draft": true,
+    "required_field_indicator": "*",
+    "help_text_position": "below",
+    "validation_display": "inline",
+    "section_collapsible": true,
+    "auto_save": true
+  }
+}
