@@ -3,6 +3,13 @@
 ## Overview
 This document describes the clean, organized project structure after modularization and archival of old files.
 
+## Current Status (December 2024)
+- **Main Branch**: Stable modular architecture with working contract generation
+- **Update-Clause Branch**: Active development branch for clause replacement features
+- **Current Working File**: `taskpane-modular.html` (modular architecture)
+- **Local Server**: `node local-server.js` serves HTTPS at https://localhost:3000
+- **Manifest**: `manifest-localhost.xml` for Word Online deployment
+
 ## Current Project Structure
 
 ```
