@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Test Clause Replacement - RHEI AI Legal Assistant</title>
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="./src/styles/main.css">
+    
+    <style>
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .test-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #e1e5e9;
+            border-radius: 6px;
+            background-color: #f8f9fa;
+        }
+        
+        .test-results {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 4px;
+            background-color: #ffffff;
+            border: 1px solid #d1d1d1;
+        }
+        
+        .success {
+            border-color: #107c10;
+            background-color: #dff6dd;
+        }
+        
+        .error {
+            border-color: #d13438;
+            background-color: #fde7e9;
+        }
+        
+        .info {
+            border-color: #0078d4;
+            background-color: #e3f2fd;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="test-container">
+        <div class="header">
+            <h1 class="app-title">Clause Replacement Test</h1>
+            <p class="app-subtitle">Testing the Legal Matrix clause replacement functionality</p>
+        </div>
+
+        <!-- Test Legal Matrix Loading -->
+        <div class="test-section">
+            <h3>Test 1: Load Legal Matrix Data</h3>
+            <button id="test-load-matrix" class="primary-button">Load Legal Matrix</button>
+            <div id="load-matrix-results" class="test-results" style="display: none;"></div>
+        </div>
+
+        <!-- Test Clause Parsing -->
+        <div class="test-section">
+            <h3>Test 2: Parse Clause Data</h3>
+            <button id="test-parse-clauses" class="primary-button" disabled>Parse Clauses</button>
+            <div id="parse-clauses-results" class="test-results" style="display: none;"></div>
+        </div>
+
+        <!-- Test Clause Dropdown -->
+        <div class="test-section">
+            <h3>Test 3: Clause Selection Interface</h3>
+            <div class="clause-replacement-section">
+                <div class="form-group">
+                    <label for="test-clause-select" class="form-label">Select Clause to Replace:</label>
+                    <select id="test-clause-select" class="form-select">
+                        <option value="">Choose a clause...</option>
+                    </select>
+                </div>
+                
+                <div id="test-clause-details" class="clause-details" style="display: none;">
+                    <div class="current-clause-section">
+                        <h4>Current Clause</h4>
+                        <div id="test-current-clause-content" class="clause-content"></div>
+                    </div>
+                    
+                    <div class="alternatives-section">
+                        <h4>Available Alternatives</h4>
+                        <div id="test-alternatives-list" class="alternatives-list"></div>
+                    </div>
+                    
+                    <div class="replacement-actions">
+                        <button id="test-preview-replacement" class="secondary-button" disabled>Preview Replacement</button>
+                        <button id="test-apply-replacement" class="primary-button" disabled>Apply Replacement</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Status Message -->
+        <div id="test-status" class="status-message">
+            Ready to test clause replacement functionality
+        </div>
+    </div>
+
+    <!-- Test Scripts -->
+    <script type="module">
+        import { legalMatrixService } from './src/services/legal-matrix-service.js';
+
+        let testData = null;
+
+        // Test 1: Load Legal Matrix
+        document.getElementById('test-load-matrix').addEventListener('click', async () => {
+            const resultsDiv = document.getElementById('load-matrix-results');
+            const statusDiv = document.getElementById('test-status');
+            
+            try {
+                statusDiv.textContent = 'Loading Legal Matrix data...';
+                statusDiv.className = 'status-message info';
+                
+                testData = await legalMatrixService.loadLegalMatrix();
+                
+                resultsDiv.innerHTML = `
+                    <h4>✅ Legal Matrix Loaded Successfully</h4>
+                    <p><strong>Headers:</strong> ${testData.headers.length} columns</p>
+                    <p><strong>Data Rows:</strong> ${testData.data.length} rows</p>
+                    <p><strong>Sample Headers:</strong> ${testData.headers.slice(0, 5).join(', ')}...</p>
+                `;
+                resultsDiv.className = 'test-results success';
+                resultsDiv.style.display = 'block';
+                
+                document.getElementById('test-parse-clauses').disabled = false;
+                
+                statusDiv.textContent = 'Legal Matrix loaded successfully';
+                statusDiv.className = 'status-message success';
+                
+            } catch (error) {
+                resultsDiv.innerHTML = `
+                    <h4>❌ Failed to Load Legal Matrix</h4>
+                    <p><strong>Error:</strong> ${error.message}</p>
+                `;
+                resultsDiv.className = 'test-results error';
+                resultsDiv.style.display = 'block';
+                
+                statusDiv.textContent = 'Failed to load Legal Matrix: ' + error.message;
+                statusDiv.className = 'status-message error';
+            }
+        });
+
+        // Test 2: Parse Clauses
+        document.getElementById('test-parse-clauses').addEventListener('click', () => {
+            const resultsDiv = document.getElementById('parse-clauses-results');
+            const statusDiv = document.getElementById('test-status');
+            
+            try {
+                const clauseNumbers = legalMatrixService.getAvailableClauseNumbers();
+                const allClauses = legalMatrixService.getAllClauses();
+                
+                // Get sample clause
+                const sampleClause = allClauses[0];
+                
+                resultsDiv.innerHTML = `
+                    <h4>✅ Clauses Parsed Successfully</h4>
+                    <p><strong>Total Clauses:</strong> ${clauseNumbers.length}</p>
+                    <p><strong>Clause Numbers:</strong> ${clauseNumbers.slice(0, 10).join(', ')}${clauseNumbers.length > 10 ? '...' : ''}</p>
+                    <p><strong>Sample Clause:</strong> ${sampleClause.number} - ${sampleClause.title}</p>
+                    <p><strong>Sample Alternatives:</strong> ${sampleClause.alternatives.length} available</p>
+                `;
+                resultsDiv.className = 'test-results success';
+                resultsDiv.style.display = 'block';
+                
+                // Populate test dropdown
+                populateTestDropdown(clauseNumbers);
+                
+                statusDiv.textContent = `Parsed ${clauseNumbers.length} clauses successfully`;
+                statusDiv.className = 'status-message success';
+                
+            } catch (error) {
+                resultsDiv.innerHTML = `
+                    <h4>❌ Failed to Parse Clauses</h4>
+                    <p><strong>Error:</strong> ${error.message}</p>
+                `;
+                resultsDiv.className = 'test-results error';
+                resultsDiv.style.display = 'block';
+                
+                statusDiv.textContent = 'Failed to parse clauses: ' + error.message;
+                statusDiv.className = 'status-message error';
+            }
+        });
+
+        function populateTestDropdown(clauseNumbers) {
+            const dropdown = document.getElementById('test-clause-select');
+            dropdown.innerHTML = '<option value="">Choose a clause...</option>';
+
+            clauseNumbers.forEach(clauseNumber => {
+                const clause = legalMatrixService.getClause(clauseNumber);
+                if (clause) {
+                    const option = document.createElement('option');
+                    option.value = clauseNumber;
+                    // Use compact title format
+                    const compactTitle = createCompactTitle(clause.title);
+                    option.textContent = `${clauseNumber} - ${compactTitle}`;
+                    dropdown.appendChild(option);
+                }
+            });
+
+            // Add event listener for dropdown
+            dropdown.addEventListener('change', handleTestClauseSelection);
+        }
+
+        function createCompactTitle(title) {
+            if (!title) return 'Untitled';
+
+            const words = title.split(' ');
+            let compactTitle = '';
+            let wordCount = 0;
+
+            for (const word of words) {
+                if (wordCount >= 5) break;
+
+                const testTitle = compactTitle ? `${compactTitle} ${word}` : word;
+
+                // If adding this word would make it too long, stop
+                if (testTitle.length > 25) break;
+
+                compactTitle = testTitle;
+                wordCount++;
+
+                // If we have at least 3 words and reasonable length, we can stop
+                if (wordCount >= 3 && compactTitle.length >= 15) break;
+            }
+
+            return compactTitle || title.substring(0, 20);
+        }
+
+        function handleTestClauseSelection(event) {
+            const clauseNumber = event.target.value;
+            const detailsDiv = document.getElementById('test-clause-details');
+            
+            if (!clauseNumber) {
+                detailsDiv.style.display = 'none';
+                return;
+            }
+            
+            const clause = legalMatrixService.getClause(clauseNumber);
+            if (!clause) return;
+            
+            // Display clause details
+            const currentContent = document.getElementById('test-current-clause-content');
+            currentContent.innerHTML = `
+                <div class="clause-header">
+                    <span class="clause-number-badge">${clause.number}</span>
+                    <strong>${clause.title}</strong>
+                </div>
+                ${clause.summary ? `<div class="clause-summary"><em>${clause.summary}</em></div>` : ''}
+                <div class="clause-text">${formatClauseText(clause.baseline.content)}</div>
+            `;
+            
+            // Display alternatives
+            const alternativesList = document.getElementById('test-alternatives-list');
+            if (clause.alternatives && clause.alternatives.length > 0) {
+                let html = '';
+                clause.alternatives.forEach((alt, index) => {
+                    html += `
+                        <div class="alternative-item" data-index="${index}">
+                            <div class="alternative-header">
+                                <div class="alternative-title">${alt.title}</div>
+                                <div class="alternative-badges">
+                                    <span class="risk-badge" style="background-color: #dff6dd; color: #107c10;">
+                                        ${alt.riskLevel.toUpperCase()} RISK
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="alternative-content">
+                                ${formatClauseText(alt.content || alt.comparison)}
+                            </div>
+                        </div>
+                    `;
+                });
+                alternativesList.innerHTML = html;
+            } else {
+                alternativesList.innerHTML = '<p>No alternatives available for this clause.</p>';
+            }
+            
+            detailsDiv.style.display = 'block';
+        }
+
+        function formatClauseText(text) {
+            if (!text) return 'No content available';
+            return text.substring(0, 300) + (text.length > 300 ? '...' : '');
+        }
+
+        // Initialize test
+        document.getElementById('test-status').textContent = 'Ready to test clause replacement functionality';
+    </script>
+</body>
+</html>

@@ -1,0 +1,113 @@
+wacowlhostwebpack.js:99 
+            
+            
+           GET https://bbtv-my.sharepoint.com/personal/mfells_bbtv_com1/_api/v2.0/sites/root/items/2ea223f5-b5c3-485a-bff7-0ba22c001e71/driveItem?VroomTakeover=1&$select=id,openWith($select=wac),officebundle,currentUserRole,eTag,name,size,content.downloadUrl,file,sharepointIds,sensitivityLabel,webUrl,webDavUrl,parentReference&action=edit 403 (Forbidden)
+(anonymous) @ wacowlhostwebpack.js:99
+e._init @ wacowlhostwebpack.js:18
+e @ wacowlhostwebpack.js:18
+(anonymous) @ wacowlhostwebpack.js:99
+e.then @ wacowlhostwebpack.js:18
+e.getGraghDriveItem @ wacowlhostwebpack.js:99
+e.getGraghDriveItemWithFileId @ wacowlhostwebpack.js:99
+e.fetchItemFromNetwork @ wacowlhostwebpack.js:99
+(anonymous) @ wacowlhostwebpack.js:99
+e.fetchItemFromNetwork @ wacowlhostwebpack.js:99
+fetchItemFromNetwork @ doc2.aspx?sourcedoc=%7B2EA223F5-B5C3-485A-BFF7-0BA22C001E71%7D&file=Document%201.docx&action=editNew&mobileredirect=true&wdOrigin=SEARCHENGINE.GOOGLE%2CAPPHOME-WEB.UNAUTH%2CAPPHOME-WEB.BANNER.NEWBLANK&wdPreviousSession=efd4b0df-d3c3-40ef-8c1c-4097b194a1db&wdPreviousSessionSrc=AppHomeWeb&ct=1751494873029:637
+await in fetchItemFromNetwork
+fetchItemFromNetwork @ doc2.aspx?sourcedoc=%7B2EA223F5-B5C3-485A-BFF7-0BA22C001E71%7D&file=Document%201.docx&action=editNew&mobileredirect=true&wdOrigin=SEARCHENGINE.GOOGLE%2CAPPHOME-WEB.UNAUTH%2CAPPHOME-WEB.BANNER.NEWBLANK&wdPreviousSession=efd4b0df-d3c3-40ef-8c1c-4097b194a1db&wdPreviousSessionSrc=AppHomeWeb&ct=1751494873029:938
+a @ owl.slim.c69683514d40c8821660.js:1
+m @ owl.handlers.1091165f5cedbe7861d9.js:1
+(anonymous) @ owl.slim.c69683514d40c8821660.js:1
+await in (anonymous)
+se @ owl.slim.c69683514d40c8821660.js:1
+(anonymous) @ word.boot.8e1b50c8c6d9bed06504.js:1
+dispatch @ word.boot.8e1b50c8c6d9bed06504.js:1
+T.Oh @ word.boot.8e1b50c8c6d9bed06504.js:1
+(anonymous) @ word.boot.8e1b50c8c6d9bed06504.js:1
+raiseEvent @ word.boot.8e1b50c8c6d9bed06504.js:1
+onMessage @ word.boot.8e1b50c8c6d9bed06504.js:1
+hd @ word.boot.8e1b50c8c6d9bed06504.js:1
+Unchecked runtime.lastError: Cannot create item with duplicate id LastPass <URL>
+Unchecked runtime.lastError: Cannot create item with duplicate id LastPass <URL>
+Unchecked runtime.lastError: Cannot create item with duplicate id LastPass <URL>
+Unchecked runtime.lastError: Cannot create item with duplicate id LastPass <URL>
+Unchecked runtime.lastError: Cannot create item with duplicate id LastPass <URL>
+Unchecked runtime.lastError: Cannot create item with duplicate id separator <URL>
+Unchecked runtime.lastError: Cannot create item with duplicate id separator <URL>
+Unchecked runtime.lastError: Cannot create item with duplicate id separator <URL>
+Unchecked runtime.lastError: Cannot create item with duplicate id separator <URL>
+Unchecked runtime.lastError: Cannot create item with duplicate id separator <URL>
+Unchecked runtime.lastError: Cannot create item with duplicate id 3379466210643889371 https://localhost:3000/taskpane-modular.html?et=
+Unchecked runtime.lastError: Cannot create item with duplicate id Add Item <URL>
+Unchecked runtime.lastError: Cannot create item with duplicate id Add Item <URL>
+Unchecked runtime.lastError: Cannot create item with duplicate id Add Item <URL>
+Unchecked runtime.lastError: Cannot create item with duplicate id Add Item <URL>
+Unchecked runtime.lastError: Cannot create item with duplicate id Add Item <URL>
+Unchecked runtime.lastError: Cannot create item with duplicate id Fill - 3379466210643889371 https://localhost:3000/taskpane-modular.html?et=
+Unchecked runtime.lastError: Cannot create item with duplicate id Edit - 3379466210643889371 https://localhost:3000/taskpane-modular.html?et=
+Unchecked runtime.lastError: Cannot create item with duplicate id Add Password <URL>
+Unchecked runtime.lastError: Cannot create item with duplicate id Add Password <URL>
+Unchecked runtime.lastError: Cannot create item with duplicate id Add Password <URL>
+Unchecked runtime.lastError: Cannot create item with duplicate id Add Password <URL>
+Unchecked runtime.lastError: Cannot create item with duplicate id Add Password <URL>
+Unchecked runtime.lastError: Cannot create item with duplicate id Add Address <URL>
+Unchecked runtime.lastError: Cannot create item with duplicate id Add Address <URL>
+Unchecked runtime.lastError: Cannot create item with duplicate id Add Address <URL>
+Unchecked runtime.lastError: Cannot create item with duplicate id Add Address <URL>
+Unchecked runtime.lastError: Cannot create item with duplicate id Add Address <URL>
+Unchecked runtime.lastError: Cannot create item with duplicate id Add Payment Card <URL>
+Unchecked runtime.lastError: Cannot create item with duplicate id Add Payment Card <URL>
+Unchecked runtime.lastError: Cannot create item with duplicate id Add Payment Card <URL>
+Unchecked runtime.lastError: Cannot create item with duplicate id Add Payment Card <URL>
+Unchecked runtime.lastError: Cannot create item with duplicate id Add Payment Card <URL>
+Unchecked runtime.lastError: Cannot create item with duplicate id Add other item <URL>
+Unchecked runtime.lastError: Cannot create item with duplicate id Add other item <URL>
+Unchecked runtime.lastError: Cannot create item with duplicate id Add other item <URL>
+Unchecked runtime.lastError: Cannot create item with duplicate id Add other item <URL>
+Unchecked runtime.lastError: Cannot create item with duplicate id Add other item <URL>
+Unchecked runtime.lastError: Cannot create item with duplicate id Save all entered data <URL>
+Unchecked runtime.lastError: Cannot create item with duplicate id Save all entered data <URL>
+Unchecked runtime.lastError: Cannot create item with duplicate id Save all entered data <URL>
+Unchecked runtime.lastError: Cannot create item with duplicate id Save all entered data <URL>
+Unchecked runtime.lastError: Cannot create item with duplicate id Save all entered data <URL>
+Unchecked runtime.lastError: Cannot create item with duplicate id Copy first name - 3379466210643889371 https://localhost:3000/taskpane-modular.html?et=
+Unchecked runtime.lastError: Cannot create item with duplicate id Generate Secure Password <URL>
+Unchecked runtime.lastError: Cannot create item with duplicate id Generate Secure Password <URL>
+Unchecked runtime.lastError: Cannot create item with duplicate id Generate Secure Password <URL>
+Unchecked runtime.lastError: Cannot create item with duplicate id Generate Secure Password <URL>
+Unchecked runtime.lastError: Cannot create item with duplicate id Generate Secure Password <URL>
+Unchecked runtime.lastError: Cannot create item with duplicate id Copy last name - 3379466210643889371 https://localhost:3000/taskpane-modular.html?et=
+Unchecked runtime.lastError: Cannot create item with duplicate id Copy address line 1 - 3379466210643889371 https://localhost:3000/taskpane-modular.html?et=
+Unchecked runtime.lastError: Cannot create item with duplicate id Copy city/town - 3379466210643889371 https://localhost:3000/taskpane-modular.html?et=
+Unchecked runtime.lastError: Cannot create item with duplicate id Copy ZIP/postal code - 3379466210643889371 https://localhost:3000/taskpane-modular.html?et=
+Unchecked runtime.lastError: Cannot create item with duplicate id Copy email address - 3379466210643889371 https://localhost:3000/taskpane-modular.html?et=
+Unchecked runtime.lastError: Cannot create item with duplicate id Copy phone number - 3379466210643889371 https://localhost:3000/taskpane-modular.html?et=
+wacowlhostwebpack.js:99 
+            
+            
+           GET https://bbtv-my.sharepoint.com/personal/mfells_bbtv_com1/_api/v2.0/sites/root/items/2ea223f5-b5c3-485a-bff7-0ba22c001e71/driveItem?VroomTakeover=1&$select=id,openWith($select=wac),officebundle,currentUserRole,eTag,name,size,content.downloadUrl,file,sharepointIds,sensitivityLabel,webUrl,webDavUrl,parentReference&action=edit 403 (Forbidden)
+(anonymous) @ wacowlhostwebpack.js:99
+e._init @ wacowlhostwebpack.js:18
+e @ wacowlhostwebpack.js:18
+(anonymous) @ wacowlhostwebpack.js:99
+e.then @ wacowlhostwebpack.js:18
+e.getGraghDriveItem @ wacowlhostwebpack.js:99
+e.getGraghDriveItemWithFileId @ wacowlhostwebpack.js:99
+e.fetchItemFromNetwork @ wacowlhostwebpack.js:99
+(anonymous) @ wacowlhostwebpack.js:99
+e.fetchItemFromNetwork @ wacowlhostwebpack.js:99
+fetchItemFromNetwork @ doc2.aspx?sourcedoc=%7B2EA223F5-B5C3-485A-BFF7-0BA22C001E71%7D&file=Document%201.docx&action=editNew&mobileredirect=true&wdOrigin=SEARCHENGINE.GOOGLE%2CAPPHOME-WEB.UNAUTH%2CAPPHOME-WEB.BANNER.NEWBLANK&wdPreviousSession=efd4b0df-d3c3-40ef-8c1c-4097b194a1db&wdPreviousSessionSrc=AppHomeWeb&ct=1751494873029:637
+await in fetchItemFromNetwork
+fetchItemFromNetwork @ doc2.aspx?sourcedoc=%7B2EA223F5-B5C3-485A-BFF7-0BA22C001E71%7D&file=Document%201.docx&action=editNew&mobileredirect=true&wdOrigin=SEARCHENGINE.GOOGLE%2CAPPHOME-WEB.UNAUTH%2CAPPHOME-WEB.BANNER.NEWBLANK&wdPreviousSession=efd4b0df-d3c3-40ef-8c1c-4097b194a1db&wdPreviousSessionSrc=AppHomeWeb&ct=1751494873029:938
+a @ owl.slim.c69683514d40c8821660.js:1
+m @ owl.handlers.1091165f5cedbe7861d9.js:1
+(anonymous) @ owl.slim.c69683514d40c8821660.js:1
+await in (anonymous)
+se @ owl.slim.c69683514d40c8821660.js:1
+(anonymous) @ word.boot.8e1b50c8c6d9bed06504.js:1
+dispatch @ word.boot.8e1b50c8c6d9bed06504.js:1
+T.Oh @ word.boot.8e1b50c8c6d9bed06504.js:1
+(anonymous) @ word.boot.8e1b50c8c6d9bed06504.js:1
+raiseEvent @ word.boot.8e1b50c8c6d9bed06504.js:1
+onMessage @ word.boot.8e1b50c8c6d9bed06504.js:1
+hd @ word.boot.8e1b50c8c6d9bed06504.js:1

@@ -45,7 +45,8 @@ body {
 
 /* Form Styles */
 .contract-type-section,
-.contract-form-section {
+.contract-form-section,
+.clause-replacement-section {
     margin-bottom: 25px;
     padding: 20px;
     background-color: #f8f9fa;
@@ -53,7 +54,8 @@ body {
     border: 1px solid #e1e5e9;
 }
 
-.contract-form-section h3 {
+.contract-form-section h3,
+.clause-replacement-section h3 {
     color: #0078d4;
     margin-bottom: 15px;
     font-size: 16px;
@@ -623,6 +625,121 @@ button:disabled {
     font-weight: 600;
 }
 
+/* Clause Replacement Specific Styles */
+.clause-details {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 6px;
+    border: 1px solid #e1e5e9;
+}
+
+.current-clause-section,
+.alternatives-section {
+    margin-bottom: 25px;
+}
+
+.current-clause-section h4,
+.alternatives-section h4 {
+    color: #0078d4;
+    margin-bottom: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    border-bottom: 1px solid #e1e5e9;
+    padding-bottom: 8px;
+}
+
+.clause-content {
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 4px;
+    border: 1px solid #e1e5e9;
+    font-size: 13px;
+    line-height: 1.5;
+    color: #323130;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.alternatives-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.alternative-item {
+    border: 1px solid #e1e5e9;
+    border-radius: 6px;
+    padding: 15px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background-color: #ffffff;
+}
+
+.alternative-item:hover {
+    border-color: #0078d4;
+    box-shadow: 0 2px 4px rgba(0, 120, 212, 0.1);
+}
+
+.alternative-item.selected {
+    border-color: #0078d4;
+    background-color: #e3f2fd;
+    box-shadow: 0 2px 8px rgba(0, 120, 212, 0.2);
+}
+
+.alternative-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.alternative-title {
+    font-weight: 600;
+    color: #323130;
+    font-size: 14px;
+}
+
+.alternative-badges {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.alternative-content {
+    color: #605e5c;
+    font-size: 13px;
+    line-height: 1.5;
+    margin-bottom: 8px;
+    max-height: 120px;
+    overflow-y: auto;
+}
+
+.alternative-source {
+    font-size: 11px;
+    color: #797673;
+    font-style: italic;
+}
+
+.replacement-actions {
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid #e1e5e9;
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+}
+
+.clause-number-badge {
+    background-color: #0078d4;
+    color: white;
+    font-size: 11px;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-weight: 600;
+    margin-right: 8px;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .container {
@@ -653,5 +770,24 @@ button:disabled {
         flex-direction: column;
         align-items: stretch;
         gap: 10px;
+    }
+
+    .replacement-actions {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .replacement-actions button {
+        width: 100%;
+    }
+
+    .alternative-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .alternative-badges {
+        align-self: flex-start;
     }
 }

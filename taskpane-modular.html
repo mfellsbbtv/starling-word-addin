@@ -85,6 +85,35 @@
             <button id="analyze-contract" class="secondary-button">🔍 Analyze Contract</button>
         </div>
 
+        <!-- Clause Replacement Section -->
+        <div class="clause-replacement-section">
+            <h3>Clause Replacement</h3>
+
+            <div class="form-group">
+                <label for="clause-select" class="form-label">Select Clause to Replace:</label>
+                <select id="clause-select" class="form-select">
+                    <option value="">Choose a clause...</option>
+                </select>
+            </div>
+
+            <div id="clause-details" class="clause-details" style="display: none;">
+                <div class="current-clause-section">
+                    <h4>Current Clause</h4>
+                    <div id="current-clause-content" class="clause-content"></div>
+                </div>
+
+                <div class="alternatives-section">
+                    <h4>Available Alternatives</h4>
+                    <div id="alternatives-list" class="alternatives-list"></div>
+                </div>
+
+                <div class="replacement-actions">
+                    <button id="preview-clause-replacement" class="secondary-button" disabled>Preview Replacement</button>
+                    <button id="apply-clause-replacement" class="primary-button" disabled>Apply Replacement</button>
+                </div>
+            </div>
+        </div>
+
         <!-- Status Message -->
         <div id="status-message" class="status-message">
             Initializing...

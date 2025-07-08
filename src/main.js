@@ -6,6 +6,7 @@
 import { initializeOffice, showDiagnostics } from './core/office-init.js';
 import { generateContract } from './services/contract-generator.js';
 import { updateStatus, setFormDefaults, showModal, hideModal } from './utils/ui-utils.js';
+import { initializeClauseReplacement } from './features/clause-replacement.js';
 
 // Global state
 let isInitialized = false;
@@ -28,7 +29,10 @@ function initializeApp() {
         
         // Initialize Office.js
         initializeOffice();
-        
+
+        // Initialize clause replacement functionality
+        initializeClauseReplacement();
+
         isInitialized = true;
         console.log("✅ App initialization completed");
         
@@ -157,11 +161,36 @@ async function handleTestContractGeneration() {
     }
 }
 
-function handleTestClauseReplacement() {
+async function handleTestClauseReplacement() {
     console.log("🧪 Testing clause replacement...");
-    updateStatus("Clause replacement test - feature coming soon...", "info");
-    
-    // TODO: Implement clause replacement test
+    updateStatus("Testing clause replacement functionality...", "info");
+
+    try {
+        // Test Word API first
+        const { debugWordAPI } = await import('./features/clause-replacement.js');
+        const wordApiWorking = await debugWordAPI();
+
+        // Test Legal Matrix loading
+        const { legalMatrixService } = await import('./services/legal-matrix-service.js');
+        await legalMatrixService.loadLegalMatrix();
+
+        const clauseNumbers = legalMatrixService.getAvailableClauseNumbers();
+        console.log(`Loaded ${clauseNumbers.length} clauses from Legal Matrix`);
+
+        if (clauseNumbers.length > 0) {
+            const testClause = legalMatrixService.getClause(clauseNumbers[0]);
+            console.log("Sample clause:", testClause);
+
+            const wordStatus = wordApiWorking ? "Word API: ✅ Working" : "Word API: ❌ Not Available";
+            updateStatus(`Clause replacement test: ${clauseNumbers.length} clauses loaded. ${wordStatus}`,
+                        wordApiWorking ? "success" : "warning");
+        } else {
+            updateStatus("No clauses found in Legal Matrix", "warning");
+        }
+    } catch (error) {
+        console.error("Clause replacement test error:", error);
+        updateStatus("Clause replacement test failed: " + error.message, "error");
+    }
 }
 
 function handleContractTypeChange(event) {
