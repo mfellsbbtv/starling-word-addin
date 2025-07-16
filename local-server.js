@@ -37,6 +37,7 @@ app.use('/taskpane-minimal.html', express.static(path.join(__dirname, 'taskpane-
 app.use('/taskpane-debug.html', express.static(path.join(__dirname, 'taskpane-debug.html')));
 app.use('/taskpane-ultra-minimal.html', express.static(path.join(__dirname, 'taskpane-ultra-minimal.html')));
 app.use('/taskpane-modular.html', express.static(path.join(__dirname, 'taskpane-modular.html')));
+app.use('/taskpane-v2.html', express.static(path.join(__dirname, 'taskpane-v2.html')));
 app.use('/test-clause-replacement.html', express.static(path.join(__dirname, 'test-clause-replacement.html')));
 
 // Serve test files
@@ -130,6 +131,7 @@ httpApp.use('/taskpane-minimal.html', express.static(path.join(__dirname, 'taskp
 httpApp.use('/taskpane-debug.html', express.static(path.join(__dirname, 'taskpane-debug.html')));
 httpApp.use('/taskpane-ultra-minimal.html', express.static(path.join(__dirname, 'taskpane-ultra-minimal.html')));
 httpApp.use('/taskpane-modular.html', express.static(path.join(__dirname, 'taskpane-modular.html')));
+httpApp.use('/taskpane-v2.html', express.static(path.join(__dirname, 'taskpane-v2.html')));
 httpApp.use('/test-clause-replacement.html', express.static(path.join(__dirname, 'test-clause-replacement.html')));
 httpApp.use('/test-playbooks.html', express.static(path.join(__dirname, 'test-playbooks.html')));
 httpApp.use('/debug-contract.html', express.static(path.join(__dirname, 'debug-contract.html')));

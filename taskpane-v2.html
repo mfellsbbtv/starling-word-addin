@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>RHEI AI Legal Assistant</title>
+
+    <!-- Office JavaScript API -->
+    <script type="text/javascript" src="https://appsforoffice.microsoft.com/lib/1.1/hosted/office.js"></script>
+    
+    <style>
+        /* RHEI AI Legal Assistant Styles */
+
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #323130;
+            background-color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 100%;
+            padding: 20px;
+            margin: 0 auto;
+        }
+
+        /* Header Styles */
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #0078d4;
+        }
+
+        .app-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #0078d4;
+            margin-bottom: 8px;
+        }
+
+        .app-subtitle {
+            font-size: 14px;
+            color: #605e5c;
+            font-weight: 400;
+        }
+
+        /* Form Styles */
+        .contract-type-section,
+        .contract-form-section {
+            margin-bottom: 25px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 6px;
+            border: 1px solid #e1e5e9;
+        }
+
+        .contract-form-section h3 {
+            color: #0078d4;
+            margin-bottom: 15px;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: #323130;
+        }
+
+        .form-input,
+        .form-select {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #d1d1d1;
+            border-radius: 4px;
+            font-size: 14px;
+            background-color: #ffffff;
+            transition: border-color 0.2s ease;
+        }
+
+        .form-input:focus,
+        .form-select:focus {
+            outline: none;
+            border-color: #0078d4;
+            box-shadow: 0 0 0 2px rgba(0, 120, 212, 0.2);
+        }
+
+        .form-input[readonly] {
+            background-color: #f3f2f1;
+            color: #605e5c;
+        }
+
+        /* Button Styles */
+        .action-section {
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .primary-button,
+        .secondary-button,
+        .debug-button {
+            padding: 12px 24px;
+            margin: 5px;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            min-width: 140px;
+        }
+
+        .primary-button {
+            background-color: #0078d4;
+            color: white;
+        }
+
+        .primary-button:hover:not(:disabled) {
+            background-color: #106ebe;
+        }
+
+        .primary-button:active {
+            background-color: #005a9e;
+        }
+
+        .secondary-button {
+            background-color: #f3f2f1;
+            color: #323130;
+            border: 1px solid #d1d1d1;
+        }
+
+        .secondary-button:hover:not(:disabled) {
+            background-color: #edebe9;
+        }
+
+        .debug-button {
+            background-color: #6c757d;
+            color: white;
+            font-size: 12px;
+            padding: 8px 16px;
+            min-width: auto;
+        }
+
+        .debug-button:hover:not(:disabled) {
+            background-color: #5a6268;
+        }
+
+        button:disabled {
+            background-color: #a19f9d;
+            color: #ffffff;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        /* Status and Progress */
+        .status-message {
+            margin: 15px 0;
+            padding: 12px;
+            border-radius: 4px;
+            font-size: 14px;
+            text-align: center;
+            border: 1px solid transparent;
+        }
+
+        .status-message.success {
+            background-color: #dff6dd;
+            color: #107c10;
+            border-color: #107c10;
+        }
+
+        .status-message.error {
+            background-color: #fde7e9;
+            color: #d13438;
+            border-color: #d13438;
+        }
+
+        .status-message.warning {
+            background-color: #fff4ce;
+            color: #797673;
+            border-color: #797673;
+        }
+
+        .status-message.info {
+            background-color: #e3f2fd;
+            color: #0078d4;
+            border-color: #0078d4;
+        }
+
+        .progress-section {
+            margin: 20px 0;
+            padding: 20px;
+            text-align: center;
+            background: #f9f9f9;
+            border-radius: 6px;
+            border: 1px solid #e1e5e9;
+        }
+
+        .progress-spinner {
+            width: 30px;
+            height: 30px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #0078d4;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Results Section */
+        .results-section {
+            margin: 20px 0;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 6px;
+            border: 1px solid #e1e5e9;
+        }
+
+        .contract-preview {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 4px;
+            border: 1px solid #d1d1d1;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .contract-preview pre {
+            white-space: pre-wrap;
+            font-family: 'Times New Roman', serif;
+            font-size: 12px;
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        /* Debug Section */
+        .debug-section {
+            margin-top: 30px;
+            padding: 15px;
+            background-color: #f1f3f4;
+            border-radius: 6px;
+            border: 1px solid #dadce0;
+        }
+
+        .debug-section h3 {
+            color: #5f6368;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1 class="app-title">RHEI AI Legal Assistant</h1>
+            <p class="app-subtitle">AI-powered contract analysis and generation for Microsoft Word</p>
+        </div>
+
+        <!-- Contract Type Selection -->
+        <div class="contract-type-section">
+            <label for="contract-type-select" class="form-label">Contract Type:</label>
+            <select id="contract-type-select" class="form-select">
+                <option value="content-management">Content Management Agreement</option>
+                <option value="data-pro">Data Pro Agreement</option>
+            </select>
+        </div>
+
+        <!-- Contract Form -->
+        <div class="contract-form-section">
+            <h3>Contract Details</h3>
+
+            <!-- Company Information (Read-only) -->
+            <div class="form-group">
+                <label for="company-name" class="form-label">Company Name:</label>
+                <input type="text" id="company-name" class="form-input" value="RHEI Creations Inc." readonly>
+            </div>
+
+            <div class="form-group">
+                <label for="company-address" class="form-label">Company Address:</label>
+                <input type="text" id="company-address" class="form-input" value="600-777 Hornby St, Vancouver, BC, Canada, V6Z1S4" readonly>
+            </div>
+
+            <!-- Provider Information (Editable) -->
+            <div class="form-group">
+                <label for="provider-name" class="form-label">Provider Name:</label>
+                <input type="text" id="provider-name" class="form-input" placeholder="Enter provider name">
+            </div>
+
+            <div class="form-group">
+                <label for="provider-address" class="form-label">Provider Address:</label>
+                <input type="text" id="provider-address" class="form-input" placeholder="Enter provider address">
+            </div>
+
+            <!-- Contract Details -->
+            <div class="form-group">
+                <label for="effective-date" class="form-label">Effective Date:</label>
+                <input type="date" id="effective-date" class="form-input">
+            </div>
+
+            <div class="form-group">
+                <label for="agreement-title" class="form-label">Agreement Title:</label>
+                <input type="text" id="agreement-title" class="form-input" value="DIGITAL VIDEO SERVICES AGREEMENT" readonly>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-section">
+            <button id="generate-contract" class="primary-button">📄 Generate Contract</button>
+            <button id="analyze-contract" class="secondary-button">🔍 Analyze Contract</button>
+        </div>
+
+        <!-- Status Message -->
+        <div id="status-message" class="status-message">
+            Initializing...
+        </div>
+
+        <!-- Results Section -->
+        <div id="results-section" class="results-section" style="display: none;">
+            <div id="results-content"></div>
+        </div>
+
+        <!-- Progress Section -->
+        <div id="progress-section" class="progress-section" style="display: none;">
+            <div class="progress-content">
+                <div class="progress-spinner"></div>
+                <div id="progress-message">Processing...</div>
+            </div>
+        </div>
+
+        <!-- Debug Section -->
+        <div class="debug-section" style="display: none;">
+            <h3>Debug Tools</h3>
+            <div id="debug-content">
+                <button id="test-word-api" class="debug-button">Test Word API</button>
+                <button id="show-diagnostics" class="debug-button">Show Diagnostics</button>
+                <button id="test-contract-generation" class="debug-button">Test Contract Generation</button>
+                <button id="test-clause-replacement" class="debug-button">Test Clause Replacement</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /**
+         * RHEI AI Legal Assistant - Merged Single File Version
+         * All modular components merged into one HTML file
+         */
+
+        // Global state
+        let isInitialized = false;
+        let currentClauseData = null;
+        let selectedAlternative = null;
+
+        // Global error handlers for Office.HostApplication issues
+        window.addEventListener('error', function(event) {
+            console.log('Global error caught:', event.error);
+            if (event.error && event.error.message && event.error.message.includes("Cannot read properties of undefined (reading 'Word')")) {
+                console.warn("FIXED: Office.HostApplication.Word error caught and handled");
+                event.preventDefault();
+                return false;
+            }
+        });
+
+        window.addEventListener('unhandledrejection', function(event) {
+            console.log('Unhandled promise rejection caught:', event.reason);
+            if (event.reason && event.reason.message && event.reason.message.includes("Cannot read properties of undefined (reading 'Word')")) {
+                console.warn("FIXED: Office.HostApplication.Word promise rejection caught and handled");
+                event.preventDefault();
+                return false;
+            }
+        });
+
+        // Override Office.HostApplication if undefined
+        function ensureOfficeHostApplication() {
+            if (typeof Office !== 'undefined' && typeof Office.HostApplication === 'undefined') {
+                console.warn("FIXING: Office.HostApplication is undefined, creating mock object");
+                Office.HostApplication = {
+                    Word: 'Word',
+                    Excel: 'Excel',
+                    PowerPoint: 'PowerPoint',
+                    Outlook: 'Outlook',
+                    OneNote: 'OneNote',
+                    Project: 'Project',
+                    Access: 'Access'
+                };
+                console.log("FIXED: Office.HostApplication mock object created");
+            }
+        }
+
+        // UI Utility Functions
+        function updateStatus(message, type) {
+            const statusElement = document.getElementById('status-message');
+            if (statusElement) {
+                statusElement.textContent = message;
+                statusElement.className = `status-message ${type || ''}`;
+            }
+            console.log(`Status: ${message}`);
+        }
+
+        function showProgress(message) {
+            const progressSection = document.getElementById('progress-section');
+            const progressMessage = document.getElementById('progress-message');
+            if (progressSection && progressMessage) {
+                progressMessage.textContent = message;
+                progressSection.style.display = 'block';
+            }
+        }
+
+        function hideProgress() {
+            const progressSection = document.getElementById('progress-section');
+            if (progressSection) {
+                progressSection.style.display = 'none';
+            }
+        }
+
+        function showResults(content) {
+            const resultsContent = document.getElementById('results-content');
+            const resultsSection = document.getElementById('results-section');
+            if (resultsContent && resultsSection) {
+                resultsContent.innerHTML = content;
+                resultsSection.style.display = 'block';
+            }
+        }
+
+        function setFormDefaults() {
+            // Set default effective date to today
+            const effectiveDateInput = document.getElementById('effective-date');
+            if (effectiveDateInput) {
+                const today = new Date().toISOString().split('T')[0];
+                effectiveDateInput.value = today;
+            }
+        }
+
+        // Office.js Initialization
+        function initializeOffice() {
+            console.log("Starting Office initialization with comprehensive HostApplication fix...");
+
+            if (typeof Office !== 'undefined') {
+                // Ensure Office.HostApplication exists before calling Office.onReady
+                ensureOfficeHostApplication();
+
+                try {
+                    // Wrap Office.onReady in additional error handling
+                    const safeOfficeOnReady = function(callback) {
+                        try {
+                            return Office.onReady(callback);
+                        } catch (error) {
+                            console.error("Office.onReady error:", error);
+                            if (error.message && error.message.includes("Cannot read properties of undefined (reading 'Word')")) {
+                                console.warn("FIXED: Office.onReady HostApplication error caught, proceeding with fallback");
+                                // Call the callback with a mock info object
+                                callback({ host: 'Word', platform: 'Web' });
+                            } else {
+                                throw error;
+                            }
+                        }
+                    };
+
+                    safeOfficeOnReady((info) => {
+                        console.log("Office.onReady called with info:", info);
+                        window.OFFICE_READY = true;
+
+                        // CRITICAL FIX: Multiple checks for Office.HostApplication
+                        let hostType = 'unknown';
+
+                        try {
+                            hostType = info.host || 'unknown';
+                        } catch (e) {
+                            console.warn("Could not determine host type from info object");
+                        }
+
+                        console.log("Detected host type:", hostType);
+                        initializeWordFeatures();
+                    });
+                } catch (error) {
+                    console.error("Error in Office.onReady setup:", error);
+                    console.warn("FIXED: Proceeding with basic initialization due to Office.onReady error");
+                    initializeBasicFeatures();
+                }
+            } else {
+                console.error("Office.js not available");
+                initializeBasicFeatures();
+            }
+        }
+
+        function initializeWordFeatures() {
+            console.log("Initializing Word features...");
+
+            // Check for Word API
+            if (typeof Word !== 'undefined' && typeof Word.run === 'function') {
+                console.log("Word API is available!");
+                window.WORD_API_AVAILABLE = true;
+                updateStatus("Word API available - all features enabled", "success");
+            } else {
+                console.log("Word API not available - using demo mode");
+                window.WORD_API_AVAILABLE = false;
+                updateStatus("Demo mode - Word API not available", "warning");
+            }
+
+            setupUI();
+        }
+
+        function initializeBasicFeatures() {
+            console.log("Initializing basic features...");
+            window.WORD_API_AVAILABLE = false;
+            updateStatus("Basic mode - limited functionality", "warning");
+            setupUI();
+        }
+
+        function setupUI() {
+            console.log("Setting up UI...");
+
+            // Enable buttons based on API availability
+            console.log("🔘 Setting up button states...");
+            console.log("WORD_API_AVAILABLE:", window.WORD_API_AVAILABLE);
+
+            const buttons = document.querySelectorAll('button');
+            console.log("Found buttons:", buttons.length);
+
+            buttons.forEach(button => {
+                // Always enable these buttons regardless of Word API availability
+                const alwaysEnabledButtons = ['show-diagnostics', 'test-word-api', 'generate-contract'];
+
+                console.log(`Button: ${button.id}, always enabled: ${alwaysEnabledButtons.includes(button.id)}`);
+
+                if (window.WORD_API_AVAILABLE || alwaysEnabledButtons.includes(button.id)) {
+                    button.disabled = false;
+                    if (!window.WORD_API_AVAILABLE && button.id === 'generate-contract') {
+                        button.title = "Generate contract (demo mode - will show preview)";
+                        console.log("✅ Generate contract button enabled for demo mode");
+                    } else if (button.id === 'generate-contract') {
+                        console.log("✅ Generate contract button enabled for Word API mode");
+                    }
+                } else {
+                    button.disabled = true;
+                    button.title = "Requires Word API - not available";
+                    console.log(`❌ Button ${button.id} disabled`);
+                }
+            });
+
+            // Special check for generate contract button
+            const generateBtn = document.getElementById('generate-contract');
+            if (generateBtn) {
+                console.log(`🎯 Generate contract button final state: disabled=${generateBtn.disabled}, title="${generateBtn.title}"`);
+            }
+        }
+
+        // Initialize the application
+        function initializeApp() {
+            console.log("🚀 Initializing RHEI AI Legal Assistant...");
+
+            if (isInitialized) {
+                console.log("App already initialized");
+                return;
+            }
+
+            try {
+                // Set up form defaults
+                setFormDefaults();
+
+                // Set up event listeners
+                setupEventListeners();
+
+                // Initialize Office.js
+                initializeOffice();
+
+                isInitialized = true;
+                console.log("✅ App initialization completed");
+
+            } catch (error) {
+                console.error("❌ App initialization failed:", error);
+                updateStatus("Initialization failed: " + error.message, "error");
+            }
+        }
+
+        // Set up all event listeners
+        function setupEventListeners() {
+            console.log("Setting up event listeners...");
+
+            // Contract generation
+            const generateBtn = document.getElementById('generate-contract');
+            if (generateBtn) {
+                console.log("🎯 Setting up event listener for generate-contract button");
+                generateBtn.addEventListener('click', handleGenerateContract);
+                console.log("✅ Event listener added to generate-contract button");
+            }
+
+            // Contract analysis
+            const analyzeBtn = document.getElementById('analyze-contract');
+            if (analyzeBtn) {
+                analyzeBtn.addEventListener('click', handleAnalyzeContract);
+            }
+
+            // Debug tools
+            const testWordApiBtn = document.getElementById('test-word-api');
+            if (testWordApiBtn) {
+                testWordApiBtn.addEventListener('click', handleTestWordApi);
+            }
+
+            const showDiagnosticsBtn = document.getElementById('show-diagnostics');
+            if (showDiagnosticsBtn) {
+                showDiagnosticsBtn.addEventListener('click', showDiagnostics);
+            }
+
+            console.log("✅ Event listeners setup completed");
+        }
+
+        // Event Handlers
+        async function handleGenerateContract() {
+            console.log("🔥 Generate contract button clicked!");
+            try {
+                await generateContract();
+            } catch (error) {
+                console.error("Error in generate contract handler:", error);
+                updateStatus("Error generating contract: " + error.message, "error");
+            }
+        }
+
+        async function handleAnalyzeContract() {
+            console.log("🔍 Analyze contract button clicked!");
+            updateStatus("Contract analysis feature coming soon...", "info");
+
+            // TODO: Implement contract analysis
+            // This would analyze the current document for clause compliance
+        }
+
+        async function handleTestWordApi() {
+            console.log("🧪 Testing Word API...");
+
+            if (typeof Word !== 'undefined' && typeof Word.run === 'function') {
+                try {
+                    await Word.run(async (context) => {
+                        const body = context.document.body;
+                        body.insertText("Word API test successful! " + new Date().toLocaleTimeString(), Word.InsertLocation.end);
+                        await context.sync();
+                    });
+                    updateStatus("Word API test successful!", "success");
+                } catch (error) {
+                    console.error("Word API test failed:", error);
+                    updateStatus("Word API test failed: " + error.message, "error");
+                }
+            } else {
+                updateStatus("Word API not available", "warning");
+            }
+        }
+
+        function showDiagnostics() {
+            const diagnostics = {
+                officeLoaded: typeof Office !== 'undefined',
+                officeReady: window.OFFICE_READY || false,
+                hostApplication: typeof Office?.HostApplication !== 'undefined',
+                wordApi: typeof Word !== 'undefined',
+                wordRun: typeof Word?.run === 'function',
+                wordApiAvailable: window.WORD_API_AVAILABLE || false
+            };
+
+            console.log("Diagnostics:", diagnostics);
+
+            const message = `Office: ${diagnostics.officeLoaded ? 'Loaded' : 'Not Loaded'}, ` +
+                          `Ready: ${diagnostics.officeReady ? 'Yes' : 'No'}, ` +
+                          `HostApp: ${diagnostics.hostApplication ? 'Available' : 'Undefined'}, ` +
+                          `Word API: ${diagnostics.wordApi ? 'Available' : 'Not Available'}`;
+
+            updateStatus(message, "info");
+        }
+
+        // Contract Generation Functions
+        async function generateContract() {
+            console.log("🚀 GENERATE CONTRACT BUTTON CLICKED!");
+            console.log("Current timestamp:", new Date().toISOString());
+
+            // Visual confirmation that button was clicked
+            updateStatus("Generate Contract button clicked! Processing...", "info");
+
+            // Check if elements exist
+            const contractTypeSelect = document.getElementById('contract-type-select');
+            console.log("Contract type select element:", contractTypeSelect);
+            console.log("Contract type value:", contractTypeSelect ? contractTypeSelect.value : 'NOT FOUND');
+
+            showProgress("Generating contract from template...");
+            console.log("Progress shown, starting generation...");
+
+            try {
+                // Get selected contract type from dropdown
+                const selectedContractType = contractTypeSelect ? contractTypeSelect.value : 'content-management';
+                console.log("Selected contract type:", selectedContractType);
+
+                // Generate contract using direct TSV approach
+                console.log("Calling generateContractFromTSV with type:", selectedContractType);
+                const result = await generateContractFromTSV(selectedContractType);
+                console.log("generateContractFromTSV result:", result);
+
+                if (result.success) {
+                    updateStatus("Contract generated successfully!", "success");
+
+                    // If Word API is available, insert into document with formatting
+                    if (window.WORD_API_AVAILABLE && typeof Word !== 'undefined') {
+                        try {
+                            await Word.run(async (context) => {
+                                const body = context.document.body;
+                                body.clear();
+
+                                // Insert contract text
+                                const contractRange = body.insertText(result.contract_text, Word.InsertLocation.start);
+
+                                // Apply basic formatting with error handling
+                                try {
+                                    contractRange.font.name = "Times New Roman";
+                                    contractRange.font.size = 12;
+
+                                    // Check if alignment property exists before setting
+                                    if (contractRange.paragraphFormat && typeof contractRange.paragraphFormat.alignment !== 'undefined') {
+                                        contractRange.paragraphFormat.alignment = Word.Alignment.justified;
+                                    }
+
+                                    if (contractRange.paragraphFormat) {
+                                        contractRange.paragraphFormat.lineSpacing = 18; // 1.5 line spacing
+                                        contractRange.paragraphFormat.spaceAfter = 6;
+                                        contractRange.paragraphFormat.keepWithNext = true;
+                                    }
+                                } catch (formatError) {
+                                    console.log("Formatting not fully supported, using basic insertion:", formatError);
+                                }
+
+                                await context.sync();
+                            });
+                            updateStatus("Contract inserted into Word document!", "success");
+                        } catch (wordError) {
+                            console.error("Word API error:", wordError);
+                            updateStatus("Contract generated but couldn't insert into Word. See preview below.", "warning");
+                            // Fall through to show preview
+                        }
+                    } else {
+                        // Demo mode - show contract in results section
+                        console.log("📋 Demo mode: showing contract in results section");
+                        console.log("WORD_API_AVAILABLE:", window.WORD_API_AVAILABLE);
+                        console.log("typeof Word:", typeof Word);
+
+                        const contractPreview = `
+                            <h3>Generated Contract (Demo Mode)</h3>
+                            <div class="contract-preview">
+                                <pre style="white-space: pre-wrap; font-family: 'Times New Roman', serif; font-size: 12px; line-height: 1.5;">${result.contract_text}</pre>
+                            </div>
+                        `;
+
+                        showResults(contractPreview);
+                        console.log("✅ Contract displayed in demo mode");
+                        updateStatus("Contract generated successfully (demo mode)", "success");
+                    }
+                } else {
+                    throw new Error(result.error || 'Contract generation failed');
+                }
+
+            } catch (error) {
+                console.error("Contract generation error:", error);
+                updateStatus("Failed to generate contract: " + error.message, "error");
+            } finally {
+                hideProgress();
+            }
+        }
+
+        // Direct contract generation from TSV
+        async function generateContractFromTSV(contractType) {
+            console.log("📄 generateContractFromTSV called with type:", contractType);
+            try {
+                let tsvData;
+
+                // Load the appropriate TSV file
+                console.log("Loading TSV file for contract type:", contractType);
+                if (contractType === 'content-management') {
+                    console.log("Fetching ContentManagement.tsv...");
+                    const response = await fetch('./playbooks/ContentManagement.tsv');
+                    console.log("Fetch response status:", response.status, response.statusText);
+                    if (!response.ok) {
+                        throw new Error(`Failed to load ContentManagement.tsv: ${response.status} ${response.statusText}`);
+                    }
+                    tsvData = await response.text();
+                    console.log("ContentManagement.tsv loaded, length:", tsvData.length);
+                } else if (contractType === 'data-pro') {
+                    console.log("Fetching DataPro.tsv...");
+                    const response = await fetch('./playbooks/DataPro.tsv');
+                    console.log("Fetch response status:", response.status, response.statusText);
+                    if (!response.ok) {
+                        throw new Error(`Failed to load DataPro.tsv: ${response.status} ${response.statusText}`);
+                    }
+                    tsvData = await response.text();
+                    console.log("DataPro.tsv loaded, length:", tsvData.length);
+                } else {
+                    throw new Error(`Unknown contract type: ${contractType}`);
+                }
+
+                // Parse TSV data
+                const lines = tsvData.split('\n');
+                // Skip the first line (tier info) and use the second line as headers
+                const headers = lines[1].split('\t');
+
+                console.log('TSV Headers found:', headers);
+
+                // Find the baseline clause text column
+                let clauseTextColumn = -1;
+                for (let i = 0; i < headers.length; i++) {
+                    const header = headers[i].trim();
+                    console.log(`Checking header ${i}: "${header}"`);
+                    if (header.includes('Full Clause Text BASELINE') ||
+                        header.includes('Full Clause Text (Original)') ||
+                        header.includes('Clause Summary BASELINE') ||
+                        (header.toLowerCase().includes('baseline') && header.toLowerCase().includes('clause'))) {
+                        clauseTextColumn = i;
+                        console.log(`Found baseline column at index ${i}: "${header}"`);
+                        break;
+                    }
+                }
+
+                if (clauseTextColumn === -1) {
+                    console.log('Primary search failed, trying fallback...');
+                    if (headers.length > 6 && headers[6] && headers[6].includes('BASELINE')) {
+                        clauseTextColumn = 6;
+                        console.log(`Using fallback column 6: "${headers[6]}"`);
+                    } else {
+                        console.error('Available headers:', headers);
+                        throw new Error('Could not find baseline clause text column in TSV data');
+                    }
+                }
+
+                // Build the contract
+                console.log("Building contract for type:", contractType);
+                let contractText = '';
+
+                if (contractType === 'content-management') {
+                    console.log("Calling buildContentManagementContract...");
+                    contractText = buildContentManagementContract(lines, clauseTextColumn);
+                    console.log("Content Management contract built, length:", contractText.length);
+                } else if (contractType === 'data-pro') {
+                    console.log("Calling buildDataProContract...");
+                    contractText = buildDataProContract(lines, clauseTextColumn);
+                    console.log("Data Pro contract built, length:", contractText.length);
+                }
+
+                console.log("Contract text preview (first 200 chars):", contractText.substring(0, 200));
+
+                const result = {
+                    success: true,
+                    contract_text: contractText,
+                    method: 'tsv_template'
+                };
+
+                console.log("Returning result:", { success: result.success, textLength: result.contract_text.length, method: result.method });
+                return result;
+
+            } catch (error) {
+                console.error('Error generating contract from TSV:', error);
+                return {
+                    success: false,
+                    error: error.message
+                };
+            }
+        }
+
+        function buildContentManagementContract(lines, clauseTextColumn) {
+            console.log("📋 buildContentManagementContract called");
+            console.log("Lines count:", lines.length);
+            console.log("Clause text column:", clauseTextColumn);
+
+            // Get form data
+            console.log("Getting form data...");
+            const formData = getFormData();
+            console.log("Form data:", formData);
+
+            console.log("Formatting contract header...");
+            let contract = formatContractHeader(formData);
+            console.log("Header length:", contract.length);
+
+            console.log("Generating recitals...");
+            contract += generateRecitals(formData);
+            console.log("After recitals length:", contract.length);
+
+            // Process clauses from TSV (start from line 2 since line 1 is now headers)
+            console.log("Processing clauses from TSV...");
+            let clausesProcessed = 0;
+            for (let i = 2; i < lines.length; i++) {
+                const columns = lines[i].split('\t');
+                if (columns.length > clauseTextColumn && columns[clauseTextColumn] && columns[clauseTextColumn].trim()) {
+                    const clauseText = columns[clauseTextColumn].trim();
+
+                    // Skip title page, table of contents, and recitals entries (we generate these)
+                    if (clauseText.includes('DIGITAL VIDEO SERVICES AGREEMENT BETWEEN') ||
+                        clauseText.includes('ARTICLE 1 INTERPRETATION') ||
+                        columns[0] === 'Title Page' ||
+                        columns[0] === 'Table of Contents' ||
+                        columns[0] === 'RECITALS') {
+                        console.log(`Skipping line ${i}: ${clauseText.substring(0, 50)}...`);
+                        continue;
+                    }
+
+                    // Add formatted clause with proper numbering
+                    const articleColumn = columns[1] || '';
+                    const clauseColumn = columns[2] || '';
+
+                    if (articleColumn && clauseColumn) {
+                        // Replace placeholder text with actual form data
+                        let processedClauseText = replacePlaceholders(clauseText, formData);
+                        contract += formatClause(articleColumn, clauseColumn, processedClauseText);
+                        clausesProcessed++;
+                        if (clausesProcessed <= 3) {
+                            console.log(`Added clause ${articleColumn} ${clauseColumn}: ${clauseText.substring(0, 50)}...`);
+                        }
+                    }
+                }
+            }
+            console.log(`Total clauses processed: ${clausesProcessed}`);
+
+            console.log("Generating schedules...");
+            contract += generateSchedules(formData);
+            console.log("Final contract length:", contract.length);
+
+            console.log("✅ buildContentManagementContract completed");
+            return contract;
+        }
+
+        function buildDataProContract(lines, clauseTextColumn) {
+            const formData = getFormData();
+
+            let contract = `DATA LICENSE AGREEMENT
+
+BETWEEN: ${formData.companyName}
+AND: ${formData.providerName}
+
+Effective Date: ${formData.effectiveDate}
+
+`;
+
+            // Process clauses from TSV (start from line 2 since line 1 is now headers)
+            for (let i = 2; i < lines.length; i++) {
+                const columns = lines[i].split('\t');
+                if (columns.length > clauseTextColumn && columns[clauseTextColumn] && columns[clauseTextColumn].trim()) {
+                    const clauseText = columns[clauseTextColumn].trim();
+
+                    // Skip cover sheet entries that are already included
+                    if (clauseText.includes('This Data License Agreement') ||
+                        clauseText.includes('The following is to be completed')) {
+                        continue;
+                    }
+
+                    // Add section headers
+                    const sectionColumn = columns[2] || '';
+                    if (sectionColumn && sectionColumn.trim()) {
+                        contract += `${sectionColumn.toUpperCase()}\n`;
+                    }
+
+                    contract += clauseText + '\n\n';
+                }
+            }
+
+            return contract;
+        }
+
+        function getFormData() {
+            return {
+                companyName: 'RHEI Creations Inc.',
+                companyAddress: '600-777 Hornby St, Vancouver, BC, Canada, V6Z1S4',
+                providerName: document.getElementById('provider-name')?.value || 'Provider Name, Inc.',
+                providerAddress: document.getElementById('provider-address')?.value || 'Provider Address',
+                effectiveDate: document.getElementById('effective-date')?.value || new Date().toLocaleDateString(),
+                agreementTitle: document.getElementById('agreement-title')?.value || 'DIGITAL VIDEO SERVICES AGREEMENT'
+            };
+        }
+
+        function formatContractHeader(formData) {
+            return `${formData.agreementTitle}
+
+
+BETWEEN:
+
+${formData.companyName}
+${formData.companyAddress}
+("RHEI")
+
+AND:
+
+${formData.providerName}
+${formData.providerAddress}
+("Provider")
+
+Effective Date: ${formData.effectiveDate}
+
+
+`;
+        }
+
+        function generateRecitals(formData) {
+            return `RECITALS
+
+WHEREAS:
+A. RHEI is a media and technology company that specializes in the optimization, monetization, claiming of video content and the management of online video channels;
+
+B. Provider is engaged in the business of creating and distributing digital video content;
+
+C. The parties wish to enter into this Agreement to set forth the terms and conditions under which RHEI will provide digital video services to Provider;
+
+NOW THEREFORE THIS AGREEMENT WITNESSES that in consideration of the premises, the mutual covenants and agreements set forth in this Agreement and other good and valuable consideration (the receipt and sufficiency of which is hereby acknowledged by each of the parties), the parties hereby agree as follows:
+
+`;
+        }
+
+        function formatClause(articleNumber, clauseNumber, clauseText) {
+            // Ensure clause number stays with clause text (non-breaking)
+            let formattedClause = '';
+
+            // Add page break before new articles if needed
+            if (articleNumber.startsWith('ARTICLE')) {
+                formattedClause += '\n';
+            }
+
+            formattedClause += `${articleNumber} ${clauseNumber}\n${clauseText}\n\n`;
+            return formattedClause;
+        }
+
+        function replacePlaceholders(text, formData) {
+            return text
+                .replace(/RHEI CREATIONS CORP\./g, formData.companyName)
+                .replace(/NINJA TUNE LTD\./g, formData.providerName)
+                .replace(/600-700 Hornby Street Vancouver, British Columbia, Canada V6Z 1S4/g, formData.companyAddress)
+                .replace(/90 Kennington Ln, London SE11 4XD, UK/g, formData.providerAddress)
+                .replace(/\[DATE\]/g, formData.effectiveDate)
+                .replace(/\[EFFECTIVE DATE\]/g, formData.effectiveDate);
+        }
+
+        function generateSchedules(formData) {
+            return `
+
+
+SCHEDULES
+
+SCHEDULE "A" – LIST OF MANAGED CHANNELS AND RHEI OWNED AND OPERATED CHANNELS
+
+[To be completed by the parties]
+
+SCHEDULE "B" – CHANNEL MANAGEMENT SERVICES
+
+[To be completed based on specific services required]
+
+SCHEDULE "C" – CONTENT DEVELOPMENT SERVICES
+
+[To be completed based on specific content development requirements]
+
+`;
+        }
+
+        // Initialize when DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initializeApp);
+        } else {
+            initializeApp();
+        }
+
+        // Also initialize on window load as backup
+        window.addEventListener('load', () => {
+            if (!isInitialized) {
+                console.log("Backup initialization triggered");
+                setTimeout(initializeApp, 1000);
+            }
+        });
+
+        // Error handling
+        window.addEventListener('error', (event) => {
+            console.error('Global error:', event.error);
+            updateStatus("An error occurred. Check console for details.", "error");
+        });
+
+        window.addEventListener('unhandledrejection', (event) => {
+            console.error('Unhandled promise rejection:', event.reason);
+            updateStatus("An error occurred. Check console for details.", "error");
+        });
+
+        console.log("📱 RHEI AI Legal Assistant (Single File) module loaded");
+    </script>
+</body>
+</html>
